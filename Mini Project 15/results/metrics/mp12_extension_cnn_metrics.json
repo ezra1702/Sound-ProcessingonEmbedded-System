@@ -1,0 +1,169 @@
+{
+  "official_underfitting_diagnosis": {
+    "epochs_run": 53,
+    "optimizer_steps": 106,
+    "final_train_loss": 1.1517751216888428,
+    "chance_level_loss_ln4": 1.3862943611198906,
+    "train_set_macro_f1": 0.5708874458874459,
+    "validation_macro_f1": 0.375,
+    "diagnosis": "UNDERFITTING: train loss masih dekat ln(4) dan train-F1 rendah; jumlah langkah optimizer terlalu sedikit (16 sampel / batch 8 = 2 langkah per epoch)."
+  },
+  "exploratory_variants": {
+    "tinykws_long": {
+      "val_f1": 0.6666666666666666,
+      "val_loss": 0.9176871180534363,
+      "best_epoch": 147,
+      "epochs_run": 300,
+      "optimizer_steps": 600,
+      "params": 1340,
+      "macs": 898624,
+      "train_f1": 0.3653846153846154
+    },
+    "dscnn": {
+      "val_f1": 1.0,
+      "val_loss": 1.2943588495254517,
+      "best_epoch": 40,
+      "epochs_run": 300,
+      "optimizer_steps": 600,
+      "params": 1172,
+      "macs": 589120,
+      "train_f1": 0.6041666666666666
+    },
+    "tinykws_freqpool": {
+      "val_f1": 1.0,
+      "val_loss": 1.0014492273330688,
+      "best_epoch": 20,
+      "epochs_run": 32,
+      "optimizer_steps": 64,
+      "params": 2108,
+      "macs": 899392,
+      "train_f1": 0.7430555555555555
+    }
+  },
+  "official_macs_hook_count": 898624,
+  "seed_stability_official_val_f1": [
+    0.375,
+    0.41666666666666663,
+    0.125
+  ],
+  "onnx_export": {
+    "official_tinykws": {
+      "file": "models/mp12_official_tinykws.onnx",
+      "bytes": 6780,
+      "max_abs_logit_diff": 4.172325134277344e-07,
+      "argmax_agreement": 1.0
+    },
+    "best_variant": {
+      "file": "models/mp12_best_variant.onnx",
+      "bytes": 9870,
+      "max_abs_logit_diff": 3.5762786865234375e-07,
+      "argmax_agreement": 1.0
+    }
+  },
+  "activation_memory_profile": {
+    "official_tinykws": {
+      "layers": [
+        {
+          "layer": "features.0",
+          "type": "Conv2d",
+          "out_bytes": 79872
+        },
+        {
+          "layer": "features.3",
+          "type": "MaxPool2d",
+          "out_bytes": 19968
+        },
+        {
+          "layer": "features.4",
+          "type": "Conv2d",
+          "out_bytes": 39936
+        },
+        {
+          "layer": "features.7",
+          "type": "AdaptiveAvgPool2d",
+          "out_bytes": 64
+        },
+        {
+          "layer": "classifier",
+          "type": "Linear",
+          "out_bytes": 16
+        }
+      ],
+      "peak_pingpong_bytes": 99840
+    },
+    "dscnn": {
+      "layers": [
+        {
+          "layer": "features.0",
+          "type": "Conv2d",
+          "out_bytes": 39936
+        },
+        {
+          "layer": "features.3",
+          "type": "Conv2d",
+          "out_bytes": 39936
+        },
+        {
+          "layer": "features.6",
+          "type": "Conv2d",
+          "out_bytes": 39936
+        },
+        {
+          "layer": "features.9",
+          "type": "Conv2d",
+          "out_bytes": 39936
+        },
+        {
+          "layer": "features.12",
+          "type": "Conv2d",
+          "out_bytes": 39936
+        },
+        {
+          "layer": "features.15",
+          "type": "AdaptiveAvgPool2d",
+          "out_bytes": 64
+        },
+        {
+          "layer": "classifier",
+          "type": "Linear",
+          "out_bytes": 16
+        }
+      ],
+      "peak_pingpong_bytes": 79872
+    },
+    "tinykws_freqpool": {
+      "layers": [
+        {
+          "layer": "features.0",
+          "type": "Conv2d",
+          "out_bytes": 79872
+        },
+        {
+          "layer": "features.3",
+          "type": "MaxPool2d",
+          "out_bytes": 19968
+        },
+        {
+          "layer": "features.4",
+          "type": "Conv2d",
+          "out_bytes": 39936
+        },
+        {
+          "layer": "features.7",
+          "type": "AdaptiveAvgPool2d",
+          "out_bytes": 832
+        },
+        {
+          "layer": "classifier",
+          "type": "Linear",
+          "out_bytes": 16
+        }
+      ],
+      "peak_pingpong_bytes": 99840
+    }
+  },
+  "saliency_model": "tinykws_freqpool",
+  "candidate_registry": "config/mp12_extension_candidates.json",
+  "test_files_loaded": false,
+  "note": "Varian eksplorasi dipilih via validation; CNN resmi MP12 tetap kandidat deployment."
+}

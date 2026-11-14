@@ -1,0 +1,206 @@
+{
+  "c_equivalence_selected_model": {
+    "compiled": true,
+    "message": "ok",
+    "c_vs_python_int8_agreement": 1.0,
+    "c_vs_float_agreement": 1.0,
+    "n": 24
+  },
+  "book_svm_int8_path": {
+    "archive_hash_verified": true,
+    "int8_vs_float_agreement_24": 1.0,
+    "c_compiled": true,
+    "note": "Jalur buku (SVM) didemonstrasikan; model deployment tetap classical_tree_int8",
+    "c_vs_python_agreement": 1.0
+  },
+  "bit_width_sweep": {
+    "8": {
+      "tree_per_tensor_24": 1.0,
+      "tree_per_feature_24": 1.0,
+      "svm_per_tensor_24": 1.0,
+      "svm_per_feature_24": 1.0,
+      "tree_per_tensor_jitter2000": 0.998,
+      "tree_per_feature_jitter2000": 0.9975,
+      "svm_per_tensor_jitter2000": 1.0,
+      "svm_per_feature_jitter2000": 0.9995
+    },
+    "6": {
+      "tree_per_tensor_24": 1.0,
+      "tree_per_feature_24": 1.0,
+      "svm_per_tensor_24": 1.0,
+      "svm_per_feature_24": 1.0,
+      "tree_per_tensor_jitter2000": 0.991,
+      "tree_per_feature_jitter2000": 0.992,
+      "svm_per_tensor_jitter2000": 0.9975,
+      "svm_per_feature_jitter2000": 0.997
+    },
+    "5": {
+      "tree_per_tensor_24": 1.0,
+      "tree_per_feature_24": 1.0,
+      "svm_per_tensor_24": 1.0,
+      "svm_per_feature_24": 1.0,
+      "tree_per_tensor_jitter2000": 0.988,
+      "tree_per_feature_jitter2000": 0.9915,
+      "svm_per_tensor_jitter2000": 0.998,
+      "svm_per_feature_jitter2000": 0.996
+    },
+    "4": {
+      "tree_per_tensor_24": 1.0,
+      "tree_per_feature_24": 1.0,
+      "svm_per_tensor_24": 1.0,
+      "svm_per_feature_24": 1.0,
+      "tree_per_tensor_jitter2000": 0.968,
+      "tree_per_feature_jitter2000": 0.9745,
+      "svm_per_tensor_jitter2000": 0.9935,
+      "svm_per_feature_jitter2000": 0.995
+    },
+    "3": {
+      "tree_per_tensor_24": 0.8333333333333334,
+      "tree_per_feature_24": 0.875,
+      "svm_per_tensor_24": 1.0,
+      "svm_per_feature_24": 1.0,
+      "tree_per_tensor_jitter2000": 0.9,
+      "tree_per_feature_jitter2000": 0.9075,
+      "svm_per_tensor_jitter2000": 0.9745,
+      "svm_per_feature_jitter2000": 0.969
+    },
+    "2": {
+      "tree_per_tensor_24": 0.5416666666666666,
+      "tree_per_feature_24": 0.5416666666666666,
+      "svm_per_tensor_24": 0.75,
+      "svm_per_feature_24": 0.75,
+      "tree_per_tensor_jitter2000": 0.5735,
+      "tree_per_feature_jitter2000": 0.614,
+      "svm_per_tensor_jitter2000": 0.8125,
+      "svm_per_feature_jitter2000": 0.8245
+    }
+  },
+  "tree_margin_lsb": {
+    "min": 7.5,
+    "per_sample": [
+      7.5,
+      16.5,
+      8.5,
+      60.5,
+      91.5,
+      46.5,
+      52.5,
+      62.5,
+      28.5,
+      42.5,
+      16.5,
+      36.5,
+      62.5,
+      74.5,
+      49.5,
+      27.5,
+      23.5,
+      7.5,
+      15.5,
+      116.5,
+      68.5,
+      23.5,
+      46.5,
+      34.5
+    ]
+  },
+  "cnn_weight_quant": {
+    "features.0.weight": {
+      "per_tensor_sqnr_db": 47.56004030706236,
+      "per_channel_sqnr_db": 49.16589291932457,
+      "fp16_sqnr_db": 73.87449292964779
+    },
+    "features.4.weight": {
+      "per_tensor_sqnr_db": 45.63194242525766,
+      "per_channel_sqnr_db": 46.717424437873525,
+      "fp16_sqnr_db": 73.67195381532409
+    },
+    "classifier.weight": {
+      "per_tensor_sqnr_db": 47.85144838660611,
+      "per_channel_sqnr_db": 49.472385176746705,
+      "fp16_sqnr_db": 75.18574296376849
+    }
+  },
+  "cnn_logit_equivalence": {
+    "logit_sqnr_int8_db": 28.695383071899414,
+    "logit_sqnr_fp16_db": 62.47074890136719,
+    "agreement_int8": 1.0,
+    "agreement_fp16": 1.0,
+    "max_abs_logit_err_int8": 0.04745078086853027,
+    "max_abs_logit_err_fp16": 0.0010646283626556396,
+    "min_top2_logit_gap_float": 0.02309378981590271
+  },
+  "compiled_footprint": {
+    "mp15_classical_model_int8.h": {
+      "text_bytes": 208,
+      "rodata_bytes": 240,
+      "note": "x86-64 -Os (host); ukuran data konstan identik di MCU, ukuran kode berbeda per ISA"
+    },
+    "mp15_svm_int8_reference.h": {
+      "text_bytes": 256,
+      "rodata_bytes": 272,
+      "note": "x86-64 -Os (host); ukuran data konstan identik di MCU, ukuran kode berbeda per ISA"
+    }
+  },
+  "package": {
+    "zip": "deployment/mp15_deployment_package.zip",
+    "zip_sha256": "09b5de7160481d42d5cc16740bc5ef7899dd9f23e74d86eb3e3c6044b200adae",
+    "files": {
+      "config/project_config.json": {
+        "sha256": "67b9f35795cd9b76e86ce9b2cd7a7be328537c9a2bf6cf0a7e67cc42b3aa5985",
+        "bytes": 459
+      },
+      "config/filter_final_config.json": {
+        "sha256": "d66a7088188e15db5a35f95f66e41464deeb33c5bb887ccdad8605bda3ff2017",
+        "bytes": 459
+      },
+      "config/preprocessing_config.json": {
+        "sha256": "167fbfbc8087809fd37deaa03ce7ebdc107f85fe25c17b40a6ca99cddb6f29d2",
+        "bytes": 670
+      },
+      "config/feature_config.json": {
+        "sha256": "2914bd18020fd1e46016549347bbb5531fc2616d5a3fa72c27479e687b0a8833",
+        "bytes": 1829
+      },
+      "config/realtime_architecture_config.json": {
+        "sha256": "ec43e795542d2a30b200591b7fe3f01ecdc026b17858764b802092529bbe1750",
+        "bytes": 831
+      },
+      "config/deployment_config.json": {
+        "sha256": "e92cbae0fe2b1230bd974634fd8e8370910419fd13f7c6e23a5fa7aedfc1e4e5",
+        "bytes": 1046
+      },
+      "firmware/mp14_realtime_constants.h": {
+        "sha256": "97a0c76ca1cfe49db79738ae9ffd1001b4a49bba0b32df75cff315213df6c887",
+        "bytes": 313
+      },
+      "firmware/mp15_classical_model_int8.h": {
+        "sha256": "26c2bf2db71636f15657b9b613894c8ced66850df32f26af1976a1938adf45b5",
+        "bytes": 1908
+      },
+      "models/mp15_classical_int8.npz": {
+        "sha256": "b338c27b37386fbae637ae0aa0245a82404bd605861b35979de8e62f92ff2232",
+        "bytes": 2896
+      },
+      "deployment/mp15_manifest.json": {
+        "sha256": "80650b9576b3256795574df71e1d203be9aa546f394f7c6fee7f243f533d333c",
+        "bytes": 897
+      },
+      "results/metrics/mp15_deployment_metrics.json": {
+        "sha256": "6df23c766609ce472b8e024af4af771a5f56d9009123c786ffa591bf58af5b3e",
+        "bytes": 2057
+      },
+      "models/mp15_tiny_cnn_int8_torchscript.pt": {
+        "sha256": "c60db6c1ed18e4b268974ba7474a421f46645d820d4fe2cd4375f3d8ef141e16",
+        "bytes": 28704
+      },
+      "features/kws_frontend.py": {
+        "sha256": "1bede5efc8270eb04801404843622e4bbf81c51cb82c16835e3304967c78dd8b",
+        "bytes": 8355
+      }
+    },
+    "integrity_ok": true
+  },
+  "selected_model_unchanged": "classical_tree_int8",
+  "post_test_tuning_performed": false
+}

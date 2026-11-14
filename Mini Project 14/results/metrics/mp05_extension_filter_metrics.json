@@ -1,0 +1,58 @@
+{
+  "feature_extension": "Filter Stability, Delay & Embedded Cost",
+  "iir_pole_zero": {
+    "pole_radius": 0.9996728042820853,
+    "zero_radius": 1.0000000000000002,
+    "stability_margin": 0.00032719571791473,
+    "is_stable": true
+  },
+  "iir_notch_bandwidth": {
+    "bw_3db_measured_hz": 1.6600000000000037,
+    "bw_3db_theory_hz": 1.6666666666666667,
+    "notch_depth_db": -220.31574393553672
+  },
+  "transition_band_gain_db": {
+    "fir": {
+      "50_hz": -9.554765221568228,
+      "100_hz": -5.942194871519074,
+      "150_hz": -3.029612752846348,
+      "200_hz": -1.243012191260253,
+      "300_hz": -0.0421515867027815
+    },
+    "iir": {
+      "50_hz": -220.31574393553672,
+      "100_hz": -0.0021437216663151726,
+      "150_hz": -0.0006781834097289875,
+      "200_hz": -0.00034280204864261653,
+      "300_hz": -0.00014148931682967492
+    }
+  },
+  "group_delay": {
+    "fir_voice_mean_ms": 4.0,
+    "fir_voice_std_ms": 2.1204546383241493e-15,
+    "iir_peak_20_200hz_ms": 177.91479833315293,
+    "iir_voice_mean_ms": 0.0005020427891200103
+  },
+  "iir_transient": {
+    "settling_60db_measured_ms": 1311.0625,
+    "settling_60db_theory_ms": 1319.283983793446
+  },
+  "snr_vs_clean_channel_db": {
+    "input_with_hum": 13.270180972613714,
+    "fir_output": 12.984503008090236,
+    "iir_output": 26.992045414799662,
+    "iir_output_after_settling": 40.81165100130022
+  },
+  "speech_low_band_80_300hz_change_db": {
+    "fir": -2.6673169896063715,
+    "iir": -0.0008772763464216804
+  },
+  "embedded_cost_float32": {
+    "fir_mac_per_sample": 129,
+    "iir_mac_per_sample": 5,
+    "fir_memory_bytes": 1028,
+    "iir_memory_bytes": 28,
+    "fir_mmac_per_second": 2.064,
+    "iir_mmac_per_second": 0.08
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "feature_extension": "Advanced Acoustic Channel & Room Metrics",
+  "speech_clarity_c50_db": -0.3252671017747455,
+  "direct_to_reverberant_ratio_drr_db": -2.029675389077338,
+  "early_decay_time_edt_s": 1.0836707117459117,
+  "rt60_estimated_s": 0.3518645997519454,
+  "comb_filtering_analysis": {
+    "speech_band_hz": [
+      300,
+      3400
+    ],
+    "peak_to_notch_depth_db": 51.44813537597656,
+    "spectral_flatness": 0.8595505952835083
+  },
+  "correlation_and_smearing": {
+    "max_cross_correlation": 0.5009077191352844,
+    "alignment_lag_ms": 0.0
+  }
+}

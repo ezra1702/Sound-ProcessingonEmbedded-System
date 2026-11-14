@@ -1,0 +1,12 @@
+{
+  "input_duration_s": 2.3499375,
+  "output_duration_s": 0.615,
+  "input_rms": 0.10555316193251037,
+  "output_rms": 0.20613924923597066,
+  "vad_threshold": 0.06018700820006426,
+  "active_ratio": 0.2575107296137339,
+  "n_input_frames": 233,
+  "n_output_frames": 60,
+  "noise_floor_change_db_proxy": -5.990137699032455,
+  "output_clipping_samples": 0
+}

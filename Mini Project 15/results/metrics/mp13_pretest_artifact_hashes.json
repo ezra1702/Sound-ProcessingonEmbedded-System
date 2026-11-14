@@ -1,0 +1,11 @@
+{
+  "models/mp11_classical_baseline.joblib": "5d7695e856014b5dbe9f4ec30d13e33e7b13cde6d6773fcdf0ca001441afb24d",
+  "models/mp11_model_parameters.npz": "ba7b8b641fd89399640617cb40192fa749d0e596375fa22eda5e0c143143a791",
+  "config/classifier_config.json": "5774e2ceda5106e4a9dcc381e5a08a470acc153f0c0f057ae73e5368c635df12",
+  "models/mp12_tiny_cnn_state.pt": "66060e0ca6a4f92ba2c5556bed827f7de9948d61671d22f8ed924ddf9cfe5ca2",
+  "models/mp12_tiny_cnn_parameters.npz": "489ff5091210f90664665519ef0d12388fa9c5d6f4d90734e0dbf389428a5111",
+  "config/deep_learning_config.json": "d4f24758435b2584f0bacd7711fb1259ee0b6e5f27844503a1439d015d5c63c3",
+  "config/feature_reduction_config.json": "d8f366029668b59c4b7ce83cd1ed0678f96b57ab571be7ff833cf961703d43da",
+  "config/feature_config.json": "2914bd18020fd1e46016549347bbb5531fc2616d5a3fa72c27479e687b0a8833",
+  "splits/mp09_split.json": "b6ea538bbe740dc618d9752bac528ccd526c0907f439092dd222daad34c03c58"
+}

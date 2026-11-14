@@ -1,0 +1,13 @@
+{
+  "last_completed_mini_project": 4,
+  "next_mini_project": 4,
+  "next_input": "data/raw/nyala_001.wav",
+  "audio_format": "config/audio_format_selected.json",
+  "spectral_config": "config/spectral_config.json",
+  "stft_reference": "features/intermediate/mp03_reference_stft.npz",
+  "status": "ready_for_mp05",
+  "channel_audio": "data/processed/mp04_channel/nyala_001_channel.wav",
+  "channel_config": "config/channel_config.json",
+  "channel_rir": "features/intermediate/mp04_synthetic_rir.npz",
+  "channel_metrics": "results/metrics/mp04_channel_metrics.json"
+}

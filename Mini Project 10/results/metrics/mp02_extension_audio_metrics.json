@@ -1,0 +1,29 @@
+{
+  "feature_extension": "Advanced Sampling & Quantization Quality Analysis",
+  "quantization_8bit_analysis": {
+    "snr_db": 36.6152458190918,
+    "psnr_db": 49.974282823320884,
+    "mse": 1.0059390660899226e-05,
+    "rmse": 0.0031716542467455726,
+    "mae": 0.002933742944151163,
+    "max_absolute_error": 0.003921627998352051
+  },
+  "resampling_8k_analysis": {
+    "roundtrip_snr_db": 23.920177459716797,
+    "psnr_db": 37.27921653493634,
+    "rmse": 0.013678521963010951,
+    "hf_cutoff_hz": 4000.0,
+    "hf_energy_loss_percent": 0.40121547729607854
+  },
+  "transmission_bitrate_kbps": {
+    "16k16_baseline": 256,
+    "8k16": 128,
+    "16k8": 128,
+    "8k8": 64
+  },
+  "bandwidth_comparison": {
+    "16kHz_bandwidth_hz": 8000,
+    "8kHz_bandwidth_hz": 4000,
+    "bandwidth_reduction_percent": 50.0
+  }
+}

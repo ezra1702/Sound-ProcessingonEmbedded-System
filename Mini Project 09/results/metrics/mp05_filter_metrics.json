@@ -1,0 +1,14 @@
+{
+  "power_45_55hz_input": 0.0003787474845403066,
+  "power_45_55hz_fir": 4.1991491173121176e-05,
+  "power_45_55hz_iir": 1.195554766297846e-05,
+  "fir_attenuation_50hz_db": -9.551884598631942,
+  "iir_attenuation_50hz_db": -15.007802819564542,
+  "fir_spectral_distortion_150_4000hz_db_rms": 36.5423271247707,
+  "iir_spectral_distortion_150_4000hz_db_rms": 39.27442794261401,
+  "fir_group_delay_ms": 4.0,
+  "fir_estimated_multiplies_per_sample": 129,
+  "iir_estimated_multiplies_per_sample": 5,
+  "fir_pc_processing_time_s": 0.0015718299999207374,
+  "iir_pc_processing_time_s": 0.0002620424999804527
+}

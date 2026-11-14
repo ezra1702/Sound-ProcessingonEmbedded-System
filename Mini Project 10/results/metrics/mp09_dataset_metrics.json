@@ -1,0 +1,45 @@
+{
+  "n_samples": 24,
+  "feature_dim": 39,
+  "finite_features": true,
+  "class_counts_all": {
+    "nyala": 6,
+    "mati": 6,
+    "naik": 6,
+    "turun": 6
+  },
+  "class_counts_train": {
+    "nyala": 4,
+    "mati": 4,
+    "naik": 4,
+    "turun": 4
+  },
+  "class_counts_validation": {
+    "nyala": 1,
+    "mati": 1,
+    "naik": 1,
+    "turun": 1
+  },
+  "class_counts_test": {
+    "nyala": 1,
+    "mati": 1,
+    "naik": 1,
+    "turun": 1
+  },
+  "n_train": 16,
+  "n_validation": 4,
+  "n_test": 4,
+  "group_overlap_train_val": [],
+  "group_overlap_train_test": [],
+  "record_duration_s": 1.2,
+  "active_duration_after_vad_s": {
+    "min": 0.275,
+    "mean": 0.48000000000000004,
+    "max": 0.725
+  },
+  "logmel_frames": {
+    "min": 26,
+    "max": 71
+  },
+  "acquisition_mode": "tts"
+}

@@ -1,0 +1,8 @@
+{
+  "last_completed_mini_project": 2,
+  "next_mini_project": 3,
+  "next_input": "data/raw/nyala_001.wav",
+  "audio_format": "config/audio_format_selected.json",
+  "metrics": "results/metrics/mp02_sampling_quantization.json",
+  "status": "ready_for_mp03"
+}

@@ -1,0 +1,16 @@
+{
+  "feature_extension": "Audio Signal Analysis",
+  "sample_rate_hz": 16000,
+  "duration_s": 2.0,
+  "num_samples": 32000,
+  "peak_normalized": 0.709747314453125,
+  "peak_dbfs": -2.9779248417101636,
+  "rms_normalized": 0.2148209661245346,
+  "rms_dbfs": -13.3584666914944,
+  "zero_crossing_rate": 0.062220694396699895,
+  "zero_crossings": 1991,
+  "spectral_centroid_hz": 1550.440322120681,
+  "dominant_frequency_hz": 163.0,
+  "signal_energy": 1476.7376708984375,
+  "clipping_ratio": 0.0
+}

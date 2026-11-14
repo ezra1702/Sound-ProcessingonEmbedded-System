@@ -1,0 +1,10 @@
+|--- feature_2 <= 0.04
+|   |--- feature_7 <= -0.39
+|   |   |--- class: nyala
+|   |--- feature_7 >  -0.39
+|   |   |--- class: turun
+|--- feature_2 >  0.04
+|   |--- feature_7 <= 0.07
+|   |   |--- class: naik
+|   |--- feature_7 >  0.07
+|   |   |--- class: mati

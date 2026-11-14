@@ -1,0 +1,239 @@
+{
+  "source_audio": "data/raw/mp09_dataset/nyala_b01.wav",
+  "stream_duration_s": 4.8,
+  "sample_rate_hz": 16000,
+  "dma_block_samples": 160,
+  "dma_block_ms": 10.0,
+  "double_buffer": true,
+  "ring_capacity_blocks": 4,
+  "frame_samples": 400,
+  "frame_ms": 25.0,
+  "hop_samples": 160,
+  "hop_ms": 10.0,
+  "context_frames": 96,
+  "context_ms": 975.0,
+  "inference_stride_frames": 10,
+  "inference_stride_ms": 100.0,
+  "n_blocks": 480,
+  "n_inferences": 39,
+  "mean_block_compute_ms": 0.3035641665519506,
+  "p95_block_compute_ms": 1.3125450044753952,
+  "max_block_compute_ms": 1.5848999901209027,
+  "max_waiting_ms": 0.0,
+  "max_queue_blocks": 0,
+  "overflow_count": 0,
+  "realtime_condition_pass": true,
+  "classical_inference_ms_mean": 0.11584102489555684,
+  "classical_inference_ms_p95": 0.1379700057441369,
+  "tiny_cnn_inference_ms_mean": 0.2920666660289638,
+  "tiny_cnn_inference_ms_p95": 0.32841999054653576,
+  "memory_proxy_bytes": {
+    "dma_double_buffer_int16": 640,
+    "pcm_frame_ring_int16": 800,
+    "logmel_context_float32": 9984,
+    "classical_frame_state_float32": 7680,
+    "tiny_cnn_activation_float32_upper_proxy": 79872,
+    "tiny_cnn_weights_float32": 5360,
+    "classical_serialized_model": 1857
+  },
+  "sanity_labels": [
+    [
+      "97",
+      "turun",
+      "mati"
+    ],
+    [
+      "107",
+      "turun",
+      "mati"
+    ],
+    [
+      "117",
+      "turun",
+      "turun"
+    ],
+    [
+      "127",
+      "turun",
+      "turun"
+    ],
+    [
+      "137",
+      "turun",
+      "turun"
+    ],
+    [
+      "147",
+      "turun",
+      "turun"
+    ],
+    [
+      "157",
+      "turun",
+      "turun"
+    ],
+    [
+      "167",
+      "turun",
+      "turun"
+    ],
+    [
+      "177",
+      "turun",
+      "turun"
+    ],
+    [
+      "187",
+      "turun",
+      "turun"
+    ],
+    [
+      "197",
+      "turun",
+      "mati"
+    ],
+    [
+      "207",
+      "turun",
+      "mati"
+    ],
+    [
+      "217",
+      "turun",
+      "mati"
+    ],
+    [
+      "227",
+      "turun",
+      "mati"
+    ],
+    [
+      "237",
+      "turun",
+      "turun"
+    ],
+    [
+      "247",
+      "turun",
+      "turun"
+    ],
+    [
+      "257",
+      "turun",
+      "turun"
+    ],
+    [
+      "267",
+      "turun",
+      "turun"
+    ],
+    [
+      "277",
+      "turun",
+      "turun"
+    ],
+    [
+      "287",
+      "turun",
+      "turun"
+    ],
+    [
+      "297",
+      "turun",
+      "turun"
+    ],
+    [
+      "307",
+      "turun",
+      "turun"
+    ],
+    [
+      "317",
+      "turun",
+      "mati"
+    ],
+    [
+      "327",
+      "turun",
+      "mati"
+    ],
+    [
+      "337",
+      "turun",
+      "mati"
+    ],
+    [
+      "347",
+      "turun",
+      "mati"
+    ],
+    [
+      "357",
+      "turun",
+      "turun"
+    ],
+    [
+      "367",
+      "turun",
+      "turun"
+    ],
+    [
+      "377",
+      "turun",
+      "turun"
+    ],
+    [
+      "387",
+      "turun",
+      "turun"
+    ],
+    [
+      "397",
+      "turun",
+      "turun"
+    ],
+    [
+      "407",
+      "turun",
+      "turun"
+    ],
+    [
+      "417",
+      "turun",
+      "turun"
+    ],
+    [
+      "427",
+      "turun",
+      "turun"
+    ],
+    [
+      "437",
+      "turun",
+      "mati"
+    ],
+    [
+      "447",
+      "turun",
+      "mati"
+    ],
+    [
+      "457",
+      "turun",
+      "mati"
+    ],
+    [
+      "467",
+      "turun",
+      "mati"
+    ],
+    [
+      "477",
+      "turun",
+      "turun"
+    ]
+  ],
+  "interpretation": "Host-side scheduling and memory proxy only. Target-device latency, peak RAM, flash, and power must be measured in MP15.",
+  "deployment_model_selected": false,
+  "deployment_selection_deferred_to": "MP15"
+}

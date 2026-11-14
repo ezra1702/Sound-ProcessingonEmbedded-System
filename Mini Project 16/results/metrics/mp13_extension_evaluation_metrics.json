@@ -1,0 +1,376 @@
+{
+  "consistency_with_official_report": {
+    "classical_macro_f1_report": 1.0,
+    "classical_macro_f1_recomputed": 1.0,
+    "cnn_macro_f1_report": 0.3333333333333333,
+    "cnn_macro_f1_recomputed": 0.3333333333333333
+  },
+  "clean_test_results": {
+    "classical_tree (resmi)": {
+      "macro_f1": 1.0,
+      "accuracy": 1.0,
+      "bootstrap95_macro_f1": [
+        1.0,
+        1.0
+      ],
+      "bootstrap95_accuracy": [
+        1.0,
+        1.0
+      ],
+      "predictions": [
+        "nyala",
+        "mati",
+        "naik",
+        "turun"
+      ],
+      "brier": 0.0,
+      "nll": -0.0,
+      "ece_5bins": 0.0,
+      "mean_confidence": 1.0,
+      "roc_auc_ovr_macro": 1.0,
+      "pr_ap_ovr_macro": 1.0
+    },
+    "tiny_cnn (resmi)": {
+      "macro_f1": 0.3333333333333333,
+      "accuracy": 0.5,
+      "bootstrap95_macro_f1": [
+        0.0,
+        1.0
+      ],
+      "bootstrap95_accuracy": [
+        0.0,
+        1.0
+      ],
+      "predictions": [
+        "nyala",
+        "mati",
+        "nyala",
+        "mati"
+      ],
+      "brier": 0.6318346819761733,
+      "nll": 1.143986345409379,
+      "ece_5bins": 0.16500112414360046,
+      "mean_confidence": 0.33499887585639954,
+      "roc_auc_ovr_macro": 0.8333333333333335,
+      "pr_ap_ovr_macro": 0.75
+    },
+    "mp11_knn (eksplorasi)": {
+      "macro_f1": 1.0,
+      "accuracy": 1.0,
+      "bootstrap95_macro_f1": [
+        1.0,
+        1.0
+      ],
+      "bootstrap95_accuracy": [
+        1.0,
+        1.0
+      ],
+      "predictions": [
+        "nyala",
+        "mati",
+        "naik",
+        "turun"
+      ],
+      "brier": 0.0,
+      "nll": -0.0,
+      "ece_5bins": 0.0,
+      "mean_confidence": 1.0,
+      "roc_auc_ovr_macro": 1.0,
+      "pr_ap_ovr_macro": 1.0
+    },
+    "mp11_logreg (eksplorasi)": {
+      "macro_f1": 1.0,
+      "accuracy": 1.0,
+      "bootstrap95_macro_f1": [
+        1.0,
+        1.0
+      ],
+      "bootstrap95_accuracy": [
+        1.0,
+        1.0
+      ],
+      "predictions": [
+        "nyala",
+        "mati",
+        "naik",
+        "turun"
+      ],
+      "brier": 0.31595620121545687,
+      "nll": 0.6472004083990708,
+      "ece_5bins": 0.4695409317828301,
+      "mean_confidence": 0.5304590682171699,
+      "roc_auc_ovr_macro": 1.0,
+      "pr_ap_ovr_macro": 1.0
+    },
+    "mp11_linear_svm (eksplorasi)": {
+      "macro_f1": 1.0,
+      "accuracy": 1.0,
+      "bootstrap95_macro_f1": [
+        1.0,
+        1.0
+      ],
+      "bootstrap95_accuracy": [
+        1.0,
+        1.0
+      ],
+      "predictions": [
+        "nyala",
+        "mati",
+        "naik",
+        "turun"
+      ]
+    },
+    "mp11_rf (eksplorasi)": {
+      "macro_f1": 1.0,
+      "accuracy": 1.0,
+      "bootstrap95_macro_f1": [
+        1.0,
+        1.0
+      ],
+      "bootstrap95_accuracy": [
+        1.0,
+        1.0
+      ],
+      "predictions": [
+        "nyala",
+        "mati",
+        "naik",
+        "turun"
+      ],
+      "brier": 0.06388888888888887,
+      "nll": 0.22357795628884491,
+      "ece_5bins": 0.19999999999999984,
+      "mean_confidence": 0.8,
+      "roc_auc_ovr_macro": 1.0,
+      "pr_ap_ovr_macro": 1.0
+    },
+    "mp11_mlp (eksplorasi)": {
+      "macro_f1": 1.0,
+      "accuracy": 1.0,
+      "bootstrap95_macro_f1": [
+        1.0,
+        1.0
+      ],
+      "bootstrap95_accuracy": [
+        1.0,
+        1.0
+      ],
+      "predictions": [
+        "nyala",
+        "mati",
+        "naik",
+        "turun"
+      ],
+      "brier": 5.988979698414381e-08,
+      "nll": 0.0001225295367028304,
+      "ece_5bins": 0.0001225131649760236,
+      "mean_confidence": 0.999877486835024,
+      "roc_auc_ovr_macro": 1.0,
+      "pr_ap_ovr_macro": 1.0
+    },
+    "cnn_tinykws_long (eksplorasi)": {
+      "macro_f1": 0.6666666666666666,
+      "accuracy": 0.75,
+      "bootstrap95_macro_f1": [
+        0.3333333333333333,
+        1.0
+      ],
+      "bootstrap95_accuracy": [
+        0.25,
+        1.0
+      ],
+      "predictions": [
+        "nyala",
+        "turun",
+        "naik",
+        "turun"
+      ],
+      "brier": 0.3849423624926131,
+      "nll": 0.7079195649345286,
+      "ece_5bins": 0.24934584647417066,
+      "mean_confidence": 0.5006541609764099,
+      "roc_auc_ovr_macro": 1.0,
+      "pr_ap_ovr_macro": 1.0
+    },
+    "cnn_dscnn (eksplorasi)": {
+      "macro_f1": 0.6666666666666666,
+      "accuracy": 0.75,
+      "bootstrap95_macro_f1": [
+        0.3333333333333333,
+        1.0
+      ],
+      "bootstrap95_accuracy": [
+        0.25,
+        1.0
+      ],
+      "predictions": [
+        "nyala",
+        "mati",
+        "naik",
+        "mati"
+      ],
+      "brier": 0.6900989165082604,
+      "nll": 1.2711916022923144,
+      "ece_5bins": 0.46210163831710815,
+      "mean_confidence": 0.28789836168289185,
+      "roc_auc_ovr_macro": 0.8333333333333334,
+      "pr_ap_ovr_macro": 0.8333333333333334
+    },
+    "cnn_tinykws_freqpool (eksplorasi)": {
+      "macro_f1": 1.0,
+      "accuracy": 1.0,
+      "bootstrap95_macro_f1": [
+        1.0,
+        1.0
+      ],
+      "bootstrap95_accuracy": [
+        1.0,
+        1.0
+      ],
+      "predictions": [
+        "nyala",
+        "mati",
+        "naik",
+        "turun"
+      ],
+      "brier": 0.5043235685666747,
+      "nll": 0.9354479726746727,
+      "ece_5bins": 0.6032577455043793,
+      "mean_confidence": 0.3967422544956207,
+      "roc_auc_ovr_macro": 1.0,
+      "pr_ap_ovr_macro": 1.0
+    }
+  },
+  "mcnemar_classical_vs_cnn_official": {
+    "a_only_correct": 2,
+    "b_only_correct": 0,
+    "p_value_exact": 0.5
+  },
+  "robustness_accuracy": {
+    "classical_tree (resmi)": {
+      "clean": 1.0,
+      "snr_30dB": 1.0,
+      "snr_20dB": 0.65,
+      "snr_10dB": 0.0,
+      "snr_5dB": 0.3,
+      "snr_0dB": 0.25,
+      "gain_-12dB": 1.0,
+      "gain_+6dB": 1.0,
+      "shift_+200ms": 1.0
+    },
+    "tiny_cnn (resmi)": {
+      "clean": 0.5,
+      "snr_30dB": 0.5,
+      "snr_20dB": 0.45,
+      "snr_10dB": 0.3,
+      "snr_5dB": 0.25,
+      "snr_0dB": 0.25,
+      "gain_-12dB": 0.5,
+      "gain_+6dB": 0.5,
+      "shift_+200ms": 0.5
+    },
+    "mp11_knn (eksplorasi)": {
+      "clean": 1.0,
+      "snr_30dB": 1.0,
+      "snr_20dB": 0.5,
+      "snr_10dB": 0.25,
+      "snr_5dB": 0.25,
+      "snr_0dB": 0.25,
+      "gain_-12dB": 1.0,
+      "gain_+6dB": 1.0,
+      "shift_+200ms": 1.0
+    },
+    "mp11_logreg (eksplorasi)": {
+      "clean": 1.0,
+      "snr_30dB": 1.0,
+      "snr_20dB": 0.3,
+      "snr_10dB": 0.25,
+      "snr_5dB": 0.25,
+      "snr_0dB": 0.25,
+      "gain_-12dB": 1.0,
+      "gain_+6dB": 1.0,
+      "shift_+200ms": 1.0
+    },
+    "mp11_linear_svm (eksplorasi)": {
+      "clean": 1.0,
+      "snr_30dB": 1.0,
+      "snr_20dB": 0.75,
+      "snr_10dB": 0.25,
+      "snr_5dB": 0.25,
+      "snr_0dB": 0.3,
+      "gain_-12dB": 1.0,
+      "gain_+6dB": 1.0,
+      "shift_+200ms": 1.0
+    },
+    "mp11_rf (eksplorasi)": {
+      "clean": 1.0,
+      "snr_30dB": 1.0,
+      "snr_20dB": 0.25,
+      "snr_10dB": 0.25,
+      "snr_5dB": 0.05,
+      "snr_0dB": 0.25,
+      "gain_-12dB": 1.0,
+      "gain_+6dB": 1.0,
+      "shift_+200ms": 1.0
+    },
+    "mp11_mlp (eksplorasi)": {
+      "clean": 1.0,
+      "snr_30dB": 1.0,
+      "snr_20dB": 0.75,
+      "snr_10dB": 0.25,
+      "snr_5dB": 0.25,
+      "snr_0dB": 0.25,
+      "gain_-12dB": 1.0,
+      "gain_+6dB": 1.0,
+      "shift_+200ms": 1.0
+    },
+    "cnn_tinykws_long (eksplorasi)": {
+      "clean": 0.75,
+      "snr_30dB": 0.85,
+      "snr_20dB": 0.9,
+      "snr_10dB": 0.5,
+      "snr_5dB": 0.5,
+      "snr_0dB": 0.25,
+      "gain_-12dB": 0.75,
+      "gain_+6dB": 0.75,
+      "shift_+200ms": 0.75
+    },
+    "cnn_dscnn (eksplorasi)": {
+      "clean": 0.75,
+      "snr_30dB": 0.75,
+      "snr_20dB": 0.75,
+      "snr_10dB": 0.7,
+      "snr_5dB": 0.45,
+      "snr_0dB": 0.25,
+      "gain_-12dB": 0.75,
+      "gain_+6dB": 0.75,
+      "shift_+200ms": 0.75
+    },
+    "cnn_tinykws_freqpool (eksplorasi)": {
+      "clean": 1.0,
+      "snr_30dB": 1.0,
+      "snr_20dB": 1.0,
+      "snr_10dB": 0.85,
+      "snr_5dB": 0.6,
+      "snr_0dB": 0.25,
+      "gain_-12dB": 1.0,
+      "gain_+6dB": 1.0,
+      "shift_+200ms": 1.0
+    }
+  },
+  "hash_verification_exploratory": {
+    "mp11_knn": true,
+    "mp11_logreg": true,
+    "mp11_linear_svm": true,
+    "mp11_tree": true,
+    "mp11_rf": true,
+    "mp11_mlp": true,
+    "mp12_tinykws_long": true,
+    "mp12_dscnn": true,
+    "mp12_tinykws_freqpool": true
+  },
+  "n_test": 4,
+  "post_test_tuning_performed": false,
+  "used_for_model_selection": false,
+  "note": "Model eksplorasi dibekukan + di-hash sebelum MP13. Hasil eksplorasi bersifat informatif (rekomendasi untuk siklus pengembangan berikutnya dengan data baru), bukan pengganti kandidat resmi."
+}

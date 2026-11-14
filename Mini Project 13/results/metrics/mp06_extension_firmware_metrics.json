@@ -1,0 +1,105 @@
+{
+  "feature_extension": "Firmware Readiness & Robustness Analysis",
+  "selected_filter": "iir_ellip_hp",
+  "steady_state_window_start_s": 1.5,
+  "transient_and_steady_state": {
+    "fir_hamming_hp": {
+      "max_pole_radius": 0.0,
+      "settling_60db_ms": 10.0,
+      "steady_state_attenuation_db": 14.539746148795905,
+      "meets_attenuation_steady_state": false
+    },
+    "fir_remez_hp": {
+      "max_pole_radius": 0.0,
+      "settling_60db_ms": 10.0,
+      "steady_state_attenuation_db": 32.763247878920055,
+      "meets_attenuation_steady_state": true
+    },
+    "iir_ellip_hp": {
+      "max_pole_radius": 0.9938121304548698,
+      "settling_60db_ms": 69.55504813385913,
+      "steady_state_attenuation_db": 50.25943549982359,
+      "meets_attenuation_steady_state": true
+    },
+    "iir_notch_q20": {
+      "max_pole_radius": 0.9995092465279207,
+      "settling_60db_ms": 879.5225773704191,
+      "steady_state_attenuation_db": 41.76666518237897,
+      "meets_attenuation_steady_state": true
+    },
+    "iir_notch_q30": {
+      "max_pole_radius": 0.9996728042820853,
+      "settling_60db_ms": 1319.283983793446,
+      "steady_state_attenuation_db": 40.0317425585381,
+      "meets_attenuation_steady_state": true
+    },
+    "iir_notch_q40": {
+      "max_pole_radius": 0.9997545931812621,
+      "settling_60db_ms": 1759.0453666662231,
+      "steady_state_attenuation_db": 38.7472863735556,
+      "meets_attenuation_steady_state": true
+    }
+  },
+  "float32_verification": {
+    "max_abs_error": 0.00034594003521431355,
+    "snr_float32_vs_float64_db": 10.65358233355944
+  },
+  "sos_conversion": {
+    "applicable": true,
+    "num_stages": 2,
+    "multiplies_per_sample": 10,
+    "float32_snr_vs_float64_db": 73.11719932246635,
+    "header": "firmware/mp06_filter_sos_cmsis.h"
+  },
+  "coefficient_quantization": [
+    {
+      "fractional_bits": 8,
+      "pole_radius_direct_form": 1.1517119334353374,
+      "pole_radius_sos": 0.994123357536679,
+      "stable_direct_form": false,
+      "stable_sos": true
+    },
+    {
+      "fractional_bits": 10,
+      "pole_radius_direct_form": 1.0000000000002018,
+      "pole_radius_sos": 0.9936320684740403,
+      "stable_direct_form": false,
+      "stable_sos": true
+    },
+    {
+      "fractional_bits": 12,
+      "pole_radius_direct_form": 1.0000000000023002,
+      "pole_radius_sos": 0.9937549135098654,
+      "stable_direct_form": false,
+      "stable_sos": true
+    },
+    {
+      "fractional_bits": 14,
+      "pole_radius_direct_form": 0.9999999999963957,
+      "pole_radius_sos": 0.9938163303334775,
+      "stable_direct_form": true,
+      "stable_sos": true
+    },
+    {
+      "fractional_bits": 16,
+      "pole_radius_direct_form": 0.9929404816657906,
+      "pole_radius_sos": 0.9938086534380941,
+      "stable_direct_form": true,
+      "stable_sos": true
+    },
+    {
+      "fractional_bits": 20,
+      "pole_radius_direct_form": 0.9940095292900445,
+      "pole_radius_sos": 0.9938120120871212,
+      "stable_direct_form": true,
+      "stable_sos": true
+    },
+    {
+      "fractional_bits": 24,
+      "pole_radius_direct_form": 0.9938335595590466,
+      "pole_radius_sos": 0.9938121320386624,
+      "stable_direct_form": true,
+      "stable_sos": true
+    }
+  ]
+}

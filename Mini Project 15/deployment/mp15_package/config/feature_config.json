@@ -1,0 +1,87 @@
+{
+  "sampling_rate_hz": 16000,
+  "frame_length_samples": 400,
+  "hop_length_samples": 160,
+  "input_frames_source": "features/intermediate/mp07_preprocessed_frames.npz",
+  "power_spectrum": "abs(rfft(frame))**2",
+  "mel": {
+    "n_mels": 26,
+    "fmin_hz": 80.0,
+    "fmax_hz": 7600.0,
+    "scale": "2595*log10(1+f/700)",
+    "log": "natural"
+  },
+  "mfcc": {
+    "n_mfcc": 13,
+    "dct_type": 2,
+    "norm": "ortho",
+    "delta": false,
+    "delta_delta": false
+  },
+  "spectral": {
+    "centroid": true,
+    "bandwidth": true,
+    "rolloff_fraction": 0.85
+  },
+  "temporal": {
+    "rms": true,
+    "zcr": true
+  },
+  "pitch": {
+    "method": "autocorrelation",
+    "min_hz": 80.0,
+    "max_hz": 350.0,
+    "confidence_threshold": 0.25
+  },
+  "aggregation": {
+    "statistics": [
+      "mean",
+      "std"
+    ],
+    "f0_only_voiced": true,
+    "append_voiced_ratio": true
+  },
+  "sample_vector_dim": 39,
+  "feature_names": [
+    "mfcc01_mean",
+    "mfcc01_std",
+    "mfcc02_mean",
+    "mfcc02_std",
+    "mfcc03_mean",
+    "mfcc03_std",
+    "mfcc04_mean",
+    "mfcc04_std",
+    "mfcc05_mean",
+    "mfcc05_std",
+    "mfcc06_mean",
+    "mfcc06_std",
+    "mfcc07_mean",
+    "mfcc07_std",
+    "mfcc08_mean",
+    "mfcc08_std",
+    "mfcc09_mean",
+    "mfcc09_std",
+    "mfcc10_mean",
+    "mfcc10_std",
+    "mfcc11_mean",
+    "mfcc11_std",
+    "mfcc12_mean",
+    "mfcc12_std",
+    "mfcc13_mean",
+    "mfcc13_std",
+    "rms_mean",
+    "rms_std",
+    "zcr_mean",
+    "zcr_std",
+    "centroid_hz_mean",
+    "centroid_hz_std",
+    "bandwidth_hz_mean",
+    "bandwidth_hz_std",
+    "rolloff85_hz_mean",
+    "rolloff85_hz_std",
+    "f0_hz_mean",
+    "f0_hz_std",
+    "voiced_ratio"
+  ],
+  "scaling": "NONE_HERE__fit_only_on_training_set_in_later_chapter"
+}

@@ -1,0 +1,36 @@
+{
+  "selected_model": "classical_tree_int8",
+  "classical_family": "tree",
+  "classes": [
+    "mati",
+    "naik",
+    "nyala",
+    "turun"
+  ],
+  "sample_rate_hz": 16000,
+  "dma_block_samples": 160,
+  "feature_frame_samples": 400,
+  "feature_hop_samples": 160,
+  "inference_stride_frames": 10,
+  "selected_feature_names": [
+    "mfcc02_mean",
+    "mfcc02_std",
+    "mfcc04_std",
+    "mfcc05_mean",
+    "zcr_mean",
+    "zcr_std",
+    "centroid_hz_mean",
+    "centroid_hz_std"
+  ],
+  "files_required": [
+    "config/project_config.json",
+    "config/filter_final_config.json",
+    "config/preprocessing_config.json",
+    "config/feature_config.json",
+    "config/realtime_architecture_config.json",
+    "config/deployment_config.json",
+    "firmware/mp14_realtime_constants.h",
+    "firmware/mp15_classical_model_int8.h",
+    "models/mp15_classical_int8.npz"
+  ]
+}

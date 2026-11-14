@@ -1,0 +1,38 @@
+{
+  "selected_model": "classical_tree_int8",
+  "target_profile": "MCU_first",
+  "n_replay_samples": 4,
+  "replay_accuracy": 1.0,
+  "replay_agreement_with_mp13": 1.0,
+  "feature_latency_ms": {
+    "mean": 3.29735,
+    "p95": 4.215584999999999
+  },
+  "inference_latency_ms": {
+    "mean": 0.0278,
+    "p95": 0.0359
+  },
+  "pipeline_latency_ms": {
+    "mean": 3.3251500000000003,
+    "p95": 4.2509
+  },
+  "pipeline_rtf_p95": 0.0035424166666666664,
+  "realtime_stride_ms": 100.0,
+  "mp14_overflow_count": 0,
+  "mp15_payload_bytes": 149,
+  "live_microphone_enabled": false,
+  "live_demo": [],
+  "acceptance_checks": {
+    "serial_gate_ready_for_mp16": true,
+    "selected_model_matches_manifest": true,
+    "post_test_tuning_false": true,
+    "mp15_numeric_agreement_test_ge_095": true,
+    "mp14_overflow_is_0": true,
+    "replay_agreement_not_worse_than_mp15": true,
+    "replay_features_are_finite": true,
+    "p95_pipeline_faster_than_audio_duration": true
+  },
+  "required_acceptance_pass": true,
+  "benchmark_platform": "host PC (Windows, Python reference) - BUKAN angka ESP32/Raspberry Pi",
+  "scientific_note": "Replay test verifies end-to-end implementation consistency; it is not a new independent generalization estimate."
+}

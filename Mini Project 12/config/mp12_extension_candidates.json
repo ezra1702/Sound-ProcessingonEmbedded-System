@@ -1,0 +1,41 @@
+{
+  "tinykws_long": {
+    "file": "models/mp12_ext_tinykws_long.pt",
+    "sha256": "a65020a4993ebbf5ee0f7f22adc20e76883d91732af1f98bf39b2599e2f24125",
+    "architecture": "TinyKWSNet",
+    "val_macro_f1": 0.6666666666666666,
+    "best_epoch": 147,
+    "params": 1340,
+    "macs": 898624,
+    "normalization_fit_scope": "training_only",
+    "checkpoint_selection_scope": "validation_only",
+    "test_files_loaded": false,
+    "role": "exploratory_candidate_frozen_before_mp13 (bukan kandidat deployment resmi)"
+  },
+  "dscnn": {
+    "file": "models/mp12_ext_dscnn.pt",
+    "sha256": "412696358ace3e14cd5d5b760b4a6f780e11980dfa6f1a574f54360f58817244",
+    "architecture": "DSCNN",
+    "val_macro_f1": 1.0,
+    "best_epoch": 40,
+    "params": 1172,
+    "macs": 589120,
+    "normalization_fit_scope": "training_only",
+    "checkpoint_selection_scope": "validation_only",
+    "test_files_loaded": false,
+    "role": "exploratory_candidate_frozen_before_mp13 (bukan kandidat deployment resmi)"
+  },
+  "tinykws_freqpool": {
+    "file": "models/mp12_ext_tinykws_freqpool.pt",
+    "sha256": "c02fbe7258618119ca1835ba6e9054570142626ac3dcb055af48bddc2a000ae8",
+    "architecture": "TinyKWSFreqPool",
+    "val_macro_f1": 1.0,
+    "best_epoch": 20,
+    "params": 2108,
+    "macs": 899392,
+    "normalization_fit_scope": "training_only",
+    "checkpoint_selection_scope": "validation_only",
+    "test_files_loaded": false,
+    "role": "exploratory_candidate_frozen_before_mp13 (bukan kandidat deployment resmi)"
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "pre_scaling_clipping_samples": 0,
+  "normalization_comparison": {
+    "none": {
+      "peak": 0.9799456712923714,
+      "rms": 0.10888038328678931,
+      "rms_dbfs": -19.261007179408377,
+      "crest_factor_db": 19.085047156279295,
+      "headroom_db": 0.1759600231202213,
+      "would_clip_samples": 0
+    },
+    "peak_0.95": {
+      "peak": 0.9499999999990305,
+      "rms": 0.1055531619277734,
+      "rms_dbfs": -19.530575050508688,
+      "crest_factor_db": 19.08504715627678,
+      "headroom_db": 0.4455278942227659,
+      "would_clip_samples": 0
+    },
+    "rms_-20dBFS": {
+      "peak": 0.9000204092799792,
+      "rms": 0.09999999999908156,
+      "rms_dbfs": -19.999999999992916,
+      "crest_factor_db": 19.08504715627221,
+      "headroom_db": 0.9149528437110556,
+      "would_clip_samples": 0
+    }
+  },
+  "vad_comparison": {
+    "agreement_mp7_vs_dual": 0.9012875536480687,
+    "active_ratio_mp7": 0.24034334763948498,
+    "active_ratio_dual": 0.33905579399141633,
+    "speech_energy_retained_mp7": 0.9937115494846634,
+    "speech_energy_retained_dual": 0.9999885446976937,
+    "dual_params": {
+      "thr_hi_db": -51.07417413309208,
+      "thr_lo_db": -69.08000782910833,
+      "zcr_thr": 0.07769423558897243,
+      "hangover_frames": 3
+    }
+  },
+  "denoise_comparison": {
+    "snr_in_0dB": {
+      "input_snr_db": 3.0035817050299434,
+      "spectral_subtraction_snr_db": 4.916368979281311,
+      "wiener_dd_snr_db": 11.831025788803347,
+      "musical_noise_proxy_db": {
+        "noisy": 5.624951836608421,
+        "spectral_subtraction": 6.173352785119406,
+        "wiener_dd": 9.60328670435494
+      }
+    },
+    "snr_in_5dB": {
+      "input_snr_db": 6.187572071223886,
+      "spectral_subtraction_snr_db": 8.922836531476392,
+      "wiener_dd_snr_db": 15.04857312943707,
+      "musical_noise_proxy_db": {
+        "noisy": 5.63523578706122,
+        "spectral_subtraction": 6.189218956417104,
+        "wiener_dd": 9.668225702008842
+      }
+    },
+    "snr_in_10dB": {
+      "input_snr_db": 10.410069826580932,
+      "spectral_subtraction_snr_db": 13.509522163926553,
+      "wiener_dd_snr_db": 18.656419904939064,
+      "musical_noise_proxy_db": {
+        "noisy": 5.656218783457341,
+        "spectral_subtraction": 6.235343930086845,
+        "wiener_dd": 9.798750108633579
+      }
+    },
+    "snr_in_20dB": {
+      "input_snr_db": 20.04189256614651,
+      "spectral_subtraction_snr_db": 23.11142097461556,
+      "wiener_dd_snr_db": 26.796522255368554,
+      "musical_noise_proxy_db": {
+        "noisy": 5.771313710192942,
+        "spectral_subtraction": 6.347305534067196,
+        "wiener_dd": 10.08677254221633
+      }
+    },
+    "clean_mp6_noise_floor_note": "Pada audio MP6 asli noise estimate sangat kecil (\u2248-107 dB per kolom STFT), sehingga MP7 secara efektif hanya melakukan trimming + normalisasi."
+  },
+  "fixed_point_q15": {
+    "dc_block_preemph_sqnr_db": 60.66547372841819,
+    "after_window_sqnr_db": 60.69192696492366,
+    "header": "firmware/mp07_preprocessing_q15.h"
+  },
+  "note": "Analisis tambahan; artefak wajib MP7 tidak diubah."
+}

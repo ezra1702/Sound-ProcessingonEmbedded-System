@@ -1,0 +1,99 @@
+{
+  "quality_audit_csv": "results/metrics/mp09_extension_quality_audit.csv",
+  "n_flagged_samples": 0,
+  "flag_summary": {
+    "too_quiet": 0,
+    "clipping": 0,
+    "word_touches_record_edge": 0,
+    "low_snr": 0,
+    "dc_offset": 0
+  },
+  "snr_est_db": {
+    "min": 19.76293192089293,
+    "mean": 23.778480628646196,
+    "max": 27.929831204895976
+  },
+  "leakage_guard": {
+    "exact_duplicate_pairs": [],
+    "near_duplicate_threshold_cosine": 0.995,
+    "near_duplicate_cross_split_pairs": [],
+    "top5_most_similar_cross_split": [
+      {
+        "cos": 0.7964631855871135,
+        "a": "mati_b01",
+        "b": "mati_b05"
+      },
+      {
+        "cos": 0.7954545023093875,
+        "a": "nyala_b02",
+        "b": "nyala_b06"
+      },
+      {
+        "cos": 0.7886668887599929,
+        "a": "naik_b02",
+        "b": "naik_b06"
+      },
+      {
+        "cos": 0.7712296594795884,
+        "a": "mati_b02",
+        "b": "mati_b06"
+      },
+      {
+        "cos": 0.7655130551392598,
+        "a": "naik_b01",
+        "b": "naik_b05"
+      }
+    ],
+    "scaler_fit_scope": "training_only",
+    "leakage_detected": false
+  },
+  "frontend_selftest": {
+    "n_samples": 24,
+    "max_abs_diff_vec39": 0.0,
+    "max_abs_diff_logmel": 0.0,
+    "bit_exact": true
+  },
+  "fisher_score_train_only_top10": [
+    {
+      "feature": "mfcc02_std",
+      "score": 7.636946469494827
+    },
+    {
+      "feature": "mfcc05_mean",
+      "score": 6.511021911485637
+    },
+    {
+      "feature": "mfcc04_std",
+      "score": 4.646938662278222
+    },
+    {
+      "feature": "centroid_hz_std",
+      "score": 4.514575315665913
+    },
+    {
+      "feature": "centroid_hz_mean",
+      "score": 4.050624277753316
+    },
+    {
+      "feature": "rolloff85_hz_mean",
+      "score": 3.680810997186185
+    },
+    {
+      "feature": "zcr_mean",
+      "score": 3.4879175787067305
+    },
+    {
+      "feature": "zcr_std",
+      "score": 3.4468980666497275
+    },
+    {
+      "feature": "mfcc02_mean",
+      "score": 2.773481042881331
+    },
+    {
+      "feature": "mfcc07_mean",
+      "score": 2.1614619432487236
+    }
+  ],
+  "reproducibility_manifest": "results/metrics/mp09_extension_reproducibility_manifest.json"
+}
