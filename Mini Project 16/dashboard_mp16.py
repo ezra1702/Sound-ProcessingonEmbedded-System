@@ -55,7 +55,7 @@ with col_a:
 with col_b:
     st.write('**MP15 kuantisasi**')
     ci = mp15.get('classical_int8', {})
-    st.json({'model': ci.get('name'), 'agreement_all': ci.get('agreement_all_24_vs_float'), 'payload_bytes': ci.get('payload_bytes_estimate')})
+    st.json({'model': ci.get('name'), 'agreement_all': ci.get('agreement_all_vs_float', ci.get('agreement_all_24_vs_float')), 'payload_bytes': ci.get('payload_bytes_estimate')})
 
 if ext:
     st.subheader('Demo stream kontinu + state machine (FITUR TAMBAHAN)')

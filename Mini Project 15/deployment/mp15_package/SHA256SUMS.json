@@ -20,31 +20,31 @@
     "bytes": 831
   },
   "config/deployment_config.json": {
-    "sha256": "e92cbae0fe2b1230bd974634fd8e8370910419fd13f7c6e23a5fa7aedfc1e4e5",
-    "bytes": 1046
+    "sha256": "71aea07e64512f93807839435852b4ef0e1be2667d691c750803d3e6be6ab207",
+    "bytes": 1052
   },
   "firmware/mp14_realtime_constants.h": {
     "sha256": "97a0c76ca1cfe49db79738ae9ffd1001b4a49bba0b32df75cff315213df6c887",
     "bytes": 313
   },
   "firmware/mp15_classical_model_int8.h": {
-    "sha256": "26c2bf2db71636f15657b9b613894c8ced66850df32f26af1976a1938adf45b5",
-    "bytes": 1908
+    "sha256": "8d1a028b7a63baf3f89b1b1502f96cbd79397a9d459aed7210e7b584db343c00",
+    "bytes": 2085
   },
   "models/mp15_classical_int8.npz": {
-    "sha256": "b338c27b37386fbae637ae0aa0245a82404bd605861b35979de8e62f92ff2232",
-    "bytes": 2896
+    "sha256": "62e188e7c457dfbddb57883b899d3cd6b89de016b02f2c16366a654d9d8d7a1c",
+    "bytes": 2288
   },
   "deployment/mp15_manifest.json": {
-    "sha256": "80650b9576b3256795574df71e1d203be9aa546f394f7c6fee7f243f533d333c",
-    "bytes": 897
+    "sha256": "dd56af40bab20007020f4c87a099f322de645f24ff52c53c675bd74c30f8defb",
+    "bytes": 895
   },
   "results/metrics/mp15_deployment_metrics.json": {
-    "sha256": "6df23c766609ce472b8e024af4af771a5f56d9009123c786ffa591bf58af5b3e",
-    "bytes": 2057
+    "sha256": "9540666c46972dba5be2734c39924822ca64cc81e10e2298083534ae0f9a5ee6",
+    "bytes": 2305
   },
   "models/mp15_tiny_cnn_int8_torchscript.pt": {
-    "sha256": "c60db6c1ed18e4b268974ba7474a421f46645d820d4fe2cd4375f3d8ef141e16",
+    "sha256": "467b1481e92fa35ecd57ddb7c73e214f3311e5ae4f5f8f9465ef7a71e0586d27",
     "bytes": 28704
   },
   "features/kws_frontend.py": {

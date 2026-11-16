@@ -1,20 +1,24 @@
 # %% [markdown]
 # # Mini Project 9 — Membangun Dataset dan Membekukan Split Eksperimen
-# Enam acquisition block × empat perintah (nyala, mati, naik, turun) = 24 WAV.
+# Protokol buku: enam acquisition block × empat perintah (nyala, mati, naik, turun).
+# **Pengerjaan ini: protokol yang sama direkam oleh KEEMPAT anggota kelompok**
+# → 4 penutur × 6 block × 4 perintah = **96 WAV** (buku: 1 penutur = 24 WAV).
 # Filter final MP6 + preprocessing MP7 + feature schema MP8 diterapkan otomatis,
-# metadata & log-Mel disimpan, lalu grouped split (block 1–4 train, 5 validation,
-# 6 test) dibekukan untuk MP10–MP13. Status -> `ready_for_mp10`.
+# metadata & log-Mel disimpan, lalu grouped split per acquisition block (block 1–4 train,
+# 5 validation, 6 test — sama dengan buku) dibekukan untuk MP10–MP13. Karena split dilakukan
+# per block, **setiap penutur muncul di train, validation, dan test** (64 / 16 / 16 sampel).
+# Status -> `ready_for_mp10`.
 #
 # **Mode akuisisi** (`ACQUISITION_MODE`, dapat dioverride env `MP09_MODE`):
-# * `mic`  : rekam langsung dari mikrofon (prosedur buku, DEMO_MODE=False).
-# * `tts`  : *speech synthesis* Windows SAPI (2 suara) + simulasi variasi kanal per block
-#            (posisi mic → gain, reverb, noise floor, hum). Dipakai pada pengerjaan ini karena
-#            sesi pengerjaan tidak memiliki akses mikrofon; label & grouping tetap sesuai protokol.
+# * `group`: (dipakai) rekaman suara asli 4 anggota dari web perekam kelompok
+#            (`../dataset_rekaman/<nama>/block_XX/<label>_bXX.wav`, WAV 16 kHz mono 16-bit 1,2 s;
+#            tiap rekaman diverifikasi pengenal ucapan bahasa Indonesia saat direkam: kata lain ditolak).
+# * `mic`  : rekam langsung dari mikrofon (prosedur buku, 1 penutur, 24 WAV).
+# * `tts`  : speech synthesis Windows SAPI + simulasi kanal (dipakai pada versi awal sebelum
+#            rekaman kelompok tersedia; disimpan untuk reprodusibilitas).
 # * `demo` : sinyal sintetis sinus dari buku (hanya untuk tes skrip).
 #
-# WAV yang sudah ada **tidak direkam ulang**. Untuk mengganti dataset dengan rekaman suara
-# kelompok: hapus `data/raw/mp09_dataset/*.wav`, set `MP09_MODE=mic`, jalankan ulang skrip ini,
-# lalu jalankan `python ../run_all_mini_projects.py --start 10`.
+# WAV yang sudah ada di `data/raw/mp09_dataset/` **tidak direkam/disalin ulang**.
 
 # %%
 # Anggota Kelompok :
@@ -36,8 +40,15 @@ from scipy.fft import dct
 ROOT = Path(__file__).resolve().parent if "__file__" in globals() else Path.cwd()
 STATUS = ROOT / 'project_status.json'
 DEMO_MODE = False       # True hanya untuk pengujian tanpa mikrofon (sinyal sinus buku)
-ACQUISITION_MODE = os.environ.get('MP09_MODE', 'demo' if DEMO_MODE else 'tts')  # 'mic' | 'tts' | 'demo'
+ACQUISITION_MODE = os.environ.get('MP09_MODE', 'demo' if DEMO_MODE else 'group')  # 'group' | 'mic' | 'tts' | 'demo'
 N_BLOCKS = 6
+# Penutur (mode group): id singkat -> nama folder di dataset_rekaman
+SPEAKERS = {'ezra': 'Christama Ezra Yudianto', 'abdillah': 'Abdillah Fatah Suryanto',
+            'ivang': 'Ivang Arfandia', 'jahzeel': 'Jahzeel Erason Nicodemus'}
+GROUP_SOURCE = Path(os.environ.get('MP09_GROUP_DIR', str(Path(__file__).resolve().parent.parent/'dataset_rekaman'
+                                                       if "__file__" in globals() else Path.cwd().parent/'dataset_rekaman')))
+SPEAKER_IDS = list(SPEAKERS) if ACQUISITION_MODE == 'group' else [None]
+N_SPEAKERS = len(SPEAKER_IDS)
 DURATION_S = 1.2
 SEED = 2026
 rng = np.random.default_rng(SEED)
@@ -162,9 +173,17 @@ def _apply_channel(speech, block, label):
 _TTS_CACHE = {}
 
 
-def acquire(label, block):
-    path = raw_dir/f'{label}_b{block:02d}.wav'
+def acquire(label, block, spk=None):
+    prefix = f'{spk}_' if spk else ''
+    path = raw_dir/f'{prefix}{label}_b{block:02d}.wav'      # mis. ezra_nyala_b01.wav
     if path.exists():
+        return path
+    if ACQUISITION_MODE == 'group':
+        src = GROUP_SOURCE/SPEAKERS[spk]/f'block_{block:02d}'/f'{label}_b{block:02d}.wav'
+        assert src.exists(), f'rekaman kelompok tidak ditemukan: {src}'
+        fs_s, s = wavfile.read(src)
+        assert fs_s == FS and s.dtype == np.int16 and s.ndim == 1, (src, fs_s, s.dtype, s.shape)
+        path.write_bytes(src.read_bytes())      # salinan byte-exact (tanpa resample/normalisasi)
         return path
     if ACQUISITION_MODE == 'demo':
         # synthetic fallback hanya untuk test script
@@ -290,24 +309,29 @@ def extract(path):
     return np.asarray(vals, np.float32), np.asarray(names, dtype=object), logmel.astype(np.float32), len(y)/FS
 
 # %% [markdown]
-# ## 1) Akuisisi 6 block × 4 kelas
+# ## 1) Akuisisi 6 block × 4 kelas (× 4 penutur pada mode group)
+# `group_id` = acquisition block (unit split & GroupKFold, sama dengan buku);
+# `subject_id` = penutur; `session_id` = penutur × block (satu sesi rekam).
 
 # %%
 records = []
 for block in range(1, N_BLOCKS+1):
     print(f'--- Acquisition block {block}/{N_BLOCKS} ---')
-    for label in LABELS:
-        p = acquire(label, block)
-        if ACQUISITION_MODE == 'tts':
-            subj = 'tts_' + BLOCK_PROFILE[block]['voice'].split()[1].lower()
-            dev, dist = 'sapi_tts_simulated_mic', f"gain{BLOCK_PROFILE[block]['gain_db']:+.0f}dB"
-        elif ACQUISITION_MODE == 'demo':
-            subj, dev, dist = 'synthetic_demo', 'none', 'normal'
-        else:
-            subj, dev, dist = 'personal_user', 'local_mic', 'normal'
-        records.append({'sample_id': p.stem, 'label': label, 'group_id': f'block_{block:02d}',
-                        'subject_id': subj, 'device_id': dev, 'distance_tag': dist,
-                        'sample_rate_hz': FS, 'path': p.relative_to(ROOT).as_posix()})
+    for spk in SPEAKER_IDS:
+        for label in LABELS:
+            p = acquire(label, block, spk)
+            if ACQUISITION_MODE == 'group':
+                subj, dev, dist = spk, f'browser_mic_{spk}', f'block_{block:02d}_position'
+            elif ACQUISITION_MODE == 'tts':
+                subj = 'tts_' + BLOCK_PROFILE[block]['voice'].split()[1].lower()
+                dev, dist = 'sapi_tts_simulated_mic', f"gain{BLOCK_PROFILE[block]['gain_db']:+.0f}dB"
+            elif ACQUISITION_MODE == 'demo':
+                subj, dev, dist = 'synthetic_demo', 'none', 'normal'
+            else:
+                subj, dev, dist = 'personal_user', 'local_mic', 'normal'
+            records.append({'sample_id': p.stem, 'label': label, 'group_id': f'block_{block:02d}',
+                            'subject_id': subj, 'session_id': f'{subj}_block_{block:02d}', 'device_id': dev, 'distance_tag': dist,
+                            'sample_rate_hz': FS, 'path': p.relative_to(ROOT).as_posix()})
     if ACQUISITION_MODE == 'mic' and block < N_BLOCKS:
         print('Istirahat 5–10 detik / ubah posisi mikrofon sedikit sebelum block berikutnya.')
         time.sleep(2)
@@ -327,7 +351,8 @@ for r in records:
     r['active_duration_s'] = round(((logmel.shape[0]-1)*H + N)/FS, 4)   # durasi setelah VAD trim
 
 X = np.vstack(X); y = np.asarray(y, dtype=object); groups = np.asarray(groups, dtype=object); ids = np.asarray(ids, dtype=object); paths = np.asarray(paths, dtype=object)
-assert X.shape == (N_BLOCKS*len(LABELS), 39)
+assert X.shape == (N_BLOCKS*len(LABELS)*N_SPEAKERS, 39)
+subjects = np.asarray([r['subject_id'] for r in records], dtype=object)
 assert np.isfinite(X).all()
 assert list(feature_names) == list(feat_cfg.get('feature_names', feature_names)), 'Urutan 39 fitur berbeda dari MP8'
 
@@ -354,22 +379,27 @@ split = {'strategy': 'grouped_by_acquisition_block', 'seed': SEED, 'train_ids': 
 
 # %%
 with (meta_dir/'mp09_metadata.csv').open('w', newline='', encoding='utf-8') as f:
-    cols = ['sample_id', 'label', 'group_id', 'subject_id', 'device_id', 'distance_tag', 'sample_rate_hz', 'duration_s', 'path', 'split']
+    cols = ['sample_id', 'label', 'group_id', 'subject_id', 'session_id', 'device_id', 'distance_tag', 'sample_rate_hz', 'duration_s', 'path', 'split']
     w = csv.DictWriter(f, fieldnames=cols); w.writeheader()
     for r in records:
         sid = r['sample_id']; sp = 'train' if sid in split['train_ids'] else ('validation' if sid in split['validation_ids'] else 'test')
         row = dict(r); row['split'] = sp; w.writerow({k: row[k] for k in cols})
 np.savez_compressed(dataset_dir/'mp09_features_39d.npz', X=X, y=y, groups=groups, sample_ids=ids, paths=paths, feature_names=feature_names,
-                    train_mask=train_mask, val_mask=val_mask, test_mask=test_mask)
+                    train_mask=train_mask, val_mask=val_mask, test_mask=test_mask, subjects=subjects)
 
 # %% [markdown]
 # ## 5) Config, metrik, visualisasi
 
 # %%
-cfg = {'sampling_rate_hz': FS, 'labels': LABELS, 'n_blocks': N_BLOCKS, 'samples_per_class': N_BLOCKS, 'total_samples': len(ids),
-       'record_duration_s': DURATION_S, 'group_key': 'group_id', 'split_strategy': 'blocks_01_04_train__05_validation__06_test', 'seed': SEED,
+cfg = {'sampling_rate_hz': FS, 'labels': LABELS, 'n_blocks': N_BLOCKS, 'n_speakers': N_SPEAKERS,
+       'speakers': list(SPEAKERS) if ACQUISITION_MODE == 'group' else None,
+       'samples_per_class': N_BLOCKS*N_SPEAKERS, 'total_samples': len(ids),
+       'record_duration_s': DURATION_S, 'group_key': 'group_id', 'subject_key': 'subject_id',
+       'split_strategy': 'blocks_01_04_train__05_validation__06_test', 'seed': SEED,
        'feature_schema_source': 'config/feature_config.json', 'feature_dim': 39, 'augmentation': 'NONE_in_MP09__training_only_later',
        'acquisition_mode': ACQUISITION_MODE,
+       'deviation_from_book': ('4 penutur x 24 = 96 WAV (buku: 1 penutur, 24 WAV); split tetap per block 1-4/5/6'
+                               if ACQUISITION_MODE == 'group' else None),
        'tts_block_profile': BLOCK_PROFILE if ACQUISITION_MODE == 'tts' else None}
 (ROOT/'config/dataset_config.json').write_text(json.dumps(cfg, indent=2), encoding='utf-8')
 
@@ -386,6 +416,9 @@ metrics = {'n_samples': int(len(ids)), 'feature_dim': int(X.shape[1]), 'finite_f
            'record_duration_s': float(np.mean(durations)),
            'active_duration_after_vad_s': {k: float(fn([r['active_duration_s'] for r in records])) for k, fn in [('min', np.min), ('mean', np.mean), ('max', np.max)]},
            'logmel_frames': {k: int(fn([np.load(logmel_dir/f"{r['sample_id']}.npz")['log_mel'].shape[0] for r in records])) for k, fn in [('min', np.min), ('max', np.max)]},
+           'n_speakers': N_SPEAKERS,
+           'subject_counts': {sp: {'train': int(np.sum(train_mask & (subjects == sp))), 'validation': int(np.sum(val_mask & (subjects == sp))),
+                                   'test': int(np.sum(test_mask & (subjects == sp)))} for sp in sorted(set(subjects))},
            'acquisition_mode': ACQUISITION_MODE}
 (metric_dir/'mp09_dataset_metrics.json').write_text(json.dumps(metrics, indent=2), encoding='utf-8')
 
@@ -408,6 +441,7 @@ STATUS.write_text(json.dumps(status, indent=2), encoding='utf-8')
 
 print('MP9 selesai:', X.shape, 'train/val/test =', train_mask.sum(), val_mask.sum(), test_mask.sum())
 print('Class counts  :', metrics['class_counts_all'])
+print('Penutur/split :', metrics['subject_counts'])
 print('Group overlap :', metrics['group_overlap_train_val'], metrics['group_overlap_train_test'])
 print('Durasi aktif  :', {k: round(v, 3) for k, v in metrics['active_duration_after_vad_s'].items()}, 's (rekaman', DURATION_S, 's)')
 print('Frame log-Mel :', metrics['logmel_frames'])

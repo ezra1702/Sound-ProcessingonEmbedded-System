@@ -1,48 +1,50 @@
 {
   "embedded_and_filter_methods_train_cv": {
     "mi": {
-      "cv_macro_f1_mean": 1.0,
-      "cv_macro_f1_std": 0.0,
-      "jaccard_stability_mean": 0.6888888888888888,
+      "cv_macro_f1_mean": 0.9052579365079365,
+      "cv_macro_f1_std": 0.07076932048187522,
+      "jaccard_stability_mean": 0.6053872053872055,
       "k": 8,
       "always_selected": [
-        "mfcc02_std",
+        "mfcc01_mean",
+        "mfcc02_mean",
         "mfcc04_std",
-        "mfcc05_mean",
-        "zcr_mean",
-        "centroid_hz_mean",
-        "centroid_hz_std"
+        "mfcc10_std",
+        "centroid_hz_mean"
       ]
     },
     "rfe": {
-      "cv_macro_f1_mean": 0.8333333333333333,
-      "cv_macro_f1_std": 0.16666666666666669,
-      "jaccard_stability_mean": 0.4181818181818182,
-      "k": 8,
-      "always_selected": [
-        "mfcc02_std",
-        "mfcc04_std",
-        "mfcc07_std"
-      ]
-    },
-    "l1": {
-      "cv_macro_f1_mean": 0.6770833333333333,
-      "cv_macro_f1_std": 0.2212162560582844,
-      "jaccard_stability_mean": 0.42533022533022535,
-      "k": 8,
-      "always_selected": [
-        "mfcc01_std",
-        "mfcc05_mean",
-        "mfcc07_mean"
-      ]
-    },
-    "rf": {
-      "cv_macro_f1_mean": 0.7499999999999999,
-      "cv_macro_f1_std": 0.14433756729740646,
+      "cv_macro_f1_mean": 0.9305555555555556,
+      "cv_macro_f1_std": 0.06944444444444448,
       "jaccard_stability_mean": 0.41414141414141414,
       "k": 8,
       "always_selected": [
-        "mfcc02_std",
+        "mfcc01_mean",
+        "mfcc04_mean",
+        "mfcc04_std"
+      ]
+    },
+    "l1": {
+      "cv_macro_f1_mean": 0.9149305555555556,
+      "cv_macro_f1_std": 0.08789250040866071,
+      "jaccard_stability_mean": 0.6962962962962963,
+      "k": 8,
+      "always_selected": [
+        "mfcc01_mean",
+        "mfcc04_mean",
+        "mfcc04_std",
+        "mfcc06_std",
+        "mfcc13_std"
+      ]
+    },
+    "rf": {
+      "cv_macro_f1_mean": 0.8725198412698414,
+      "cv_macro_f1_std": 0.04227925066936516,
+      "jaccard_stability_mean": 0.635016835016835,
+      "k": 8,
+      "always_selected": [
+        "mfcc01_mean",
+        "mfcc03_mean",
         "mfcc04_std",
         "centroid_hz_mean"
       ]
@@ -51,119 +53,117 @@
   "mi_k_curve": [
     {
       "k": 1,
-      "mean": 0.5,
-      "std": 0.3118047822311618
+      "mean": 0.670436507936508,
+      "std": 0.030698554787839435
     },
     {
       "k": 2,
-      "mean": 0.8333333333333333,
-      "std": 0.16666666666666669
+      "mean": 0.8015873015873015,
+      "std": 0.04280268254921553
     },
     {
       "k": 3,
-      "mean": 0.9166666666666666,
-      "std": 0.14433756729740646
+      "mean": 0.8048115079365079,
+      "std": 0.08506149021075594
     },
     {
       "k": 4,
-      "mean": 0.9166666666666666,
-      "std": 0.14433756729740646
+      "mean": 0.8675595238095238,
+      "std": 0.09842074859867768
     },
     {
       "k": 6,
-      "mean": 0.9166666666666666,
-      "std": 0.14433756729740646
+      "mean": 0.8665854978354978,
+      "std": 0.08413050483064714
     },
     {
       "k": 8,
-      "mean": 1.0,
-      "std": 0.0
+      "mean": 0.9052579365079365,
+      "std": 0.07076932048187522
     },
     {
       "k": 10,
-      "mean": 1.0,
-      "std": 0.0
+      "mean": 0.8719246031746032,
+      "std": 0.04500547176357705
     },
     {
       "k": 12,
-      "mean": 0.9166666666666666,
-      "std": 0.14433756729740646
+      "mean": 0.9041666666666667,
+      "std": 0.05543389456520862
     },
     {
       "k": 16,
-      "mean": 0.8333333333333333,
-      "std": 0.16666666666666669
+      "mean": 0.9528769841269842,
+      "std": 0.051898765945362794
     },
     {
       "k": 20,
-      "mean": 0.8333333333333333,
-      "std": 0.16666666666666669
+      "mean": 0.9841269841269842,
+      "std": 0.027492869961410746
     },
     {
       "k": 26,
-      "mean": 0.8333333333333333,
-      "std": 0.16666666666666669
+      "mean": 0.9841269841269842,
+      "std": 0.027492869961410746
     },
     {
       "k": 39,
-      "mean": 0.7499999999999999,
-      "std": 0.14433756729740646
+      "mean": 0.9213789682539684,
+      "std": 0.05197397343436966
     }
   ],
-  "k_min_within_0.03_of_best": 8,
+  "k_min_within_0.03_of_best": 20,
   "permutation_importance_oof": [
     {
       "feature": "mfcc04_std",
-      "macro_f1_drop": 0.22604166666666664
+      "macro_f1_drop": 0.23741567460317464
     },
     {
-      "feature": "mfcc05_mean",
-      "macro_f1_drop": 0.18645833333333334
+      "feature": "mfcc01_mean",
+      "macro_f1_drop": 0.22438875360750365
     },
     {
-      "feature": "mfcc02_std",
-      "macro_f1_drop": 0.16979166666666667
+      "feature": "mfcc04_mean",
+      "macro_f1_drop": 0.13720982142857144
     },
     {
-      "feature": "zcr_mean",
-      "macro_f1_drop": 0.12916666666666665
+      "feature": "mfcc06_std",
+      "macro_f1_drop": 0.12461129148629149
     },
     {
-      "feature": "centroid_hz_mean",
-      "macro_f1_drop": 0.08333333333333333
+      "feature": "mfcc07_mean",
+      "macro_f1_drop": 0.10567460317460317
     },
     {
-      "feature": "zcr_std",
-      "macro_f1_drop": 0.07916666666666668
+      "feature": "mfcc03_mean",
+      "macro_f1_drop": 0.09525049603174604
     },
     {
-      "feature": "mfcc02_mean",
-      "macro_f1_drop": 0.06666666666666668
+      "feature": "mfcc11_std",
+      "macro_f1_drop": 0.07676339285714286
     },
     {
-      "feature": "centroid_hz_std",
-      "macro_f1_drop": 0.04166666666666667
+      "feature": "rms_mean",
+      "macro_f1_drop": 0.03875744047619047
     }
   ],
   "front_end_cost": {
     "groups_needed_by_selection": [
       "mfcc",
-      "spectral_shape",
-      "zcr"
+      "rms"
     ],
     "stages_needed": [
-      "centroid_bandwidth_rolloff",
       "dct_13_mfcc",
       "fft_power_spectrum",
       "mel_filterbank_log",
-      "zcr"
+      "rms"
     ],
     "mac_per_frame_full39": 72276,
-    "mac_per_frame_selected": 9476,
-    "front_end_saving_pct": 86.8891471581161,
+    "mac_per_frame_selected": 8672,
+    "front_end_saving_pct": 88.00154961536333,
     "pitch_autocorrelation_skippable": true
   },
-  "frozen_mp10_choice": "mi8",
+  "frozen_mp10_choice": "rfe8",
   "scope": "training_only_groupkfold",
   "validation_used": false,
   "test_used": false

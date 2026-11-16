@@ -1,2 +1,7 @@
 # Materi kuliah & PDF mini projek di root (di luar folder Mini Project XX)
 /*.pdf
+
+.vercel
+
+# Zip unduhan Google Drive (duplikat dari dataset_rekaman/)
+/MP09_Dataset-*.zip

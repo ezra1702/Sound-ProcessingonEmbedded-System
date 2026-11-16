@@ -1,8 +1,8 @@
 {
   "test_opened": true,
   "test_opened_once_in_running_project": true,
-  "reproduction_run": false,
-  "n_test": 4,
+  "reproduction_run": true,
+  "n_test": 16,
   "classes": [
     "mati",
     "naik",
@@ -10,143 +10,155 @@
     "turun"
   ],
   "sample_ids": [
-    "nyala_b06",
-    "mati_b06",
-    "naik_b06",
-    "turun_b06"
+    "ezra_nyala_b06",
+    "ezra_mati_b06",
+    "ezra_naik_b06",
+    "ezra_turun_b06",
+    "abdillah_nyala_b06",
+    "abdillah_mati_b06",
+    "abdillah_naik_b06",
+    "abdillah_turun_b06",
+    "ivang_nyala_b06",
+    "ivang_mati_b06",
+    "ivang_naik_b06",
+    "ivang_turun_b06",
+    "jahzeel_nyala_b06",
+    "jahzeel_mati_b06",
+    "jahzeel_naik_b06",
+    "jahzeel_turun_b06"
   ],
   "classical": {
-    "accuracy": 1.0,
-    "balanced_accuracy": 1.0,
-    "macro_precision": 1.0,
-    "macro_recall": 1.0,
-    "macro_f1": 1.0,
+    "accuracy": 0.9375,
+    "balanced_accuracy": 0.9375,
+    "macro_precision": 0.95,
+    "macro_recall": 0.9375,
+    "macro_f1": 0.9365079365079365,
     "accuracy_wilson_95": [
-      0.5100999795960008,
-      1.0
+      0.7167073163197013,
+      0.9888809426916687
     ],
     "per_class": {
       "mati": {
         "precision": 1.0,
         "recall": 1.0,
         "f1": 1.0,
-        "support": 1
+        "support": 4
       },
       "naik": {
-        "precision": 1.0,
+        "precision": 0.8,
         "recall": 1.0,
-        "f1": 1.0,
-        "support": 1
+        "f1": 0.8888888888888888,
+        "support": 4
       },
       "nyala": {
         "precision": 1.0,
         "recall": 1.0,
         "f1": 1.0,
-        "support": 1
+        "support": 4
       },
       "turun": {
         "precision": 1.0,
-        "recall": 1.0,
-        "f1": 1.0,
-        "support": 1
+        "recall": 0.75,
+        "f1": 0.8571428571428571,
+        "support": 4
       }
     },
     "confusion_matrix": [
       [
-        1,
+        4,
         0,
         0,
         0
       ],
       [
         0,
-        1,
+        4,
         0,
         0
       ],
       [
         0,
         0,
-        1,
+        4,
         0
       ],
       [
         0,
+        1,
         0,
-        0,
-        1
+        3
       ]
     ]
   },
   "tiny_cnn": {
-    "accuracy": 0.5,
-    "balanced_accuracy": 0.5,
-    "macro_precision": 0.25,
-    "macro_recall": 0.5,
-    "macro_f1": 0.3333333333333333,
+    "accuracy": 0.5625,
+    "balanced_accuracy": 0.5625,
+    "macro_precision": 0.5666666666666667,
+    "macro_recall": 0.5625,
+    "macro_f1": 0.5595238095238095,
     "accuracy_wilson_95": [
-      0.15003570882017148,
-      0.8499642911798285
+      0.33178195606776517,
+      0.7690163666481448
     ],
     "per_class": {
       "mati": {
         "precision": 0.5,
-        "recall": 1.0,
-        "f1": 0.6666666666666666,
-        "support": 1
+        "recall": 0.5,
+        "f1": 0.5,
+        "support": 4
       },
       "naik": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
-        "support": 1
+        "precision": 0.6666666666666666,
+        "recall": 0.5,
+        "f1": 0.5714285714285714,
+        "support": 4
       },
       "nyala": {
         "precision": 0.5,
-        "recall": 1.0,
-        "f1": 0.6666666666666666,
-        "support": 1
+        "recall": 0.5,
+        "f1": 0.5,
+        "support": 4
       },
       "turun": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
-        "support": 1
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6666666666666666,
+        "support": 4
       }
     },
     "confusion_matrix": [
       [
-        1,
+        2,
         0,
         0,
-        0
+        2
       ],
       [
         0,
-        0,
-        1,
-        0
-      ],
-      [
-        0,
-        0,
-        1,
+        2,
+        2,
         0
       ],
       [
         1,
-        0,
-        0,
+        1,
+        2,
         0
+      ],
+      [
+        1,
+        0,
+        0,
+        3
       ]
     ]
   },
   "resource_proxy": {
     "classical": {
-      "family": "tree",
-      "estimated_ops_per_sample": 2,
-      "parameter_count_proxy": 7,
-      "serialized_bytes": 1857,
+      "family": "logreg",
+      "estimated_ops_per_sample": 64,
+      "parameter_count_proxy": 36,
+      "serialized_bytes": 1074,
       "note": "Classifier-only resource proxy; feature extraction cost is not included."
     },
     "tiny_cnn": {
@@ -163,5 +175,5 @@
     "mp11_classical_baseline",
     "mp12_tiny_cnn"
   ],
-  "interpretation_warning": "With four test samples, point estimates have very wide uncertainty. Do not claim perfect generalization from a 100% score."
+  "interpretation_warning": "With only 16 test samples (known speakers, new session), point estimates have wide uncertainty; see the Wilson intervals. Do not claim generalization to unseen speakers."
 }

@@ -6,7 +6,7 @@
 # Fitur tambahan (materi Bab 13: uncertainty, ROC/PR, calibration/Brier, distribusi kesalahan):
 # 1. **Bootstrap 95% CI** macro-F1 & accuracy (sampel test di-resample).
 # 2. **Uji McNemar exact** classical vs CNN (apakah perbedaan signifikan?).
-# 3. **Kalibrasi**: Brier score, NLL, ECE + reliability diagram (CNN softmax & tree leaf-probability).
+# 3. **Kalibrasi**: Brier score, NLL, ECE + reliability diagram (CNN softmax & probabilitas model klasik terpilih).
 # 4. **ROC-AUC & PR-AP one-vs-rest** per kelas.
 # 5. **Robustness stress test** pada WAV test: derau putih SNR 30→0 dB, gain −12/+6 dB, time-shift,
 #    memakai front-end beku `kws_frontend.py` (MP9) → kurva degradasi per model.
@@ -120,7 +120,7 @@ def predict(m, v39_list, lm_list):
 
 # %%
 wavs = {sid: fe.read_wav(ROOT/'data/raw/mp09_dataset'/f'{sid}.wav') for sid in test_ids}
-y_true = np.array([sid.split('_b')[0] for sid in test_ids])
+y_true = np.array([sid.split('_b')[0].split('_')[-1] for sid in test_ids])
 clean_feats = [fe.features(wavs[s]) for s in test_ids]
 v_clean = [f[0] for f in clean_feats]; lm_clean = [f[1] for f in clean_feats]
 results, preds, probs = {}, {}, {}

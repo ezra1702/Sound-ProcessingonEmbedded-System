@@ -161,7 +161,8 @@ diag = {'epochs_run': len(h['train_loss']), 'optimizer_steps': len(h['train_loss
         'train_set_macro_f1': train_f1(official), 'validation_macro_f1': met['validation_macro_f1'],
         'diagnosis': None}
 diag['diagnosis'] = ('UNDERFITTING: train loss masih dekat ln(4) dan train-F1 rendah; '
-                     'jumlah langkah optimizer terlalu sedikit (16 sampel / batch 8 = 2 langkah per epoch).'
+                     f'jumlah langkah optimizer terlalu sedikit ({len(ytr)} sampel / batch 8 = {int(np.ceil(len(ytr)/8))} langkah per epoch, '
+                     f"{diag['optimizer_steps']} langkah total karena early stopping)."
                      if diag['final_train_loss'] > 0.8*diag['chance_level_loss_ln4'] else 'Konvergen')
 print('Diagnosis CNN resmi:', {k: (round(v, 4) if isinstance(v, float) else v) for k, v in diag.items()})
 

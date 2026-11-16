@@ -77,14 +77,14 @@
     "gross_error_rate_20pct": 0.0
   },
   "compute_cost_us_per_frame_host": {
-    "rms": 5.599333332308257,
-    "zcr": 8.945666680422923,
-    "fft_power_spectrum": 8.216333323313545,
-    "centroid_bandwidth_rolloff": 9.099666688901683,
-    "mel_filterbank_log": 2.945000014733523,
-    "dct_13_mfcc": 11.557000010119129,
-    "pitch_autocorrelation": 21.188333339523524,
-    "pitch_yin": 805.5875001446111
+    "rms": 6.3873333419905975,
+    "zcr": 8.692333334086774,
+    "fft_power_spectrum": 13.639000001906728,
+    "centroid_bandwidth_rolloff": 9.563999992678873,
+    "mel_filterbank_log": 3.2076666684588417,
+    "dct_13_mfcc": 11.814333326280273,
+    "pitch_autocorrelation": 24.100999993000492,
+    "pitch_yin": 827.1274999970046
   },
   "compute_cost_mac_per_frame": {
     "rms": 400,

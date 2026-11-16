@@ -2,13 +2,13 @@
 #pragma once
 #include <stdint.h>
 #include <math.h>
-// family: tree (tree) | model: classical_tree_int8
+// family: logreg (linear) | model: classical_logreg_int8
 #define MP15_INPUT_DIM 8
 #define MP15_N_CLASSES 4
-static const int32_t MP15_FEATURE_INDEX[8] = {2, 3, 7, 8, 28, 29, 30, 31};
-static const float MP15_FEATURE_MEAN[8] = {0.526658719f, 4.87777164f, 2.87890223f, -2.58045432f, 0.27257485f, 0.0974067861f, 1965.99218f, 871.798551f};
-static const float MP15_FEATURE_SCALE[8] = {2.36671478f, 2.65812235f, 0.827549787f, 1.93496642f, 0.0601364703f, 0.0419211745f, 500.994766f, 379.860914f};
-static const float MP15_INPUT_Q_SCALE = 0.015133384f;
+static const int32_t MP15_FEATURE_INDEX[8] = {0, 4, 6, 7, 11, 12, 21, 26};
+static const float MP15_FEATURE_MEAN[8] = {-3.71215049f, -3.82435837f, 1.19398804f, 3.01063671f, 1.45001238f, -0.0335881028f, 0.955705956f, 0.0395954548f};
+static const float MP15_FEATURE_SCALE[8] = {4.18022037f, 3.68923748f, 2.69562483f, 1.15169474f, 0.494389732f, 1.44786538f, 0.304245014f, 0.0159747109f};
+static const float MP15_INPUT_Q_SCALE = 0.0291919784f;
 static inline void mp15_quantize_input(const float *x39, int8_t *zq) {
     for (int i = 0; i < MP15_INPUT_DIM; ++i) {
         float z = (x39[MP15_FEATURE_INDEX[i]] - MP15_FEATURE_MEAN[i]) / MP15_FEATURE_SCALE[i];
@@ -16,19 +16,20 @@ static inline void mp15_quantize_input(const float *x39, int8_t *zq) {
         zq[i] = (int8_t)(q > 127.f ? 127 : (q < -127.f ? -127 : q));
     }
 }
-#define MP15_TREE_N_NODES 7
-static const int8_t MP15_TREE_FEATURE[7] = {2, 7, -1, -1, 7, -1, -1};
-static const int8_t MP15_TREE_THRESH_Q[7] = {2, -26, 0, 0, 4, 0, 0};
-static const int16_t MP15_TREE_LEFT[7] = {1, 2, -1, -1, 5, -1, -1};
-static const int16_t MP15_TREE_RIGHT[7] = {4, 3, -1, -1, 6, -1, -1};
-static const uint8_t MP15_TREE_LEAF_CLASS[7] = {255, 255, 2, 3, 255, 1, 0};
-/* Return indeks kelas; input = vektor 39-D mentah. Inferensi murni integer setelah kuantisasi input. */
+static const int8_t MP15_WEIGHT_Q[32] = {-127, -20, 6, 94, -2, 47, -16, -50, 74, -5, 127, 34, 112, -117, -63, 69, 69, -69, -127, 38, -62, -15, 82, 29, 18, 66, 1, -127, -26, 42, -2, -20};
+static const float MP15_WEIGHT_SCALE[4] = {0.0119420256f, 0.00856551041f, 0.00928624578f, 0.0138548534f};
+static const float MP15_BIAS[4] = {-0.510203419f, 0.450780334f, 0.317074721f, -0.257651636f};
+/* Return indeks kelas; input = vektor 39-D mentah (belum di-scale). */
 static inline int mp15_classical_predict(const float *x39) {
     int8_t zq[MP15_INPUT_DIM]; mp15_quantize_input(x39, zq);
-    int n = 0;
-    while (MP15_TREE_FEATURE[n] >= 0)
-        n = (zq[MP15_TREE_FEATURE[n]] <= MP15_TREE_THRESH_Q[n]) ? MP15_TREE_LEFT[n] : MP15_TREE_RIGHT[n];
-    return (int)MP15_TREE_LEAF_CLASS[n];
+    int best = 0; float best_s = -1e30f;
+    for (int c = 0; c < MP15_N_CLASSES; ++c) {
+        int32_t acc = 0;
+        for (int i = 0; i < MP15_INPUT_DIM; ++i) acc += (int32_t)MP15_WEIGHT_Q[c*MP15_INPUT_DIM+i] * (int32_t)zq[i];
+        float s = (float)acc * MP15_WEIGHT_SCALE[c] * MP15_INPUT_Q_SCALE + MP15_BIAS[c];
+        if (s > best_s) { best_s = s; best = c; }
+    }
+    return best;
 }
 // class 0: mati
 // class 1: naik

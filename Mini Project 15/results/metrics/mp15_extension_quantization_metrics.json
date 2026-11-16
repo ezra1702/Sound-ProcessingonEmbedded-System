@@ -4,135 +4,212 @@
     "message": "ok",
     "c_vs_python_int8_agreement": 1.0,
     "c_vs_float_agreement": 1.0,
-    "n": 24
+    "n": 96
   },
   "book_svm_int8_path": {
     "archive_hash_verified": true,
-    "int8_vs_float_agreement_24": 1.0,
+    "int8_vs_float_agreement_all": 1.0,
     "c_compiled": true,
-    "note": "Jalur buku (SVM) didemonstrasikan; model deployment tetap classical_tree_int8",
+    "note": "Jalur buku (SVM) didemonstrasikan; model deployment tetap classical_logreg_int8",
     "c_vs_python_agreement": 1.0
   },
   "bit_width_sweep": {
     "8": {
-      "tree_per_tensor_24": 1.0,
-      "tree_per_feature_24": 1.0,
-      "svm_per_tensor_24": 1.0,
-      "svm_per_feature_24": 1.0,
-      "tree_per_tensor_jitter2000": 0.998,
-      "tree_per_feature_jitter2000": 0.9975,
-      "svm_per_tensor_jitter2000": 1.0,
-      "svm_per_feature_jitter2000": 0.9995
-    },
-    "6": {
-      "tree_per_tensor_24": 1.0,
-      "tree_per_feature_24": 1.0,
-      "svm_per_tensor_24": 1.0,
-      "svm_per_feature_24": 1.0,
-      "tree_per_tensor_jitter2000": 0.991,
-      "tree_per_feature_jitter2000": 0.992,
-      "svm_per_tensor_jitter2000": 0.9975,
+      "selected_per_tensor_all": 1.0,
+      "selected_per_feature_all": 1.0,
+      "svm_per_tensor_all": 1.0,
+      "svm_per_feature_all": 1.0,
+      "selected_per_tensor_jitter2000": 0.998,
+      "selected_per_feature_jitter2000": 0.997,
+      "svm_per_tensor_jitter2000": 0.998,
       "svm_per_feature_jitter2000": 0.997
     },
+    "6": {
+      "selected_per_tensor_all": 1.0,
+      "selected_per_feature_all": 1.0,
+      "svm_per_tensor_all": 0.9895833333333334,
+      "svm_per_feature_all": 0.9895833333333334,
+      "selected_per_tensor_jitter2000": 0.9915,
+      "selected_per_feature_jitter2000": 0.9965,
+      "svm_per_tensor_jitter2000": 0.9905,
+      "svm_per_feature_jitter2000": 0.9945
+    },
     "5": {
-      "tree_per_tensor_24": 1.0,
-      "tree_per_feature_24": 1.0,
-      "svm_per_tensor_24": 1.0,
-      "svm_per_feature_24": 1.0,
-      "tree_per_tensor_jitter2000": 0.988,
-      "tree_per_feature_jitter2000": 0.9915,
-      "svm_per_tensor_jitter2000": 0.998,
-      "svm_per_feature_jitter2000": 0.996
+      "selected_per_tensor_all": 1.0,
+      "selected_per_feature_all": 1.0,
+      "svm_per_tensor_all": 1.0,
+      "svm_per_feature_all": 0.9895833333333334,
+      "selected_per_tensor_jitter2000": 0.9865,
+      "selected_per_feature_jitter2000": 0.986,
+      "svm_per_tensor_jitter2000": 0.9825,
+      "svm_per_feature_jitter2000": 0.9875
     },
     "4": {
-      "tree_per_tensor_24": 1.0,
-      "tree_per_feature_24": 1.0,
-      "svm_per_tensor_24": 1.0,
-      "svm_per_feature_24": 1.0,
-      "tree_per_tensor_jitter2000": 0.968,
-      "tree_per_feature_jitter2000": 0.9745,
-      "svm_per_tensor_jitter2000": 0.9935,
-      "svm_per_feature_jitter2000": 0.995
+      "selected_per_tensor_all": 0.9895833333333334,
+      "selected_per_feature_all": 0.9895833333333334,
+      "svm_per_tensor_all": 0.9895833333333334,
+      "svm_per_feature_all": 0.9791666666666666,
+      "selected_per_tensor_jitter2000": 0.9745,
+      "selected_per_feature_jitter2000": 0.9755,
+      "svm_per_tensor_jitter2000": 0.962,
+      "svm_per_feature_jitter2000": 0.9715
     },
     "3": {
-      "tree_per_tensor_24": 0.8333333333333334,
-      "tree_per_feature_24": 0.875,
-      "svm_per_tensor_24": 1.0,
-      "svm_per_feature_24": 1.0,
-      "tree_per_tensor_jitter2000": 0.9,
-      "tree_per_feature_jitter2000": 0.9075,
-      "svm_per_tensor_jitter2000": 0.9745,
-      "svm_per_feature_jitter2000": 0.969
+      "selected_per_tensor_all": 0.9479166666666666,
+      "selected_per_feature_all": 0.9479166666666666,
+      "svm_per_tensor_all": 0.9375,
+      "svm_per_feature_all": 0.9270833333333334,
+      "selected_per_tensor_jitter2000": 0.9185,
+      "selected_per_feature_jitter2000": 0.9425,
+      "svm_per_tensor_jitter2000": 0.882,
+      "svm_per_feature_jitter2000": 0.9195
     },
     "2": {
-      "tree_per_tensor_24": 0.5416666666666666,
-      "tree_per_feature_24": 0.5416666666666666,
-      "svm_per_tensor_24": 0.75,
-      "svm_per_feature_24": 0.75,
-      "tree_per_tensor_jitter2000": 0.5735,
-      "tree_per_feature_jitter2000": 0.614,
-      "svm_per_tensor_jitter2000": 0.8125,
-      "svm_per_feature_jitter2000": 0.8245
+      "selected_per_tensor_all": 0.4166666666666667,
+      "selected_per_feature_all": 0.7083333333333334,
+      "svm_per_tensor_all": 0.4375,
+      "svm_per_feature_all": 0.6458333333333334,
+      "selected_per_tensor_jitter2000": 0.459,
+      "selected_per_feature_jitter2000": 0.69,
+      "svm_per_tensor_jitter2000": 0.464,
+      "svm_per_feature_jitter2000": 0.609
     }
   },
-  "tree_margin_lsb": {
-    "min": 7.5,
+  "decision_margin": {
+    "model_kind": "linear",
+    "unit": "logit (skor top-1 - top-2)",
+    "small_margin_threshold": 0.5,
+    "min": 0.1374743262439972,
+    "n_below_threshold": 2,
+    "n": 96,
     "per_sample": [
-      7.5,
-      16.5,
-      8.5,
-      60.5,
-      91.5,
-      46.5,
-      52.5,
-      62.5,
-      28.5,
-      42.5,
-      16.5,
-      36.5,
-      62.5,
-      74.5,
-      49.5,
-      27.5,
-      23.5,
-      7.5,
-      15.5,
-      116.5,
-      68.5,
-      23.5,
-      46.5,
-      34.5
+      1.691688722704278,
+      1.5224185290624672,
+      1.907357720531066,
+      1.5985056308750694,
+      0.9749198995693654,
+      4.211395138558806,
+      0.6792764570248175,
+      3.7191316322179455,
+      4.091220203847413,
+      3.9965521197191665,
+      3.62780894769366,
+      2.67509412687405,
+      4.732700494146695,
+      3.0638092095187397,
+      2.9069295531798995,
+      2.7353234594596882,
+      0.97720065511045,
+      3.61172304199558,
+      2.0039639639093747,
+      2.5740807361687073,
+      1.7770105354454235,
+      3.3498480089878893,
+      3.102246672481485,
+      3.0342247792494,
+      3.75537249800264,
+      2.7145137614489814,
+      4.870877063194464,
+      3.2730876070220494,
+      4.065860996466323,
+      4.881358029102279,
+      3.3369482784712514,
+      1.3319232719352265,
+      2.626435884612906,
+      3.3459255763538227,
+      1.5984985858707965,
+      2.0682272508069253,
+      2.2030953918899105,
+      2.4963567645067872,
+      1.9108661447288355,
+      3.9138894416464534,
+      5.6432206512944125,
+      2.160361939662403,
+      3.6755886767572883,
+      2.8416777019115758,
+      3.6749832188136704,
+      3.9935123275218105,
+      2.520426033140384,
+      2.725126403344227,
+      0.6696468078832853,
+      3.888326518970657,
+      1.318947804499572,
+      1.704170990343263,
+      1.7842498557982505,
+      1.70753639060613,
+      0.8279659860688571,
+      2.8356414147838276,
+      4.05250452145864,
+      2.7517490129818905,
+      2.1794958612002135,
+      3.1786537567780178,
+      5.124688990348497,
+      1.9088834330143971,
+      4.4445944908234525,
+      4.37774793955719,
+      2.9751103216919055,
+      6.700917366962733,
+      0.7135450434538715,
+      1.2763752494251985,
+      0.195157874555145,
+      1.8979225791952696,
+      0.8896250540733159,
+      2.912377607741211,
+      4.399260965588468,
+      0.5796200916148755,
+      4.064153565834459,
+      3.4689933716599697,
+      2.489398984866777,
+      1.1182043131819652,
+      6.276603806763259,
+      4.407672753343967,
+      2.59397967635153,
+      2.7263534301060384,
+      3.165473029124889,
+      1.0003833480846291,
+      0.7951279081843536,
+      0.1374743262439972,
+      3.7960103314381897,
+      3.1506056514865515,
+      4.53966010035363,
+      1.9844148846053566,
+      2.2176916857806344,
+      0.7194601701937603,
+      4.67773849942254,
+      3.469976433628342,
+      4.470608543452931,
+      5.415921380304052
     ]
   },
   "cnn_weight_quant": {
     "features.0.weight": {
-      "per_tensor_sqnr_db": 47.56004030706236,
-      "per_channel_sqnr_db": 49.16589291932457,
-      "fp16_sqnr_db": 73.87449292964779
+      "per_tensor_sqnr_db": 47.72076069960999,
+      "per_channel_sqnr_db": 48.689397278660074,
+      "fp16_sqnr_db": 73.12846344627295
     },
     "features.4.weight": {
-      "per_tensor_sqnr_db": 45.63194242525766,
-      "per_channel_sqnr_db": 46.717424437873525,
-      "fp16_sqnr_db": 73.67195381532409
+      "per_tensor_sqnr_db": 45.72139789520136,
+      "per_channel_sqnr_db": 46.767175969502716,
+      "fp16_sqnr_db": 73.81269062007091
     },
     "classifier.weight": {
-      "per_tensor_sqnr_db": 47.85144838660611,
-      "per_channel_sqnr_db": 49.472385176746705,
-      "fp16_sqnr_db": 75.18574296376849
+      "per_tensor_sqnr_db": 47.847135712451994,
+      "per_channel_sqnr_db": 47.919452340000234,
+      "fp16_sqnr_db": 74.13205442166132
     }
   },
   "cnn_logit_equivalence": {
-    "logit_sqnr_int8_db": 28.695383071899414,
-    "logit_sqnr_fp16_db": 62.47074890136719,
-    "agreement_int8": 1.0,
+    "logit_sqnr_int8_db": 26.879880905151367,
+    "logit_sqnr_fp16_db": 57.02691650390625,
+    "agreement_int8": 0.9583333333333334,
     "agreement_fp16": 1.0,
-    "max_abs_logit_err_int8": 0.04745078086853027,
-    "max_abs_logit_err_fp16": 0.0010646283626556396,
-    "min_top2_logit_gap_float": 0.02309378981590271
+    "max_abs_logit_err_int8": 0.08908402919769287,
+    "max_abs_logit_err_fp16": 0.0012608170509338379,
+    "min_top2_logit_gap_float": 0.00023008882999420166
   },
   "compiled_footprint": {
     "mp15_classical_model_int8.h": {
-      "text_bytes": 208,
+      "text_bytes": 240,
       "rodata_bytes": 240,
       "note": "x86-64 -Os (host); ukuran data konstan identik di MCU, ukuran kode berbeda per ISA"
     },
@@ -144,7 +221,7 @@
   },
   "package": {
     "zip": "deployment/mp15_deployment_package.zip",
-    "zip_sha256": "09b5de7160481d42d5cc16740bc5ef7899dd9f23e74d86eb3e3c6044b200adae",
+    "zip_sha256": "a76a46fad95a2138f5fb6dab9127530231d9f30d8a84fbd0f57135ccf2b1408a",
     "files": {
       "config/project_config.json": {
         "sha256": "67b9f35795cd9b76e86ce9b2cd7a7be328537c9a2bf6cf0a7e67cc42b3aa5985",
@@ -167,31 +244,31 @@
         "bytes": 831
       },
       "config/deployment_config.json": {
-        "sha256": "e92cbae0fe2b1230bd974634fd8e8370910419fd13f7c6e23a5fa7aedfc1e4e5",
-        "bytes": 1046
+        "sha256": "71aea07e64512f93807839435852b4ef0e1be2667d691c750803d3e6be6ab207",
+        "bytes": 1052
       },
       "firmware/mp14_realtime_constants.h": {
         "sha256": "97a0c76ca1cfe49db79738ae9ffd1001b4a49bba0b32df75cff315213df6c887",
         "bytes": 313
       },
       "firmware/mp15_classical_model_int8.h": {
-        "sha256": "26c2bf2db71636f15657b9b613894c8ced66850df32f26af1976a1938adf45b5",
-        "bytes": 1908
+        "sha256": "8d1a028b7a63baf3f89b1b1502f96cbd79397a9d459aed7210e7b584db343c00",
+        "bytes": 2085
       },
       "models/mp15_classical_int8.npz": {
-        "sha256": "b338c27b37386fbae637ae0aa0245a82404bd605861b35979de8e62f92ff2232",
-        "bytes": 2896
+        "sha256": "62e188e7c457dfbddb57883b899d3cd6b89de016b02f2c16366a654d9d8d7a1c",
+        "bytes": 2288
       },
       "deployment/mp15_manifest.json": {
-        "sha256": "80650b9576b3256795574df71e1d203be9aa546f394f7c6fee7f243f533d333c",
-        "bytes": 897
+        "sha256": "dd56af40bab20007020f4c87a099f322de645f24ff52c53c675bd74c30f8defb",
+        "bytes": 895
       },
       "results/metrics/mp15_deployment_metrics.json": {
-        "sha256": "6df23c766609ce472b8e024af4af771a5f56d9009123c786ffa591bf58af5b3e",
-        "bytes": 2057
+        "sha256": "9540666c46972dba5be2734c39924822ca64cc81e10e2298083534ae0f9a5ee6",
+        "bytes": 2305
       },
       "models/mp15_tiny_cnn_int8_torchscript.pt": {
-        "sha256": "c60db6c1ed18e4b268974ba7474a421f46645d820d4fe2cd4375f3d8ef141e16",
+        "sha256": "467b1481e92fa35ecd57ddb7c73e214f3311e5ae4f5f8f9465ef7a71e0586d27",
         "bytes": 28704
       },
       "features/kws_frontend.py": {
@@ -201,6 +278,6 @@
     },
     "integrity_ok": true
   },
-  "selected_model_unchanged": "classical_tree_int8",
+  "selected_model_unchanged": "classical_logreg_int8",
   "post_test_tuning_performed": false
 }

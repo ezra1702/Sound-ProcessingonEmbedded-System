@@ -2,20 +2,20 @@
   "extra_families": {
     "svm_rbf": {
       "best_params": {
-        "C": 0.3,
+        "C": 1.0,
         "gamma": "scale"
       },
-      "cv_macro_f1": 1.0,
+      "cv_macro_f1": 0.9696428571428571,
       "validation_macro_f1": 1.0,
-      "support_vectors": 16,
-      "ops_proxy": 384
+      "support_vectors": 56,
+      "ops_proxy": 1344
     },
     "gaussian_nb": {
       "best_params": {
-        "var_smoothing": 0.001
+        "var_smoothing": 1e-09
       },
-      "cv_macro_f1": 0.9166666666666666,
-      "validation_macro_f1": 1.0,
+      "cv_macro_f1": 0.9523809523809523,
+      "validation_macro_f1": 0.873015873015873,
       "support_vectors": null,
       "ops_proxy": 128
     },
@@ -23,21 +23,21 @@
       "best_params": {
         "solver": "svd"
       },
-      "cv_macro_f1": 0.48958333333333337,
-      "validation_macro_f1": 1.0,
+      "cv_macro_f1": 0.9528769841269842,
+      "validation_macro_f1": 0.873015873015873,
       "support_vectors": null,
       "ops_proxy": 64
     }
   },
   "robustness_and_overfit": {
     "knn": {
-      "train_fit_f1": 1.0,
-      "cv_f1": 1.0,
-      "overfit_gap": 0.0,
+      "train_fit_f1": 0.9843597262952102,
+      "cv_f1": 0.9841269841269842,
+      "overfit_gap": 0.0002327421682259967,
       "cv_f1_feature_noise": {
-        "0.25": 0.9833333333333332,
-        "0.5": 0.9260416666666667,
-        "1.0": 0.7703125
+        "0.25": 0.936701388888889,
+        "0.5": 0.880959145021645,
+        "1.0": 0.708357683982684
       }
     },
     "logreg": {
@@ -45,39 +45,39 @@
       "cv_f1": 1.0,
       "overfit_gap": 0.0,
       "cv_f1_feature_noise": {
-        "0.25": 0.9583333333333333,
-        "0.5": 0.8916666666666668,
-        "1.0": 0.7546875
+        "0.25": 0.9691468253968255,
+        "0.5": 0.8846223394660896,
+        "1.0": 0.6970995670995671
       }
     },
     "linear_svm": {
       "train_fit_f1": 1.0,
-      "cv_f1": 1.0,
-      "overfit_gap": 0.0,
+      "cv_f1": 0.9841269841269842,
+      "overfit_gap": 0.015873015873015817,
       "cv_f1_feature_noise": {
-        "0.25": 0.946875,
-        "0.5": 0.83125,
-        "1.0": 0.6916666666666667
+        "0.25": 0.9466294642857143,
+        "0.5": 0.839943181818182,
+        "1.0": 0.6359329732767233
       }
     },
     "tree": {
       "train_fit_f1": 1.0,
-      "cv_f1": 1.0,
-      "overfit_gap": 0.0,
+      "cv_f1": 0.8576884920634921,
+      "overfit_gap": 0.14231150793650793,
       "cv_f1_feature_noise": {
-        "0.25": 0.8697916666666666,
-        "0.5": 0.7541666666666667,
-        "1.0": 0.5708333333333334
+        "0.25": 0.8264833603896105,
+        "0.5": 0.752696158008658,
+        "1.0": 0.5544218802031302
       }
     },
     "rf": {
       "train_fit_f1": 1.0,
-      "cv_f1": 0.8333333333333333,
-      "overfit_gap": 0.16666666666666674,
+      "cv_f1": 0.9378968253968254,
+      "overfit_gap": 0.062103174603174605,
       "cv_f1_feature_noise": {
-        "0.25": 0.8020833333333333,
-        "0.5": 0.7739583333333334,
-        "1.0": 0.6609375
+        "0.25": 0.8995510912698415,
+        "0.5": 0.8165016233766235,
+        "1.0": 0.6464640220890221
       }
     },
     "mlp": {
@@ -85,81 +85,81 @@
       "cv_f1": 1.0,
       "overfit_gap": 0.0,
       "cv_f1_feature_noise": {
-        "0.25": 0.9875,
-        "0.5": 0.9333333333333332,
-        "1.0": 0.7880208333333334
+        "0.25": 0.9595808531746034,
+        "0.5": 0.8704540945165945,
+        "1.0": 0.68504329004329
       }
     },
     "svm_rbf": {
       "train_fit_f1": 1.0,
-      "cv_f1": 1.0,
-      "overfit_gap": 0.0,
+      "cv_f1": 0.9696428571428571,
+      "overfit_gap": 0.03035714285714286,
       "cv_f1_feature_noise": {
-        "0.25": 0.9666666666666666,
-        "0.5": 0.884375,
-        "1.0": 0.7130208333333334
+        "0.25": 0.9531746031746031,
+        "0.5": 0.8829482323232323,
+        "1.0": 0.6927637987012988
       }
     },
     "gaussian_nb": {
-      "train_fit_f1": 1.0,
-      "cv_f1": 0.9166666666666666,
-      "overfit_gap": 0.08333333333333337,
+      "train_fit_f1": 0.96875,
+      "cv_f1": 0.9523809523809523,
+      "overfit_gap": 0.016369047619047672,
       "cv_f1_feature_noise": {
-        "0.25": 0.890625,
-        "0.5": 0.8171875,
-        "1.0": 0.5557291666666666
+        "0.25": 0.917289411976912,
+        "0.5": 0.8357596049783551,
+        "1.0": 0.6047141747141748
       }
     },
     "lda": {
       "train_fit_f1": 1.0,
-      "cv_f1": 0.48958333333333337,
-      "overfit_gap": 0.5104166666666666,
+      "cv_f1": 0.9528769841269842,
+      "overfit_gap": 0.04712301587301582,
       "cv_f1_feature_noise": {
-        "0.25": 0.2771875,
-        "0.5": 0.22874999999999995,
-        "1.0": 0.18520833333333334
+        "0.25": 0.9402157738095237,
+        "0.5": 0.8453977272727273,
+        "1.0": 0.6326925505050506
       }
     }
   },
   "frozen_family_archive": {
     "knn": {
       "file": "models/mp11_family_models/mp11_knn.joblib",
-      "sha256": "f59556d3b442187e37c7d533da32da8289ed2c761d118c036a8c22013149684c",
+      "sha256": "dcd6fb8ea65ed89dba82ec3c14f40e40f2330342a79c2d5daeec544e4dbf3baa",
       "reproduces_mp11_validation_predictions": true,
       "fit_scope": "training_only",
       "test_used": false
     },
     "logreg": {
       "file": "models/mp11_family_models/mp11_logreg.joblib",
-      "sha256": "66fd79c6f187e4414d6b950299a6a016cf72e9efaf1ec8675143237e333fe26d",
+      "sha256": "85e1587cd4bce837c75557e6bb67033b2ee74abf4c0c15ee08c55bd8fe9860f9",
       "reproduces_mp11_validation_predictions": true,
       "fit_scope": "training_only",
       "test_used": false
     },
     "linear_svm": {
       "file": "models/mp11_family_models/mp11_linear_svm.joblib",
-      "sha256": "95b9ddebb77d7dc524e1cbd55ce309310174dfc3207f8032dc25ecf7a32265d9",
+      "sha256": "d3b0054b17ec51d48e777779ec123331a18032d7158ca3f508697aa39a51951d",
       "reproduces_mp11_validation_predictions": true,
       "fit_scope": "training_only",
       "test_used": false
     },
     "tree": {
       "file": "models/mp11_family_models/mp11_tree.joblib",
-      "sha256": "5d7695e856014b5dbe9f4ec30d13e33e7b13cde6d6773fcdf0ca001441afb24d",
+      "sha256": "cb39cec94162f0e6289ef78a657c04fab8095570fd164d294c96969cc334e88f",
       "reproduces_mp11_validation_predictions": true,
       "fit_scope": "training_only",
       "test_used": false
     },
     "rf": {
       "file": "models/mp11_family_models/mp11_rf.joblib",
-      "sha256": "ce02cfc513805b84d18df5668f0c00d2f75ab6d3a2a443213c4c073ed8458434",
+      "sha256": "63d91e0de8fc5e844819bcfcefb2dbde240c7efc9b098b42e0645f93310a4d6b",
       "reproduces_mp11_validation_predictions": true,
       "fit_scope": "training_only",
       "test_used": false
     },
     "mlp": {
       "file": "models/mp11_family_models/mp11_mlp.joblib",
-      "sha256": "1602fea5b770a45f5fac023ba033ec2d52adb0735e9ba274a1aa616b70140fd9",
+      "sha256": "caee80c3258b1cd2aa5c4a2a2d1129b6eeeb8c32011107126e4c40d099563a8f",
       "reproduces_mp11_validation_predictions": true,
       "fit_scope": "training_only",
       "test_used": false
@@ -168,19 +168,19 @@
   "c_export_verification": {
     "compiled": true,
     "compiler": "gcc.EXE (Rev5, Built by MSYS2 project) 16.1.0",
-    "n_vectors": 20,
+    "n_vectors": 80,
     "scope": "train+validation (test tidak dibuka)",
     "agreement_c_vs_sklearn": 1.0,
     "header": "firmware/mp11_classifier_float.h"
   },
   "host_latency_ms_per_sample": {
-    "knn": 0.7159469999896828,
-    "logreg": 0.05139200002304278,
-    "linear_svm": 0.05109199999424163,
-    "tree": 0.060783000008086674,
-    "rf": 1.8235814999934519,
-    "mlp": 0.13071299996227026
+    "knn": 0.7389650000004622,
+    "logreg": 0.05198749999181018,
+    "linear_svm": 0.05037250000896165,
+    "tree": 0.06254849999095313,
+    "rf": 2.9068605000065872,
+    "mlp": 0.134089999992284
   },
-  "chosen_family_mp11": "tree",
+  "chosen_family_mp11": "logreg",
   "note": "Analisis tambahan pada TRAIN/VALIDATION. Test set tidak dibuka. Pilihan MP11 tidak diubah."
 }
