@@ -151,7 +151,7 @@ b = np.asarray(final["b"], dtype=np.float32)
 a = np.asarray(final["a"], dtype=np.float32)
 
 def c_array(name, arr):
-    vals = ", ".join(f"{v:.9g}f" for v in arr)
+    vals = ", ".join(f"{v:#.9g}f" for v in arr)
     return f"static const float {name}[{len(arr)}] = {{ {vals} }};"
 
 header = "\n".join([

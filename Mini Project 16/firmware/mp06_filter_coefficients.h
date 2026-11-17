@@ -4,5 +4,5 @@
 #define FILTER_B_LEN 5
 #define FILTER_A_LEN 5
 static const float FILTER_B[5] = { 0.833866f, -3.33411407f, 5.00049639f, -3.33411407f, 0.833866f };
-static const float FILTER_A[5] = { 1f, -3.86340547f, 5.60461521f, -3.61845398f, 0.877275527f };
+static const float FILTER_A[5] = { 1.0f, -3.86340547f, 5.60461521f, -3.61845398f, 0.877275527f };
 /* Keep state between audio blocks; do not reset per frame. */
