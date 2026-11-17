@@ -1,0 +1,931 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lampu Suara KWS</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='7' r='6' fill='%23f5b82e'/%3E%3Crect x='5' y='12' width='6' height='3' fill='%23777'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f4f5f7; --card:#ffffff; --ink:#1d2430; --muted:#6b7482; --line:#e3e6eb;
+  --accent:#2f6fed; --ok:#1f9d55; --warn:#d08a00; --bad:#d64545; --sim:#8a4fd8;
+  --bulb-off:#c9ced6; --glow:255,190,60;
+  --shadow:0 1px 2px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1218; --card:#171b23; --ink:#e7eaf0; --muted:#8d96a5; --line:#262c37;
+    --accent:#5b8dff; --ok:#3ccf7e; --warn:#f0b429; --bad:#ff6b6b; --sim:#b388ff;
+    --bulb-off:#3a414d; --shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1218; --card:#171b23; --ink:#e7eaf0; --muted:#8d96a5; --line:#262c37;
+  --accent:#5b8dff; --ok:#3ccf7e; --warn:#f0b429; --bad:#ff6b6b; --sim:#b388ff;
+  --bulb-off:#3a414d; --shadow:0 1px 2px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:16px}
+header{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-bottom:14px}
+header h1{font-size:20px;margin:0;flex:1 1 260px}
+header h1 small{display:block;font-size:13px;font-weight:400;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:13px;font-weight:600;border:1px solid var(--line);background:var(--card)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--muted)}
+.pill.on .dot{background:var(--ok)} .pill.wait .dot{background:var(--warn)} .pill.off .dot{background:var(--bad)}
+.pill.sim{color:var(--sim);border-color:var(--sim)} .pill.sim .dot{background:var(--sim)}
+.banner{display:none;margin:0 0 14px;padding:10px 14px;border-radius:10px;background:color-mix(in srgb,var(--sim) 14%,var(--card));border:1px solid var(--sim);color:var(--ink);font-size:14px}
+body.sim .banner{display:block}
+.grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:14px}
+@media (max-width:820px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow);min-width:0}
+.card h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 12px;font-weight:700}
+.lamp{display:flex;flex-direction:column;align-items:center;gap:12px}
+.lamp svg{width:min(210px,60vw);height:auto;overflow:visible}
+#bulbGlass{transition:fill .35s,filter .35s}
+#halo{transition:opacity .35s}
+.lampState{font-size:26px;font-weight:800;letter-spacing:.02em}
+.lampState.on{color:var(--warn)} .lampState.off{color:var(--muted)}
+.segs{display:flex;gap:5px;width:100%;max-width:330px}
+.seg{flex:1;height:12px;border-radius:3px;background:var(--line);transition:background .25s}
+.seg.lit{background:rgb(var(--glow))}
+body:not(.power) .seg.lit{background:var(--bulb-off)}
+.sub{color:var(--muted);font-size:13px}
+.fsm{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.chip{padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid var(--line);color:var(--muted)}
+.chip.act{color:#fff;border-color:transparent;background:var(--accent)}
+.chip.act.FAULT{background:var(--bad)} .chip.act.COOLDOWN{background:var(--warn)}
+.det{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:baseline}
+.word{grid-column:1/-1;font-size:40px;font-weight:800;line-height:1.1;margin-bottom:4px;word-break:break-word}
+.word.rej{color:var(--bad);font-size:26px}
+.det dt{color:var(--muted);font-size:13px} .det dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums}
+.meter{margin-top:16px}
+.bar{position:relative;height:16px;border-radius:8px;background:var(--line);overflow:hidden}
+.bar i{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--ok),var(--warn) 75%,var(--bad));transition:width .08s linear}
+.meterRow{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:13px;color:var(--muted)}
+.vad{display:inline-flex;align-items:center;gap:6px}
+.vad .dot{background:var(--line)} .vad.on .dot{background:var(--ok)}
+.controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+@media (max-width:820px){.controls{grid-template-columns:minmax(0,1fr)}}
+.btns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+button{font:inherit;font-weight:700;padding:11px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;min-height:44px}
+button:hover:not(:disabled){border-color:var(--accent)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button.simbtn{border-color:color-mix(in srgb,var(--sim) 50%,var(--line))}
+button.rec{background:var(--bad);border-color:var(--bad);color:#fff}
+.full{grid-column:1/-1}
+.note{font-size:12.5px;color:var(--muted);margin:8px 0 0}
+.note.warn{color:var(--warn)}
+.conn{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.conn input{flex:1 1 160px;min-width:0;font:inherit;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}
+@media (max-width:620px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.stat b{display:block;font-size:22px;font-variant-numeric:tabular-nums}
+.stat span{font-size:12.5px;color:var(--muted)}
+.logCard{margin-top:14px}
+.logHead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.logHead h2{margin:0}
+.logHead button{padding:7px 12px;min-height:36px;font-size:13px}
+.tbl{overflow-x:auto;max-height:340px;overflow-y:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{position:sticky;top:0;background:var(--card);color:var(--muted);font-weight:700;font-size:12px}
+td.k-keyword{color:var(--ok);font-weight:700} td.k-reject{color:var(--bad);font-weight:700}
+td.k-failsafe{color:var(--bad);font-weight:700} td.k-recover{color:var(--accent);font-weight:700} td.k-manual{color:var(--accent);font-weight:700}
+tr.sim td:first-child::after{content:" SIM";color:var(--sim);font-size:10px;font-weight:800}
+.empty{padding:16px;color:var(--muted);text-align:center}
+footer{margin:16px 0 8px;color:var(--muted);font-size:12.5px;display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:space-between}
+.themeBtn{padding:5px 10px;min-height:32px;font-size:13px}
+kbd{font:12px ui-monospace,Consolas,monospace;padding:1px 5px;border:1px solid var(--line);border-radius:4px}
+/* ---- panel AI ---- */
+.ai{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:14px;margin-top:14px}
+@media (max-width:820px){.ai{grid-template-columns:minmax(0,1fr)}}
+.pbars{display:grid;gap:7px}
+.pb{display:grid;grid-template-columns:54px minmax(0,1fr) 46px;gap:8px;align-items:center;font-size:13px}
+.pb .tr{height:14px;border-radius:7px;background:var(--line);overflow:hidden}
+.pb .tr i{display:block;height:100%;width:0;background:var(--muted);transition:width .25s}
+.pb.top .tr i{background:var(--accent)} .pb.top b{color:var(--accent)}
+.pb.kw4 .tr i{opacity:.95} .pb span:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.specWrap{position:relative;width:100%;aspect-ratio:98/40;border-radius:10px;overflow:hidden;background:#000;border:1px solid var(--line)}
+.specWrap canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+#camCv{mix-blend-mode:screen;transition:opacity .2s}
+.axis{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-top:4px}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;user-select:none}
+.toggle input{width:18px;height:18px;accent-color:var(--accent)}
+.spk{font-size:28px;font-weight:800;margin:2px 0 8px}
+.spk.unk{color:var(--muted);font-size:22px}
+.users{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.user{display:inline-flex;align-items:center;gap:6px;padding:4px 6px 4px 10px;border-radius:999px;border:1px solid var(--line);font-size:13px;font-weight:600}
+.user.new{border-color:var(--ok)} .user button{min-height:24px;padding:0 7px;font-size:12px;border-radius:999px}
+.enrollWord{font-size:44px;font-weight:800;text-align:center;margin:6px 0;color:var(--accent)}
+.prog{height:10px;border-radius:5px;background:var(--line);overflow:hidden} .prog i{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+.lockOn{color:var(--ok);font-weight:700} .lockOff{color:var(--muted)}
+.cmp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.cmp div{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px}
+.cmp b{display:block;font-size:18px}
+.cmp .ok{color:var(--ok)} .cmp .bad{color:var(--bad)}
+.asst{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center;margin-bottom:14px}
+.orb{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#9fd4ff,var(--accent) 55%,#1b3a8a);box-shadow:0 0 0 0 rgba(47,111,237,.5)}
+.orb.talk{animation:orbP 0.9s ease-in-out infinite}
+@keyframes orbP{0%{box-shadow:0 0 0 0 rgba(47,111,237,.55);transform:scale(1)}50%{box-shadow:0 0 0 14px rgba(47,111,237,0);transform:scale(1.06)}100%{box-shadow:0 0 0 0 rgba(47,111,237,0);transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.orb.talk{animation:none;outline:3px solid var(--accent)}}
+.asNow{font-size:18px;font-weight:700;min-height:1.4em}
+.asMsg{font-size:13px;color:var(--muted);padding:3px 0;border-top:1px dashed var(--line)} .asMsg.bad{color:var(--bad)}
+.asBar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:6px}
+.asBar button{min-height:32px;padding:4px 12px;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Lampu Kendali Suara — Keyword Spotting Embedded
+      <small>nyala · mati · naik · turun &nbsp;|&nbsp; Kelompok Christama Ezra, Abdillah, Ivang, Jahzeel</small></h1>
+    <span id="connPill" class="pill off"><span class="dot"></span><span id="connText">Belum terhubung</span></span>
+    <button id="themeBtn" class="themeBtn" type="button" title="Ganti tema">🌓</button>
+  </header>
+
+  <div class="banner" id="simBanner">
+    <b>MODE SIMULASI</b>. Hasil di halaman ini dibuat oleh browser untuk latihan, <b>bukan</b> oleh board.
+    Saat demo resmi, matikan mode simulasi dan sambungkan ke board.
+  </div>
+
+  <section class="card asst" aria-label="Mastekkom asisten suara">
+    <div class="orb" id="asOrb" aria-hidden="true"></div>
+    <div style="min-width:0">
+      <h2 style="margin-bottom:4px">Mastekkom · asisten suara</h2>
+      <div class="asNow" id="asNow" aria-live="polite">Sambungkan ke board, lalu ucapkan perintah.</div>
+      <div class="asBar">
+        <label class="toggle"><input type="checkbox" id="asChk" checked> balas dengan suara</label>
+        <button id="asTest" type="button">🔊 Tes suara</button>
+        <span class="note" id="asVoice" style="margin:0"></span>
+      </div>
+      <div id="asLog" style="margin-top:6px"></div>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section class="card lamp" aria-label="Status lampu">
+      <h2 style="align-self:flex-start">Lampu</h2>
+      <svg viewBox="0 0 200 250" aria-hidden="true">
+        <defs>
+          <radialGradient id="haloG"><stop offset="0" stop-color="rgb(255,200,80)" stop-opacity=".75"/><stop offset="1" stop-color="rgb(255,200,80)" stop-opacity="0"/></radialGradient>
+        </defs>
+        <circle id="halo" cx="100" cy="90" r="98" fill="url(#haloG)" opacity="0"/>
+        <path id="bulbGlass" d="M100 18c-38 0-66 29-66 64 0 24 12 39 24 52 8 9 13 18 13 28v12h58v-12c0-10 5-19 13-28 12-13 24-28 24-52 0-35-28-64-66-64z" fill="var(--bulb-off)"/>
+        <path d="M84 120l8-22 8 14 8-14 8 22" fill="none" stroke="rgba(0,0,0,.25)" stroke-width="3" stroke-linejoin="round"/>
+        <rect x="70" y="178" width="60" height="12" rx="4" fill="#8b93a0"/>
+        <rect x="72" y="193" width="56" height="10" rx="4" fill="#7a828f"/>
+        <rect x="76" y="206" width="48" height="10" rx="4" fill="#8b93a0"/>
+        <path d="M86 219h28l-6 14h-16z" fill="#5f6672"/>
+      </svg>
+      <div id="lampState" class="lampState off">MATI</div>
+      <div class="segs" id="segs" aria-label="Level terang"></div>
+      <div class="sub">Level terang: <b id="lvlText">5</b> / 10</div>
+      <div class="fsm" aria-label="State machine">
+        <span class="chip" data-st="IDLE">IDLE</span>
+        <span class="chip" data-st="COOLDOWN">COOLDOWN</span>
+        <span class="chip" data-st="FAULT">FAULT</span>
+      </div>
+    </section>
+
+    <section class="card" aria-label="Deteksi terakhir">
+      <h2>Deteksi terakhir</h2>
+      <dl class="det">
+        <dd id="detWord" class="word" style="color:var(--muted)">—</dd>
+        <dt>Aksi</dt><dd id="detAction">—</dd>
+        <dt>Keyakinan</dt><dd id="detScore">—</dd>
+        <dt>Penutur</dt><dd id="detSpk">—</dd>
+        <dt id="detOodT" hidden>Jarak OOD</dt><dd id="detOod" hidden>—</dd>
+        <dt>Latency di board</dt><dd id="detLat">—</dd>
+        <dt>Sumber</dt><dd id="detSrc">—</dd>
+        <dt>Waktu</dt><dd id="detTime">—</dd>
+      </dl>
+      <div class="meter">
+        <h2 style="margin-bottom:8px">Level suara mikrofon</h2>
+        <div class="bar"><i id="meterFill"></i></div>
+        <div class="meterRow"><span id="meterDb">— dBFS</span><span id="vad" class="vad"><span class="dot"></span>suara terdeteksi</span></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="ai">
+    <section class="card" aria-label="Apa yang dilihat AI">
+      <div class="logHead"><h2>Apa yang dilihat AI</h2>
+        <label class="toggle"><input type="checkbox" id="camChk" checked> peta perhatian (CAM)</label></div>
+      <div class="specWrap"><canvas id="specCv" width="98" height="40"></canvas><canvas id="camCv" width="98" height="40"></canvas></div>
+      <div class="axis"><span>0 s</span><span id="specCap">log-Mel 98 frame × 40 band</span><span>1,0 s</span></div>
+      <p class="note">Gambar = spectrogram log-Mel 1 detik yang masuk ke DS-CNN di board (bawah = nada rendah, atas = nada tinggi).
+        Warna panas = bagian yang paling menentukan keputusan model (Class Activation Map, dihitung di board).</p>
+      <h2 style="margin-top:14px">Probabilitas tiap kelas</h2>
+      <div class="pbars" id="pbars"></div>
+      <div class="cmp" id="cmpBox" hidden>
+        <div>DS-CNN INT8 (deep learning)<b id="cmpDl">—</b></div>
+        <div>Logreg MP15 (klasik)<b id="cmpCl">—</b></div>
+      </div>
+    </section>
+
+    <div style="display:grid;gap:14px;align-content:start">
+      <section class="card" aria-label="Penutur">
+        <div class="logHead"><h2>Siapa yang bicara</h2>
+          <label class="toggle" title="Bila aktif, hanya suara anggota/pengguna terdaftar yang bisa mengendalikan lampu">
+            <input type="checkbox" id="lockChk"> 🔒 kunci suara</label></div>
+        <div id="spkName" class="spk unk">—</div>
+        <div class="pbars" id="spkBars"></div>
+        <p class="note" id="lockNote">Kunci suara mati: semua orang bisa memberi perintah.</p>
+      </section>
+
+      <section class="card" aria-label="Daftarkan pengguna baru">
+        <h2>Daftarkan pengguna baru</h2>
+        <div id="enrIdle">
+          <div class="conn" style="margin-top:0">
+            <input id="enrName" placeholder="Nama, mis. Pak Dosen" maxlength="20" autocomplete="off">
+            <button id="enrBtn" class="primary" type="button">Mulai</button>
+          </div>
+          <p class="note">Ucapkan tiap kata 3 kali (12 rekaman, ±1 menit) ke mic board. Board menyimpan "sidik suara" di memori flash —
+            model tidak dilatih ulang (few-shot, prototipe).</p>
+        </div>
+        <div id="enrRun" hidden>
+          <div class="sub" style="text-align:center">Ucapkan ke mic board:</div>
+          <div class="enrollWord" id="enrWord">—</div>
+          <div class="prog"><i id="enrProg"></i></div>
+          <div class="meterRow"><span id="enrCount">0 / 12</span><button id="enrCancel" type="button" style="min-height:32px;padding:4px 12px">Batal</button></div>
+        </div>
+        <div class="users" id="userList"></div>
+      </section>
+    </div>
+  </div>
+
+  <div class="controls">
+    <section class="card" aria-label="Koneksi">
+      <h2>Koneksi board</h2>
+      <div class="sub">Alamat board (IP di WiFi yang sama)</div>
+      <div class="conn">
+        <input id="hostIn" placeholder="mis. 192.168.1.50" autocomplete="off" spellcheck="false">
+        <button id="connBtn" class="primary" type="button">Sambung</button>
+      </div>
+      <div class="conn">
+        <button id="simBtn" class="simbtn" type="button" style="flex:1">Mode simulasi: MATI</button>
+      </div>
+      <p class="note" id="connNote">Halaman ini terhubung ke board lewat WebSocket <kbd>ws://&lt;alamat&gt;/ws</kbd>.</p>
+    </section>
+
+    <section class="card" aria-label="Kontrol manual">
+      <h2>Kontrol manual (cadangan)</h2>
+      <div class="btns">
+        <button type="button" data-cmd="ON">💡 ON</button>
+        <button type="button" data-cmd="OFF">⏻ OFF</button>
+        <button type="button" data-cmd="LEVEL_UP">▲ Terang</button>
+        <button type="button" data-cmd="LEVEL_DOWN">▼ Redup</button>
+      </div>
+      <p class="note">Tombol ini mengirim perintah langsung ke board (tanpa suara). Tercatat di log sebagai <b>manual</b>.</p>
+    </section>
+
+    <section class="card" aria-label="Uji suara">
+      <h2 id="speakTitle">Bicara lewat HP</h2>
+      <div id="micBox">
+        <button id="micBtn" class="primary" type="button" style="width:100%">🎤 Tekan lalu ucapkan perintah</button>
+        <p class="note" id="micNote">HP merekam 1,2 detik lalu mengirim suaranya ke board. Yang mengenali kata tetap board.</p>
+      </div>
+      <div id="simSpeak" class="btns" hidden>
+        <button type="button" class="simbtn" data-say="nyala">"nyala"</button>
+        <button type="button" class="simbtn" data-say="mati">"mati"</button>
+        <button type="button" class="simbtn" data-say="naik">"naik"</button>
+        <button type="button" class="simbtn" data-say="turun">"turun"</button>
+        <button type="button" class="simbtn" data-say="halo">"halo" (kata lain)</button>
+        <button type="button" class="simbtn" data-say="clap">👏 tepuk tangan</button>
+        <button type="button" class="simbtn full" data-say="stranger">🧑 orang asing bilang "nyala"</button>
+        <button type="button" class="simbtn full" data-say="stall">⚠️ Simulasi mic terputus (watchdog)</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="stats" aria-label="Statistik sesi">
+    <div class="stat"><b id="stKw">0</b><span>perintah diterima</span></div>
+    <div class="stat"><b id="stRej">0</b><span>suara ditolak</span></div>
+    <div class="stat"><b id="stLat">—</b><span>latency rata-rata (p95)</span></div>
+    <div class="stat"><b id="stUp">—</b><span>lama tersambung</span></div>
+  </div>
+
+  <section class="card logCard" aria-label="Event log">
+    <div class="logHead">
+      <h2>Event log</h2>
+      <div style="display:flex;gap:8px">
+        <button id="dlBtn" type="button">⬇ Unduh log (JSONL)</button>
+        <button id="clrBtn" type="button">Bersihkan</button>
+      </div>
+    </div>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Waktu</th><th>Jenis</th><th>Kata</th><th>Aksi</th><th>State</th><th>Lampu</th><th>Yakin</th><th>Penutur</th><th>Latency</th></tr></thead>
+        <tbody id="logBody"><tr><td colspan="9" class="empty">Belum ada kejadian.</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <span id="devInfo">Model: DS-CNN INT8 (kata + penutur) · log-Mel 98×40 · 16 kHz</span>
+    <span>Siklus 2 (deep learning) di atas MP16 · Teknik Pemrosesan Suara dan AI pada Sistem Embedded</span>
+  </footer>
+</div>
+
+<script>
+"use strict";
+// ---------- konstanta (sama dengan MP16) ----------
+const LVL_MIN = 0, LVL_MAX = 10, LVL_ON = 5;
+const COOLDOWN_MS = 800, OOD_THR = 11.81;
+const FS = 16000, CLIP_N = 19200;           // 1,2 s = durasi klip training MP09
+const ACTION_ID = {ON:"Lampu ON", OFF:"Lampu OFF", LEVEL_UP:"Terang +1", LEVEL_DOWN:"Redup −1",
+  IGNORED_BOUND:"Diabaikan (batas level)", NONE:"Tidak ada aksi", REJECT:"Ditolak (bukan perintah)",
+  REJECT_SPEAKER:"Ditolak: suara tidak dikenal (kunci aktif)", ENROLL:"Rekaman pendaftaran",
+  FAILSAFE_OFF:"Fail-safe: lampu OFF", RECOVER:"Audio pulih"};
+const KIND_ID = {keyword:"perintah", reject:"ditolak", failsafe:"fail-safe", recover:"pulih", manual:"manual"};
+
+let CLASSES = ["nyala","mati","naik","turun","diam","lain"];
+const CLASS_ID = {diam:"diam/hening", lain:"kata lain"};
+const $ = id => document.getElementById(id);
+const S = {power:false, level:LVL_ON, state:"IDLE", connected:false, sim:false,
+  connSince:0, log:[], lat:[], nKw:0, nRej:0, ws:null, retry:0, retryTimer:null, wantConn:false,
+  users:[], lock:false, enroll:null, spkThr:0.5};
+
+// ---------- penyimpanan lokal (opsional) ----------
+function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+function lsSet(k,v){ try { localStorage.setItem(k,v); } catch(e){} }
+
+// ---------- tema ----------
+(function(){
+  const t = lsGet("kws_theme"); if (t) document.documentElement.dataset.theme = t;
+  $("themeBtn").onclick = () => {
+    const cur = document.documentElement.dataset.theme ||
+      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const nx = cur === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = nx; lsSet("kws_theme", nx);
+  };
+})();
+
+// ---------- render ----------
+const segs = $("segs");
+for (let i = 1; i <= LVL_MAX; i++){ const d = document.createElement("div"); d.className = "seg"; segs.appendChild(d); }
+
+function renderLamp(){
+  document.body.classList.toggle("power", S.power);
+  const ls = $("lampState");
+  ls.textContent = S.power ? "NYALA" : "MATI"; ls.className = "lampState " + (S.power ? "on" : "off");
+  $("lvlText").textContent = S.level;
+  [...segs.children].forEach((d,i) => d.classList.toggle("lit", i < S.level));
+  const k = S.power ? Math.max(0.12, S.level / LVL_MAX) : 0;
+  $("halo").setAttribute("opacity", (k * 0.95).toFixed(2));
+  $("bulbGlass").setAttribute("fill", S.power ? `rgb(255,${Math.round(170 + 60*k)},${Math.round(40 + 120*k)})` : "var(--bulb-off)");
+  document.querySelectorAll(".fsm .chip").forEach(c => {
+    const on = c.dataset.st === S.state; c.classList.toggle("act", on); c.classList.toggle(c.dataset.st, on);
+  });
+}
+
+function setConn(kind, text){
+  const p = $("connPill"); p.className = "pill " + kind; $("connText").textContent = text;
+}
+
+function fmtTime(ms){ const d = new Date(ms); return d.toLocaleTimeString("id-ID",{hour12:false}) + "." + String(d.getMilliseconds()).padStart(3,"0"); }
+function num(v, dig, unit){ return (v === undefined || v === null || isNaN(v)) ? "—" : Number(v).toFixed(dig) + (unit || ""); }
+
+function showDetection(e){
+  const w = $("detWord");
+  if (e.kind === "keyword" || e.kind === "manual"){ w.textContent = e.kind === "manual" ? "(manual)" : "“" + e.label + "”"; w.className = "word"; w.style.color = ""; }
+  else if (e.kind === "reject"){ w.textContent = e.action === "REJECT_SPEAKER" ? "Ditolak: “" + e.label + "” dari suara asing" : "Ditolak: bukan perintah"; w.className = "word rej"; w.style.color = ""; }
+  else if (e.kind === "failsafe"){ w.textContent = "Mic terputus!"; w.className = "word rej"; w.style.color = ""; }
+  else if (e.kind === "recover"){ w.textContent = "Audio pulih"; w.className = "word"; w.style.color = "var(--accent)"; }
+  $("detAction").textContent = ACTION_ID[e.action] || e.action || "—";
+  $("detScore").textContent = e.probs ? num(100 * e.score, 0, " %") : num(e.score, 2, " logit");
+  $("detSpk").textContent = e.speaker === undefined ? "—" : (e.speaker ? e.speaker : "tidak dikenal") + (e.speaker_cos !== undefined ? " (cos " + num(e.speaker_cos, 2) + ")" : "");
+  const hasOod = e.ood !== undefined; $("detOodT").hidden = $("detOod").hidden = !hasOod;
+  $("detOod").textContent = !hasOod ? "—" : num(e.ood, 2) + (e.ood > OOD_THR ? "  (> ambang " + OOD_THR + ")" : "  (≤ ambang " + OOD_THR + ")");
+  $("detLat").textContent = num(e.latency_ms, 2, " ms");
+  $("detSrc").textContent = e.sim ? "SIMULASI browser" : ({board_mic:"mic board", web_mic:"mic HP → board", web:"tombol web"}[e.source] || e.source || "board");
+  $("detTime").textContent = fmtTime(e.t || Date.now());
+}
+
+function addLog(e){
+  e.t = e.t || Date.now();
+  S.log.push(e); if (S.log.length > 500) S.log.shift();
+  if (e.kind === "keyword") S.nKw++;
+  if (e.kind === "reject") S.nRej++;
+  if (typeof e.latency_ms === "number"){ S.lat.push(e.latency_ms); if (S.lat.length > 500) S.lat.shift(); }
+  const body = $("logBody");
+  if (body.querySelector(".empty")) body.innerHTML = "";
+  const tr = document.createElement("tr"); if (e.sim) tr.className = "sim";
+  const cells = [fmtTime(e.t), KIND_ID[e.kind] || e.kind, e.label || "—", ACTION_ID[e.action] || e.action || "—",
+    e.state || "—", e.power === undefined ? "—" : (e.power ? "ON · " + e.level : "OFF"),
+    e.probs ? num(100 * e.score, 0, " %") : num(e.score, 2), e.speaker === undefined ? "—" : (e.speaker || "?"), num(e.latency_ms, 2, " ms")];
+  cells.forEach((c,i) => { const td = document.createElement("td"); td.textContent = c; if (i === 1) td.className = "k-" + e.kind; tr.appendChild(td); });
+  body.prepend(tr);
+  while (body.children.length > 200) body.lastChild.remove();
+  showDetection(e); renderStats();
+  if (e.probs) renderAI(e);
+}
+
+function renderStats(){
+  $("stKw").textContent = S.nKw; $("stRej").textContent = S.nRej;
+  if (S.lat.length){
+    const a = [...S.lat].sort((x,y) => x - y), mean = a.reduce((s,v) => s + v, 0) / a.length;
+    const p95 = a[Math.min(a.length - 1, Math.floor(0.95 * a.length))];
+    $("stLat").textContent = mean.toFixed(1) + " (" + p95.toFixed(1) + ") ms";
+  } else $("stLat").textContent = "—";
+}
+setInterval(() => {
+  if (!S.connSince){ $("stUp").textContent = "—"; return; }
+  const s = Math.floor((Date.now() - S.connSince) / 1000);
+  $("stUp").textContent = Math.floor(s / 60) + "m " + String(s % 60).padStart(2,"0") + "s";
+}, 1000);
+
+function setMeter(db, vad){
+  const pct = Math.max(0, Math.min(100, (db + 80) / 80 * 100));
+  $("meterFill").style.width = pct + "%";
+  $("meterDb").textContent = isFinite(db) ? db.toFixed(1) + " dBFS" : "— dBFS";
+  $("vad").classList.toggle("on", !!vad);
+}
+
+// ---------- pesan dari board ----------
+function onBoardMsg(m){
+  switch (m.type){
+    case "hello":
+      $("devInfo").textContent = `Board: ${m.device || "?"} · Model: ${m.model || "?"} · ${m.payload_bytes || "?"} B` +
+        (m.model_sha ? " · SHA " + String(m.model_sha).slice(0,12) + "…" : "") + ` · ${m.fs || FS} Hz`;
+      if (m.power !== undefined){ S.power = !!m.power; S.level = m.level ?? S.level; S.state = m.state || S.state; renderLamp(); }
+      if (Array.isArray(m.classes)) { CLASSES = m.classes; renderProbs(null); }
+      if (Array.isArray(m.users)) { S.users = m.users; renderUsers(); }
+      if (m.lock !== undefined) setLockUi(!!m.lock);
+      if (m.spk_threshold !== undefined) S.spkThr = m.spk_threshold;
+      if (!S.welcomed){ S.welcomed = true; assistantWelcome(); }
+      if (m.macs) $("devInfo").textContent += ` · ${(m.macs/1e6).toFixed(2)} M MAC/inferensi`;
+      break;
+    case "users": S.users = m.list || []; renderUsers(); break;
+    case "settings": setLockUi(!!m.lock); break;
+    case "enroll": onEnroll(m); break;
+    case "level": setMeter(m.rms_db, m.vad); break;
+    case "state": S.power = !!m.power; S.level = m.level ?? S.level; S.state = m.state || S.state; renderLamp(); break;
+    case "event":
+      if (m.kind === "enroll_sample") break;
+      if (m.power !== undefined) S.power = !!m.power;
+      if (m.level !== undefined) S.level = m.level;
+      if (m.state) S.state = m.state;
+      renderLamp(); addLog(Object.assign({}, m, {t: Date.now(), board_t_ms: m.t_ms}));
+      break;
+    case "error": $("connNote").textContent = "Board melapor error: " + (m.message || "?"); break;
+  }
+}
+
+// ---------- koneksi WebSocket ----------
+function wsUrl(host){
+  host = host.trim().replace(/^wss?:\/\//, "").replace(/^https?:\/\//, "").replace(/\/.*$/, "");
+  return (location.protocol === "https:" ? "wss://" : "ws://") + host + "/ws";
+}
+function connect(){
+  if (S.sim) setSim(false);
+  const host = $("hostIn").value.trim();
+  if (!host){ $("connNote").textContent = "Isi dulu alamat IP board (lihat di Serial Monitor saat board menyala)."; return; }
+  lsSet("kws_host", host); S.wantConn = true; openWs(host);
+}
+function openWs(host){
+  clearTimeout(S.retryTimer);
+  try { if (S.ws) S.ws.close(); } catch(e){}
+  setConn("wait", "Menyambung…");
+  let ws;
+  try { ws = new WebSocket(wsUrl(host)); } catch(e){ setConn("off", "Alamat tidak valid"); return; }
+  ws.binaryType = "arraybuffer"; S.ws = ws;
+  ws.onopen = () => {
+    S.connected = true; S.retry = 0; S.connSince = Date.now(); setConn("on", "Terhubung ke board");
+    $("connBtn").textContent = "Putus"; $("connNote").textContent = "Terhubung ke " + wsUrl(host);
+    ws.send(JSON.stringify({type:"hello", client:"web_demo"}));
+    updateButtons();
+  };
+  ws.onmessage = ev => {
+    if (typeof ev.data !== "string") return;
+    let m; try { m = JSON.parse(ev.data); } catch(e){ return; }
+    onBoardMsg(m);
+  };
+  ws.onclose = () => {
+    const was = S.connected; S.connected = false; S.connSince = 0; S.ws = null; updateButtons();
+    $("connBtn").textContent = "Sambung";
+    if (S.sim){ setConn("sim", "SIMULASI (tanpa board)"); return; }
+    if (!S.wantConn){ setConn("off", "Belum terhubung"); return; }
+    S.retry = Math.min(S.retry + 1, 6); const wait = 500 * 2 ** S.retry;
+    setConn("off", (was ? "Terputus" : "Gagal") + ", coba lagi " + Math.round(wait/1000) + " s");
+    S.retryTimer = setTimeout(() => openWs(host), wait);
+  };
+  ws.onerror = () => {};
+}
+function disconnect(){ S.wantConn = false; clearTimeout(S.retryTimer); try { S.ws && S.ws.close(); } catch(e){} }
+$("connBtn").onclick = () => (S.connected || S.wantConn) && !S.sim ? (disconnect(), $("connBtn").textContent = "Sambung") : connect();
+$("hostIn").addEventListener("keydown", e => { if (e.key === "Enter") connect(); });
+
+function sendCmd(action){
+  if (S.sim){ simManual(action); return; }
+  if (!S.connected) return;
+  S.ws.send(JSON.stringify({type:"cmd", action}));
+}
+document.querySelectorAll("[data-cmd]").forEach(b => b.onclick = () => sendCmd(b.dataset.cmd));
+
+// ---------- panel AI: probabilitas, spectrogram + CAM, penutur ----------
+function b64u8(s){ const b = atob(s), o = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) o[i] = b.charCodeAt(i); return o; }
+function cmap(v, hot){            // v 0..1 -> [r,g,b]; hot = palet panas untuk CAM
+  if (hot) return [Math.min(255, 510*v), Math.max(0, Math.min(255, 510*v - 180)), Math.max(0, 255*(v - 0.75)*4)];
+  return [Math.round(255*Math.min(1, 1.6*v)), Math.round(255*Math.max(0, 1.4*v - 0.45)), Math.round(255*(0.35 + 0.4*Math.sin(Math.PI*v)))];
+}
+function drawGrid(cv, data, T, F, hot, alphaFn){
+  cv.width = T; cv.height = F; const ctx = cv.getContext("2d"), im = ctx.createImageData(T, F);
+  for (let t = 0; t < T; t++) for (let f = 0; f < F; f++){
+    const v = data[t*F + f] / 255, k = ((F - 1 - f)*T + t)*4, c = cmap(v, hot);
+    im.data[k] = c[0]; im.data[k+1] = c[1]; im.data[k+2] = c[2]; im.data[k+3] = alphaFn ? alphaFn(v) : 255;
+  }
+  ctx.putImageData(im, 0, 0);
+}
+function renderProbs(p, top){
+  const box = $("pbars"); box.innerHTML = "";
+  CLASSES.forEach((c, i) => {
+    const v = p ? p[i] : 0, d = document.createElement("div");
+    d.className = "pb" + (p && i === top ? " top" : "");
+    d.innerHTML = `<b>${c}</b><span class="tr"><i style="width:${(100*v).toFixed(1)}%"></i></span><span>${p ? (100*v).toFixed(0) + "%" : "—"}</span>`;
+    box.appendChild(d);
+  });
+}
+function renderAI(e){
+  const p = e.probs, top = p.indexOf(Math.max(...p));
+  renderProbs(p, top);
+  if (e.spec_b64) drawGrid($("specCv"), b64u8(e.spec_b64), e.spec_t || 98, e.spec_f || 40, false);
+  if (e.cam_b64){
+    const cv = $("camCv"), H = e.cam_h || 25, W = e.cam_w || 10, small = document.createElement("canvas");
+    drawGrid(small, b64u8(e.cam_b64), H, W, true, v => Math.round(255*Math.min(1, v*1.2)));
+    cv.width = 98; cv.height = 40; const ctx = cv.getContext("2d"); ctx.imageSmoothingEnabled = true;
+    ctx.clearRect(0, 0, 98, 40); ctx.drawImage(small, 0, 0, 98, 40);
+    $("specCap").textContent = "perhatian untuk kelas “" + (e.label || CLASSES[top]) + "”";
+  }
+  const sb = $("spkBars"); sb.innerHTML = "";
+  if (e.speaker_scores){
+    const ent = Object.entries(e.speaker_scores).sort((a, b) => b[1] - a[1]);
+    ent.forEach(([n, c]) => { const d = document.createElement("div"); d.className = "pb" + (n === e.speaker ? " top" : "");
+      const w = Math.max(0, Math.min(1, (c + 0.2) / 1.2));
+      d.innerHTML = `<b style="overflow:hidden;text-overflow:ellipsis">${n}</b><span class="tr"><i style="width:${(100*w).toFixed(0)}%"></i></span><span>${c.toFixed(2)}</span>`; sb.appendChild(d); });
+  }
+  const sn = $("spkName");
+  if (e.speaker){ sn.textContent = "Halo, " + e.speaker + " 👋"; sn.className = "spk"; }
+  else if (e.speaker === null){ sn.textContent = "Suara tidak dikenal"; sn.className = "spk unk"; }
+  if (e.classical){
+    $("cmpBox").hidden = false;
+    $("cmpDl").textContent = (e.kind === "keyword" || e.action === "REJECT_SPEAKER") ? "“" + e.label + "”" : "ditolak";
+    $("cmpCl").textContent = e.classical.reject ? "ditolak (OOD)" : "“" + e.classical.label + "”";
+  }
+  assistantOnEvent(e);
+}
+$("camChk").onchange = () => { $("camCv").style.opacity = $("camChk").checked ? 1 : 0; };
+
+function renderUsers(){
+  const box = $("userList"); box.innerHTML = "";
+  S.users.forEach(u => {
+    const d = document.createElement("span"); d.className = "user" + (u.enrolled ? " new" : "");
+    d.textContent = (u.enrolled ? "🆕 " : "👤 ") + u.name;
+    if (u.enrolled){ const b = document.createElement("button"); b.type = "button"; b.textContent = "✕"; b.title = "Hapus " + u.name;
+      b.onclick = () => { if (S.sim){ S.users = S.users.filter(x => x !== u); renderUsers(); } else wsSend({type:"user_delete", name:u.name}); };
+      d.appendChild(b); }
+    box.appendChild(d);
+  });
+}
+function setLockUi(on){
+  S.lock = on; $("lockChk").checked = on;
+  $("lockNote").innerHTML = on ? '<span class="lockOn">Kunci suara AKTIF</span>: hanya pengguna terdaftar yang bisa mengendalikan lampu.'
+                               : '<span class="lockOff">Kunci suara mati</span>: semua orang bisa memberi perintah.';
+}
+$("lockChk").onchange = () => { const on = $("lockChk").checked; if (S.sim) setLockUi(on); else wsSend({type:"set", lock:on});
+  say([on ? "kunci_on" : "kunci_off"]); };
+function wsSend(o){ if (S.connected && S.ws) S.ws.send(JSON.stringify(o)); }
+
+// ---------- pendaftaran pengguna baru ----------
+const ENR_WORDS = ["nyala","mati","naik","turun"], ENR_TOTAL = 12;
+function onEnroll(m){
+  if (m.state === "prompt"){
+    S.enroll = {name:m.name, index:m.index}; $("enrIdle").hidden = true; $("enrRun").hidden = false;
+    $("enrWord").textContent = "“" + m.word + "”"; $("enrCount").textContent = m.index + " / " + (m.total || ENR_TOTAL);
+    $("enrProg").style.width = (100 * m.index / (m.total || ENR_TOTAL)) + "%";
+    say(m.index === 0 ? ["daftar_mulai", "kata_" + m.word] : ["kata_" + m.word]);
+  } else if (m.state === "retry"){
+    $("enrCount").textContent += " · ulangi: " + (m.reason || "kurang jelas"); say(["ulangi"]);
+  } else if (m.state === "done"){
+    S.enroll = null; $("enrIdle").hidden = false; $("enrRun").hidden = true; $("enrName").value = "";
+    say(["daftar_selesai"]);
+    addLog({kind:"manual", label:null, action:"ENROLL", source:"web", sim:S.sim, state:S.state, power:S.power, level:S.level});
+  } else if (m.state === "cancelled"){
+    S.enroll = null; $("enrIdle").hidden = false; $("enrRun").hidden = true;
+  }
+}
+$("enrBtn").onclick = () => {
+  assistantUnlock();
+  const name = $("enrName").value.trim(); if (!name) { $("enrName").focus(); return; }
+  if (S.sim){ S.enrollSim = {name, i:0}; onEnroll({state:"prompt", name, index:0, total:ENR_TOTAL, word:ENR_WORDS[0]}); }
+  else wsSend({type:"enroll_start", name});
+};
+$("enrCancel").onclick = () => { if (S.sim){ S.enrollSim = null; onEnroll({state:"cancelled"}); } else wsSend({type:"enroll_cancel"}); };
+function simEnrollStep(){
+  const st = S.enrollSim; if (!st) return; st.i++;
+  if (st.i >= ENR_TOTAL){ S.users.push({name:st.name, enrolled:true}); renderUsers(); S.enrollSim = null; onEnroll({state:"done", name:st.name}); return; }
+  onEnroll({state:"prompt", name:st.name, index:st.i, total:ENR_TOTAL, word:ENR_WORDS[st.i % 4]});
+}
+
+// ---------- data AI tiruan untuk mode simulasi ----------
+function simAI(k, stranger){
+  const T = 98, F = 40, spec = new Uint8Array(T*F), cam = new Uint8Array(25*10);
+  const on = k < 4 ? [30 + 3*k, 62 + 4*k] : (k === 4 ? [0, 0] : [25, 70]);
+  for (let t = 0; t < T; t++) for (let f = 0; f < F; f++){
+    let v = 40 + 25*Math.random();
+    if (t > on[0] && t < on[1]) v += 120*Math.exp(-((f - 6 - 5*Math.sin(t/7 + k))**2)/18) + 70*Math.exp(-((f - 18 - 3*k)**2)/30);
+    spec[t*F + f] = Math.min(255, v);
+  }
+  for (let t = 0; t < 25; t++) for (let f = 0; f < 10; f++){
+    const tc = (on[0] + on[1]) / 8, v = k < 4 ? Math.exp(-((t - tc)**2)/6 - ((f - 2 - k % 3)**2)/5) : 0.1*Math.random();
+    cam[t*10 + f] = Math.round(255 * v);
+  }
+  const z = CLASSES.map((_, i) => (i === k ? 4.5 : 0) + Math.random()); const ex = z.map(Math.exp), se = ex.reduce((a, b) => a + b);
+  const probs = ex.map(v => v / se);
+  const names = S.users.map(u => u.name), who = stranger || k >= 4 ? -1 : Math.floor(Math.random() * Math.min(names.length, 4));
+  const sc = {}; names.forEach((n, i) => sc[n] = i === who ? rnd(0.7, 0.9) : rnd(0.0, 0.35));
+  const enc = u => { let s = ""; for (let i = 0; i < u.length; i++) s += String.fromCharCode(u[i]); return btoa(s); };
+  return {probs, score: probs[k], speaker: who >= 0 ? names[who] : null, speaker_cos: who >= 0 ? sc[names[who]] : rnd(0.1, 0.35),
+    speaker_scores: sc, spec_b64: enc(spec), spec_t:T, spec_f:F, cam_b64: enc(cam), cam_h:25, cam_w:10,
+    classical: {label: k < 4 && Math.random() < 0.8 ? CLASSES[k] : CLASSES[Math.floor(Math.random()*4)], reject: k >= 4 && Math.random() < 0.5}};
+}
+
+// ---------- MASTEKKOM: asisten suara ----------
+// Board = telinga + otak (kata & penutur, di ESP32). Mastekkom = mulut: membalas dengan rekaman suara Ivang
+// (potongan clips/<id>.wav dari phrases.json). Bila ada potongan yang belum direkam -> suara TTS browser.
+const AS = {on:true, voice:null, lastSpk:null, lastSpkT:0, greeted:{}, unlocked:false, phrases:{}, clips:{}, nClips:0, q:[], playing:false};
+function pickVoice(){
+  const vs = (window.speechSynthesis && speechSynthesis.getVoices()) || [];
+  AS.voice = vs.find(v => /^id(-|_)/i.test(v.lang)) || vs.find(v => /indonesia/i.test(v.name)) || null;
+  renderVoiceInfo();
+}
+function renderVoiceInfo(){
+  const n = Object.keys(AS.phrases).length;
+  $("asVoice").textContent = AS.nClips ? `suara Ivang: ${AS.nClips}/${n} potongan` + (AS.nClips < n ? " (sisanya TTS browser)" : "")
+    : (AS.voice ? "suara TTS: " + AS.voice.name : "suara TTS bawaan browser");
+}
+if (window.speechSynthesis){ speechSynthesis.onvoiceschanged = pickVoice; setTimeout(pickVoice, 300); }
+async function loadMastekkom(){
+  if (!/^https?:$/.test(location.protocol)) return;
+  try {
+    const r = await fetch("mastekkom/phrases.json", {cache:"no-store"}); if (!r.ok) return;
+    AS.phrases = (await r.json()).frasa || {};
+    await Promise.all(Object.keys(AS.phrases).map(async id => {
+      try { const c = await fetch("mastekkom/clips/" + id + ".wav", {cache:"no-store"});
+        if (c.ok && (c.headers.get("content-type") || "").includes("audio")){ AS.clips[id] = URL.createObjectURL(await c.blob()); AS.nClips++; } } catch(e){}
+    }));
+  } catch(e){}
+  renderVoiceInfo();
+}
+function assistantUnlock(){ if (!AS.unlocked && window.speechSynthesis){ AS.unlocked = true; try { speechSynthesis.speak(new SpeechSynthesisUtterance("")); } catch(e){} } }
+document.addEventListener("pointerdown", assistantUnlock, {once:true});
+// parts: array berisi id frasa (string) atau {text, opt:true} = teks bebas (mis. nama pengguna baru) yang dilewati saat mode rekaman
+function say(parts, mood){
+  const text = parts.map(p => typeof p === "string" ? (AS.phrases[p] || PHRASE_FALLBACK[p] || p) : p.text).join(" ");
+  const box = $("asLog"), row = document.createElement("div"); row.className = "asMsg" + (mood ? " " + mood : "");
+  row.innerHTML = "<b>Mastekkom:</b> "; row.appendChild(document.createTextNode(text));
+  box.prepend(row); while (box.children.length > 6) box.lastChild.remove();
+  $("asNow").textContent = text;
+  if (!AS.on) return;
+  const ids = parts.filter(p => typeof p === "string");
+  const useClips = ids.length && ids.every(id => AS.clips[id]) && parts.every(p => typeof p === "string" || p.opt);
+  AS.q.push(useClips ? {clips: ids.map(id => AS.clips[id])} : {text}); if (!AS.playing) playNext();
+}
+function playNext(){
+  const it = AS.q.shift(), orb = $("asOrb");
+  if (!it){ AS.playing = false; orb.classList.remove("talk"); return; }
+  AS.playing = true; orb.classList.add("talk");
+  if (it.clips){
+    let i = 0; const a = new Audio();
+    const nx = () => { if (i >= it.clips.length) { playNext(); return; } a.src = it.clips[i++]; a.play().catch(() => playNext()); };
+    a.onended = nx; a.onerror = nx; nx();
+  } else if (window.speechSynthesis){
+    try {
+      const u = new SpeechSynthesisUtterance(it.text); u.lang = "id-ID"; if (AS.voice) u.voice = AS.voice; u.rate = 1.02;
+      u.onend = u.onerror = () => playNext(); speechSynthesis.speak(u);
+    } catch(e){ playNext(); }
+  } else playNext();
+}
+// dipakai saat phrases.json tidak bisa dimuat (mis. dibuka dari file:// atau mode simulasi offline)
+const PHRASE_FALLBACK = {perkenalan:"Halo, saya Mastekkom, asisten lampu kelompok Ezra, Abdillah, Ivang, dan Jahzeel.",
+  siap:"Sistem lampu suara siap. Silakan beri perintah: nyala, mati, naik, atau turun.", simulasi:"Mode simulasi. Ini latihan tanpa board.",
+  pagi:"Selamat pagi,", siang:"Selamat siang,", sore:"Selamat sore,", malam:"Selamat malam,", datang:"Selamat datang.", halo_lagi:"Halo lagi,",
+  lampu_nyala:"Siap, lampu saya nyalakan.", lampu_mati:"Baik, lampu saya matikan.", lebih_terang:"Lebih terang.", lebih_redup:"Saya redupkan.",
+  tingkat:"Sekarang tingkat", paling_terang:"Lampu sudah paling terang.", paling_redup:"Lampu sudah paling redup.",
+  masih_mati:"Lampu masih mati. Katakan nyala dulu ya.", bukan_perintah:"Maaf, itu bukan perintah yang saya kenal. Coba: nyala, mati, naik, atau turun.",
+  asing:"Maaf, suara Anda belum saya kenal. Kunci suara sedang aktif. Silakan daftar dulu.",
+  kunci_on:"Kunci suara aktif. Saya hanya menuruti suara yang saya kenal.", kunci_off:"Kunci suara dimatikan. Semua orang boleh memberi perintah.",
+  daftar_mulai:"Baik, saya akan belajar mengenali suara Anda. Ucapkan setiap kata yang muncul di layar.", ulangi:"Maaf, kurang jelas. Ulangi ya.",
+  daftar_selesai:"Terima kasih. Suara Anda sudah saya simpan. Mulai sekarang saya mengenali Anda.",
+  kata_nyala:"nyala.", kata_mati:"mati.", kata_naik:"naik.", kata_turun:"turun.",
+  nama_ezra:"Ezra.", nama_abdillah:"Abdillah.", nama_ivang:"Ivang.", nama_jahzeel:"Jahzeel."};
+["nol","satu","dua","tiga","empat","lima","enam","tujuh","delapan","sembilan","sepuluh"].forEach((w, i) => PHRASE_FALLBACK["n" + i] = w + ".");
+const BUILTIN = {ezra:"nama_ezra", abdillah:"nama_abdillah", ivang:"nama_ivang", jahzeel:"nama_jahzeel"};
+function nameParts(n){ const id = BUILTIN[String(n).toLowerCase()]; return id ? [id] : [{text: n + ".", opt:true}]; }
+function greetId(){ const h = new Date().getHours(); return h < 11 ? "pagi" : h < 15 ? "siang" : h < 18 ? "sore" : "malam"; }
+function assistantSay(text){ say([{text}]); }
+function assistantOnEvent(e){
+  if (S.enroll) return;
+  const now = Date.now(), who = e.speaker; let parts = [];
+  if (who && (who !== AS.lastSpk || now - AS.lastSpkT > 5*60*1000)){       // sapaan: orang berganti / lama tidak bicara
+    parts = AS.greeted[who] ? ["halo_lagi", ...nameParts(who)] : [greetId(), ...nameParts(who), "datang"];
+    AS.greeted[who] = true;
+  }
+  if (who){ AS.lastSpk = who; AS.lastSpkT = now; }
+  if (e.kind === "keyword"){
+    const lv = "n" + Math.max(0, Math.min(10, e.level | 0));
+    switch (e.action){
+      case "ON": parts.push("lampu_nyala", "tingkat", lv); break;
+      case "OFF": parts.push("lampu_mati"); break;
+      case "LEVEL_UP": parts.push("lebih_terang", "tingkat", lv); break;
+      case "LEVEL_DOWN": parts.push("lebih_redup", "tingkat", lv); break;
+      case "IGNORED_BOUND": parts.push(e.level >= LVL_MAX ? "paling_terang" : "paling_redup"); break;
+      case "NONE": if ((e.label === "naik" || e.label === "turun") && !e.power) parts.push("masih_mati"); break;
+    }
+  } else if (e.action === "REJECT_SPEAKER"){
+    parts.push("asing");
+  } else if (e.kind === "reject" && e.probs){
+    const k = e.probs.indexOf(Math.max(...e.probs));
+    if (CLASSES[k] === "lain" && e.probs[k] > 0.6) parts.push("bukan_perintah");
+  }
+  if (parts.length) say(parts, e.action === "REJECT_SPEAKER" ? "bad" : "");
+}
+function assistantWelcome(){ say([greetId(), "perkenalan", "siap"]); }
+$("asChk").onchange = () => { AS.on = $("asChk").checked; if (!AS.on){ AS.q = []; if (window.speechSynthesis) speechSynthesis.cancel(); } else assistantUnlock(); };
+$("asTest").onclick = () => { assistantUnlock(); say([greetId(), "perkenalan"]); };
+loadMastekkom();
+
+// ---------- mode simulasi (FSM sama dengan MP16, tanpa model) ----------
+let simCool = 0, simMeterT = null, simFault = false;
+function fsmApply(label){
+  // kembalikan aksi sesuai command state machine MP16
+  if (simFault) return "NONE";
+  if (Date.now() < simCool) return "NONE";
+  let a = "NONE";
+  if (label === "nyala"){ S.power = true; a = "ON"; }
+  else if (label === "mati"){ S.power = false; a = "OFF"; }
+  else if (label === "naik" || label === "turun"){
+    if (!S.power) a = "NONE";
+    else {
+      const nx = S.level + (label === "naik" ? 1 : -1);
+      if (nx < LVL_MIN || nx > LVL_MAX) a = "IGNORED_BOUND";
+      else { S.level = nx; a = label === "naik" ? "LEVEL_UP" : "LEVEL_DOWN"; }
+    }
+  }
+  if (a !== "NONE" && a !== "IGNORED_BOUND"){ simCool = Date.now() + COOLDOWN_MS; S.state = "COOLDOWN";
+    setTimeout(() => { if (!simFault && Date.now() >= simCool){ S.state = "IDLE"; renderLamp(); } }, COOLDOWN_MS + 20); }
+  return a;
+}
+function rnd(a, b){ return a + Math.random() * (b - a); }
+function simSay(what){
+  if (what === "stall"){
+    simFault = true; S.power = false; S.state = "FAULT"; renderLamp();
+    addLog({kind:"failsafe", action:"FAILSAFE_OFF", state:"FAULT", power:false, level:S.level, sim:true, source:"board_mic"});
+    setTimeout(() => { simFault = false; S.state = "IDLE"; renderLamp();
+      addLog({kind:"recover", action:"RECOVER", state:"IDLE", power:S.power, level:S.level, sim:true, source:"board_mic"}); }, 2500);
+    return;
+  }
+  pulseMeter();
+  setTimeout(() => {
+    const lat = rnd(2.4, 4.6);
+    if (what === "halo" || what === "clap"){
+      const ai = simAI(what === "clap" ? 4 : 5);
+      if (S.enroll){ onEnroll({state:"retry", reason:"bukan kata yang diminta"}); return; }
+      addLog(Object.assign({kind:"reject", label:null, action:"REJECT", state:S.state, power:S.power, level:S.level,
+        latency_ms: lat, sim:true, source:"board_mic"}, ai));
+      return;
+    }
+    const stranger = what === "stranger"; if (stranger) what = "nyala";
+    const ai = simAI(CLASSES.indexOf(what), stranger);
+    if (S.enroll){ simEnrollStep(); return; }
+    if (S.lock && !ai.speaker){
+      addLog(Object.assign({kind:"reject", label:what, action:"REJECT_SPEAKER", state:S.state, power:S.power, level:S.level, latency_ms: lat, sim:true, source:"board_mic"}, ai));
+      return;
+    }
+    const a = fsmApply(what); renderLamp();
+    addLog(Object.assign({kind:"keyword", label:what, action:a, state:S.state, power:S.power, level:S.level,
+      latency_ms: lat, sim:true, source:"board_mic"}, ai));
+  }, 380);
+}
+function simManual(action){
+  const map = {ON:"nyala", OFF:"mati", LEVEL_UP:"naik", LEVEL_DOWN:"turun"};
+  simCool = 0; const a = fsmApply(map[action]); renderLamp();
+  addLog({kind:"manual", label:null, action:a, state:S.state, power:S.power, level:S.level, sim:true, source:"web"});
+}
+function pulseMeter(){
+  let t0 = performance.now();
+  const step = () => { const dt = performance.now() - t0; if (dt > 600) return;
+    setMeter(-62 + 44 * Math.sin(Math.PI * dt / 600), true); requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+function setSim(on){
+  S.sim = on; document.body.classList.toggle("sim", on);
+  $("simBtn").textContent = "Mode simulasi: " + (on ? "AKTIF" : "MATI");
+  $("simSpeak").hidden = !on; $("micBox").hidden = on;
+  $("speakTitle").textContent = on ? "Ucapan simulasi" : "Bicara lewat HP";
+  clearInterval(simMeterT);
+  if (on){
+    disconnect(); S.connSince = Date.now(); setConn("sim", "SIMULASI (tanpa board)");
+    $("devInfo").textContent = "SIMULASI · tampilan contoh, angka & gambar AI dibuat browser (bukan model)";
+    S.users = [{name:"Ezra"},{name:"Abdillah"},{name:"Ivang"},{name:"Jahzeel"}]; renderUsers();
+    say(["simulasi"]);
+    simMeterT = setInterval(() => setMeter(rnd(-66, -60), false), 120);
+  } else {
+    S.connSince = 0; setConn("off", "Belum terhubung"); setMeter(NaN, false);
+  }
+  updateButtons();
+}
+$("simBtn").onclick = () => setSim(!S.sim);
+document.querySelectorAll("[data-say]").forEach(b => b.onclick = () => simSay(b.dataset.say));
+
+// ---------- mic HP → board (kirim 1,2 s PCM16 mono 16 kHz) ----------
+let recBusy = false;
+async function recordAndSend(){
+  if (recBusy || !S.connected) return;
+  if (!window.isSecureContext || !navigator.mediaDevices){
+    $("micNote").textContent = "Browser memblokir mikrofon karena halaman tidak HTTPS. Lihat petunjuk di README demo_web.";
+    $("micNote").className = "note warn"; return;
+  }
+  recBusy = true; const btn = $("micBtn");
+  let stream, ctx;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({audio:{channelCount:1, echoCancellation:false, noiseSuppression:false, autoGainControl:false}});
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const src = ctx.createMediaStreamSource(stream), proc = ctx.createScriptProcessor(4096, 1, 1);
+    const chunks = []; src.connect(proc); proc.connect(ctx.destination);
+    proc.onaudioprocess = e => { chunks.push(new Float32Array(e.inputBuffer.getChannelData(0))); };
+    btn.className = "rec"; btn.textContent = "🔴 Ucapkan sekarang…";
+    await new Promise(r => setTimeout(r, 2000));       // rekam 2 s, lalu ambil jendela 1,2 s di sekitar ucapan
+    proc.disconnect(); src.disconnect();
+    const raw = concat(chunks), x = resample(raw, ctx.sampleRate, FS);
+    const pcm = centerWindow(x, CLIP_N);
+    S.ws.send(pcm.buffer);
+    $("micNote").textContent = "Suara terkirim ke board (" + CLIP_N + " sampel, 16 kHz). Menunggu hasil…";
+    $("micNote").className = "note";
+  } catch(e){
+    $("micNote").textContent = "Mikrofon gagal: " + (e.message || e.name); $("micNote").className = "note warn";
+  } finally {
+    if (stream) stream.getTracks().forEach(t => t.stop());
+    if (ctx) ctx.close();
+    btn.className = "primary"; btn.textContent = "🎤 Tekan lalu ucapkan perintah"; recBusy = false;
+  }
+}
+function concat(cs){ const n = cs.reduce((s,c) => s + c.length, 0), o = new Float32Array(n); let k = 0; cs.forEach(c => { o.set(c,k); k += c.length; }); return o; }
+function resample(x, from, to){
+  if (from === to) return x;
+  const n = Math.floor(x.length * to / from), o = new Float32Array(n), r = from / to;
+  for (let i = 0; i < n; i++){                       // rata-rata per segmen = anti-aliasing sederhana
+    const a = i * r, b = Math.min(x.length, (i + 1) * r); let s = 0, c = 0;
+    for (let j = Math.floor(a); j < b; j++){ s += x[j]; c++; }
+    o[i] = c ? s / c : 0;
+  }
+  return o;
+}
+function centerWindow(x, N){
+  // pusatkan jendela 1,2 s pada energi terbesar (sama seperti web perekam dataset MP09)
+  const H = 160, E = []; for (let i = 0; i + H <= x.length; i += H){ let s = 0; for (let j = 0; j < H; j++) s += x[i+j]*x[i+j]; E.push(s); }
+  let best = 0, bi = 0, W = Math.floor(N / H), acc = 0;
+  for (let i = 0; i < E.length; i++){ acc += E[i]; if (i >= W) acc -= E[i - W]; if (acc > best){ best = acc; bi = i - W + 1; } }
+  const start = Math.max(0, Math.min(x.length - N, bi * H)), out = new Int16Array(N);
+  for (let i = 0; i < N; i++){ const v = x[start + i] || 0; out[i] = Math.max(-32768, Math.min(32767, Math.round(v * 32767))); }
+  return out;
+}
+$("micBtn").onclick = recordAndSend;
+
+function updateButtons(){
+  const live = S.connected || S.sim;
+  document.querySelectorAll("[data-cmd]").forEach(b => b.disabled = !live);
+  $("micBtn").disabled = !S.connected;
+}
+
+// ---------- log: unduh & bersihkan ----------
+$("dlBtn").onclick = () => {
+  if (!S.log.length) return;
+  const txt = S.log.map(e => JSON.stringify(Object.assign({iso: new Date(e.t).toISOString()}, e))).join("\n") + "\n";
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([txt], {type:"application/x-ndjson"}));
+  a.download = "demo_event_log_" + new Date().toISOString().replace(/[:.]/g, "-").slice(0,19) + ".jsonl";
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+$("clrBtn").onclick = () => {
+  S.log = []; S.lat = []; S.nKw = 0; S.nRej = 0; renderStats();
+  $("logBody").innerHTML = '<tr><td colspan="9" class="empty">Belum ada kejadian.</td></tr>';
+};
+
+// ---------- start ----------
+(function init(){
+  renderLamp(); updateButtons(); setMeter(NaN, false); renderProbs(null); setLockUi(false);
+  const servedByBoard = /^https?:$/.test(location.protocol) && location.hostname &&
+    !/(^|\.)vercel\.app$/.test(location.hostname);
+  const saved = lsGet("kws_host");
+  $("hostIn").value = servedByBoard ? location.host : (saved || "");
+  if (servedByBoard) connect();                     // dibuka dari board -> langsung sambung
+  else if (!saved) $("connNote").innerHTML = "Belum ada board? Aktifkan <b>Mode simulasi</b> untuk latihan. Protokol: <kbd>ws://&lt;alamat&gt;/ws</kbd>.";
+})();
+</script>
+</body>
+</html>

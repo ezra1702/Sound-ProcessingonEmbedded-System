@@ -5,3 +5,11 @@
 
 # Zip unduhan Google Drive (duplikat dari dataset_rekaman/)
 /MP09_Dataset-*.zip
+
+# demo_ai: dataset/model hasil build (besar, dibuat ulang dengan build_dataset.py & train.py).
+# Cache TTS tetap di-commit karena hanya bisa dibuat di Windows (suara SAPI Zira/David).
+/demo_ai/artifacts/*
+!/demo_ai/artifacts/tts/
+# header model hasil export_c.py (selalu dibuat ulang dari model terlatih)
+/demo_ai/firmware_src/kws_model_int8.h
+/demo_ai/esp32_kws_ai/kws_model_int8.h
