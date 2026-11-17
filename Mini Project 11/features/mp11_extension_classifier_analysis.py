@@ -152,15 +152,15 @@ if chosen == 'tree':
         if t.children_left[node] == -1:
             cls = int(np.argmax(t.value[node][0]))
             return [f'{ind}return {cls}; /* {model.classes_[cls]} */']
-        out = [f'{ind}if (x[{t.feature[node]}] <= {t.threshold[node]:.9g}f) {{']
+        out = [f'{ind}if (x[{t.feature[node]}] <= {t.threshold[node]:#.9g}f) {{']
         out += emit(t.children_left[node], ind + '    ')
         out += [f'{ind}}} else {{'] + emit(t.children_right[node], ind + '    ') + [f'{ind}}}']
         return out
     lines += ['static inline int mp11_predict(const float *x) {'] + emit(0, '    ') + ['}']
 elif chosen in ('logreg', 'linear_svm'):
     W = np.asarray(model.coef_, np.float32); b = np.asarray(model.intercept_, np.float32)
-    lines += [f'static const float MP11_W[{W.size}] = {{ ' + ', '.join(f'{v:.9g}f' for v in W.ravel()) + ' };',
-              f'static const float MP11_B[{b.size}] = {{ ' + ', '.join(f'{v:.9g}f' for v in b) + ' };',
+    lines += [f'static const float MP11_W[{W.size}] = {{ ' + ', '.join(f'{v:#.9g}f' for v in W.ravel()) + ' };',
+              f'static const float MP11_B[{b.size}] = {{ ' + ', '.join(f'{v:#.9g}f' for v in b) + ' };',
               'static inline int mp11_predict(const float *x) {',
               '    int best = 0; float bs = -1e30f;',
               '    for (int k = 0; k < MP11_N_CLASSES; ++k) { float s = MP11_B[k];',
@@ -175,7 +175,7 @@ gcc = shutil.which('gcc')
 idx_tv = np.where(tr | va)[0]
 if gcc and chosen in ('tree', 'logreg', 'linear_svm'):
     build_dir = ROOT/'firmware/build'; build_dir.mkdir(exist_ok=True)
-    vec = ', '.join(f'{v:.9g}f' for v in X[idx_tv].astype(np.float32).ravel())
+    vec = ', '.join(f'{v:#.9g}f' for v in X[idx_tv].astype(np.float32).ravel())
     test_c = f"""#include <stdio.h>
 #include "../mp11_classifier_float.h"
 static const float XS[{len(idx_tv)*d}] = {{ {vec} }};

@@ -290,12 +290,18 @@ class Board:
                 **self.fsm.snap()}
 
     # HTTP: "/" -> halaman demo, "/ws" -> WebSocket
+
+    @staticmethod
+    def _ok(body, ctype):
+        return Response(HTTPStatus.OK, 'OK', Headers([('Content-Type', ctype), ('Content-Length', str(len(body))),
+                                                      ('Cache-Control', 'no-store')]), body)
+
     def process_request(self, connection, request):
-        if request.path == '/ws':
+        path = request.path.split('?', 1)[0]
+        if path == '/ws':
             return None
-        if request.path in ('/', '/index.html'):
-            return Response(HTTPStatus.OK, 'OK', Headers([('Content-Type', 'text/html; charset=utf-8'),
-                                                          ('Content-Length', str(len(self.page))), ('Cache-Control', 'no-store')]), self.page)
+        if path in ('/', '/index.html'):
+            return self._ok(self.page, 'text/html; charset=utf-8')
         return connection.respond(HTTPStatus.NOT_FOUND, 'Not found\n')
 
     async def handler(self, ws):

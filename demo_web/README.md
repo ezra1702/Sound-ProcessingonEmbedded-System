@@ -44,3 +44,17 @@ Mode utama demo (mic di board) tidak terpengaruh masalah ini.
 ## Kejujuran angka
 Field `device` di pesan `hello` tampil di footer halaman. `mock_board.py` mengisinya dengan **"PC (board tiruan, BUKAN ESP32)"**,
 sehingga latency yang tampil adalah latency PC. Angka ESP32 baru valid bila dikirim dari firmware yang berjalan di board.
+
+## Siklus 2: model DS-CNN dan pengenal penutur
+
+Default `mock_board.py` sekarang `--model dl` (DS-CNN INT8 dari `demo_ai/`). Artefak dibuat dulu dengan pipeline di
+`demo_ai/README.md` (`build_dataset.py` → `train.py` → `fewshot.py` → `export_c.py`). Mode lama tetap ada: `--model classical`.
+
+Panel tambahan di halaman (terisi bila event dari board membawa field siklus 2):
+- **AI**: spectrogram log-Mel yang dilihat model + peta CAM, bar probabilitas 6 kelas, latency front-end vs jaringan,
+  dan perbandingan dengan model klasik MP15 (hanya di `mock_board.py`).
+- **Penutur**: siapa yang bicara + skor cosine tiap pengguna, tombol **kunci suara**.
+- **Daftarkan pengguna**: 3× tiap kata (12 ucapan). Disimpan di NVS (board) / `demo_ai/artifacts/mock_users.npz` (mock).
+
+Detail pesan ada di `PROTOKOL.md`.
+

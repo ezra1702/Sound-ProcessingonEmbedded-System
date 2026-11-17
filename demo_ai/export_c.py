@@ -142,9 +142,9 @@ def main():
     FW.mkdir(parents=True, exist_ok=True)
     write_model_header(q, protos, spk_thr, tau, FW/'kws_model_int8.h', macs=model.macs())
     write_web_page()
+    write_tables(FW/'kws_tables.h')                                     # tulis dulu, baru salin ke sketch
     for fn in ('kws_engine.c', 'kws_engine.h', 'kws_model_int8.h', 'kws_tables.h'):   # sketch Arduino butuh salinan lokal
         shutil.copy(FW/fn, C.ROOT/'esp32_kws_ai'/fn)
-    write_tables(FW/'kws_tables.h')
     np.savez(C.OUT/'int8_params.npz', protos=protos, **{f'scale_{k}': v for k, v in scales.items()})
     C.save_json(C.OUT/'act_scales.json', scales)
 

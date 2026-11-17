@@ -12,4 +12,7 @@
 !/demo_ai/artifacts/tts/
 # header model hasil export_c.py (selalu dibuat ulang dari model terlatih)
 /demo_ai/firmware_src/kws_model_int8.h
-/demo_ai/esp32_kws_ai/kws_model_int8.h
+# (salinan di sketch esp32_kws_ai/ DI-COMMIT agar board bisa langsung di-flash dari clone)
+
+# cache Python
+__pycache__/

@@ -1,4 +1,8 @@
-# Handoff: Siklus 2 (Deep Learning + Mastekkom). Status per 17 Nov 2026
+# Handoff: Siklus 2 (Deep Learning). Status per 17 Nov 2026
+
+> **Update 17 Nov 10.00:** Mastekkom DIHAPUS atas keputusan kelompok (web, firmware LittleFS, mock_board, folder `demo_web/mastekkom/`).
+> Model DS-CNN lebar 32 (20 epoch) sudah dilatih, diekspor INT8, dan firmware ESP32/ESP32-S3 lolos compile. Lihat `README.md` bagian Hasil.
+> Catatan Mastekkom di bawah hanya riwayat.
 
 Catatan ini untuk melanjutkan pekerjaan di laptop lain (macOS). Folder `Mini Project 07–16` **tidak diubah** oleh siklus 2.
 
@@ -67,3 +71,11 @@ Urutan penting: `export_c.py` membaca `fewshot_report.json` (ambang), `evaluate.
 - Jangan upgrade PyTorch global (reproduksi MP12/MP13).
 - Repo PUBLIK: jangan taruh rahasia (secret Apps Script) di halaman publik.
 - Commit/push hanya bila diminta. Branch kerja: `dataset-kelompok-mp07-16`.
+
+## Status Mac M1 (17 Nov 2026, 10.55) — siap dicoba di board
+- Env: `conda activate kws-demo` (Python 3.11, torch 2.6, MPS). Model w32 + export INT8 + evaluasi sudah ada di `artifacts/`.
+- Firmware compile OK (`./flash_esp32.sh`): ESP32-S3 1.039.076 B flash (49%), RAM global 119 KB; ESP32 1.053.895 B (50%), 120 KB.
+  `web_page.h` == `demo_web/index.html` terbaru (dicek dekompresi).
+- `mock_board.py --model dl` diuji lewat WebSocket: hello, cmd manual, audio PCM (rekaman Ivang block 6:
+  nyala→ON, naik→LEVEL_UP ×2, turun→LEVEL_DOWN, mati→OFF, penutur Ivang), set lock.
+- Belum: few-shot LOSO (ambang penutur masih default 0,6), uji di board nyata (latency ESP32, `MIC_SHIFT`/`GATE_DB`).

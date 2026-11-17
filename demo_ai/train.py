@@ -21,6 +21,11 @@ def _pick_device():
             torch.zeros(1, device='cuda').add_(1); torch.cuda.synchronize(); return 'cuda'
         except Exception:
             pass                                      # GPU terlalu baru untuk build PyTorch ini -> CPU
+    if getattr(torch.backends, 'mps', None) is not None and torch.backends.mps.is_available():
+        try:
+            torch.zeros(1, device='mps').add_(1); return 'mps'   # Mac Apple Silicon
+        except Exception:
+            pass
     return 'cpu'
 
 
@@ -122,8 +127,17 @@ def main():
     tr, va = to_dev(tr_d), to_dev(va_d)
     print(f'device {DEV} | train {len(tr[1])} | val {len(va[1])}', flush=True)
     results, models = {}, {}
-    for width in (32, 48, 64):
-        m, hist, best = train_model(tr, va, width=width)
+    import os
+    widths = tuple(int(w) for w in os.environ.get('KWS_WIDTHS', '32,48,64').split(','))
+    for width in widths:
+        ck = C.OUT/f'ckpt_w{width}.pt'                    # checkpoint per lebar: run terputus tidak mengulang dari nol
+        if ck.exists():
+            d = torch.load(ck, map_location=DEV, weights_only=False)
+            m = KWSNet(width=width).to(DEV); m.load_state_dict(d['state_dict']); hist, best = d['hist'], d['best']
+            print(f'width {width}: dimuat dari {ck.name}', flush=True)
+        else:
+            m, hist, best = train_model(tr, va, width=width, epochs=int(os.environ.get('KWS_EPOCHS', 40)))
+            torch.save({'state_dict': m.state_dict(), 'hist': hist, 'best': best}, ck)
         pk, ps, *_ = predict(m, va[0])
         met = kw_metrics(va_d['kw'], pk, va_d['clean'], va_d['spk'], ps)
         results[width] = {'params': param_count(m), 'macs': m.macs(), 'best_val_macro_f1': best, 'val': met,

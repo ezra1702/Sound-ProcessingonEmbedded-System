@@ -22,7 +22,7 @@ import common as C
 from train import DEV, load, predict, to_dev, train_model
 
 TAU = 10.0          # suhu softmax prototipe kata (tetap, tidak dituning)
-EPOCHS = 30
+EPOCHS = int(__import__("os").environ.get("FEWSHOT_EPOCHS", 20))   # 30 di Windows; 20 di Mac (batas waktu demo)
 
 
 def fuse(p_model, f, kw_protos):

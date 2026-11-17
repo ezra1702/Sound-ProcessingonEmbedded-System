@@ -127,15 +127,38 @@ kbd{font:12px ui-monospace,Consolas,monospace;padding:1px 5px;border:1px solid v
 .cmp div{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px}
 .cmp b{display:block;font-size:18px}
 .cmp .ok{color:var(--ok)} .cmp .bad{color:var(--bad)}
-.asst{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center;margin-bottom:14px}
-.orb{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#9fd4ff,var(--accent) 55%,#1b3a8a);box-shadow:0 0 0 0 rgba(47,111,237,.5)}
-.orb.talk{animation:orbP 0.9s ease-in-out infinite}
-@keyframes orbP{0%{box-shadow:0 0 0 0 rgba(47,111,237,.55);transform:scale(1)}50%{box-shadow:0 0 0 14px rgba(47,111,237,0);transform:scale(1.06)}100%{box-shadow:0 0 0 0 rgba(47,111,237,0);transform:scale(1)}}
-@media (prefers-reduced-motion:reduce){.orb.talk{animation:none;outline:3px solid var(--accent)}}
-.asNow{font-size:18px;font-weight:700;min-height:1.4em}
-.asMsg{font-size:13px;color:var(--muted);padding:3px 0;border-top:1px dashed var(--line)} .asMsg.bad{color:var(--bad)}
-.asBar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:6px}
-.asBar button{min-height:32px;padding:4px 12px;font-size:13px}
+.tabs{display:flex;gap:6px;margin:0 0 14px;border-bottom:1px solid var(--line)}
+.tabs button{min-height:40px;padding:8px 14px;border:0;border-bottom:3px solid transparent;border-radius:0;background:none;color:var(--muted);font-weight:700}
+.tabs button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.mpHero h2{margin-bottom:6px}
+.mpLead{margin:0 0 12px;max-width:80ch}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:4px 0 14px}
+.flow span{display:flex;flex-direction:column;padding:6px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);font-size:13px;font-weight:700}
+.flow span small{font-weight:400;color:var(--muted);font-size:11.5px}
+.flow span.hl{border-color:var(--accent);color:var(--accent)}
+.flow b{color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.kpis div{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12.5px;color:var(--muted)}
+.kpis b{display:block;font-size:20px;color:var(--ink)}
+.phase{font-size:15px;margin:20px 0 10px}
+.mpGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;align-items:start}
+.mp{padding:0}
+.mp summary{display:flex;gap:12px;align-items:center;padding:12px 14px;cursor:pointer;list-style:none}
+.mp summary::-webkit-details-marker{display:none}
+.mp summary b{display:block}
+.mp summary small{display:block;color:var(--muted);font-size:12.5px}
+.mp[open] summary{border-bottom:1px solid var(--line)}
+.mpN{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:#fff;font-weight:800;font-size:14px}
+.mp dl{margin:0;padding:10px 14px 14px;font-size:13.5px}
+.mp dt{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;margin-top:6px}
+.mp dd{margin:2px 0 0}
+.tblWrap{overflow-x:auto}
+.mpT{width:100%;border-collapse:collapse;font-size:13.5px}
+.mpT th,.mpT td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+.mpT th{color:var(--muted);font-size:12px}
+.mpList{margin:10px 0 0;padding-left:18px;font-size:13.5px}
+.mpList li{margin:3px 0}
+code{font-size:.92em}
 </style>
 </head>
 <body>
@@ -147,24 +170,16 @@ kbd{font:12px ui-monospace,Consolas,monospace;padding:1px 5px;border:1px solid v
     <button id="themeBtn" class="themeBtn" type="button" title="Ganti tema">🌓</button>
   </header>
 
+  <nav class="tabs" role="tablist" aria-label="Tampilan">
+    <button type="button" role="tab" id="tabDemo" aria-selected="true">Demo Aplikasi</button>
+    <button type="button" role="tab" id="tabMP" aria-selected="false">Presentasi MP 1–16</button>
+  </nav>
+
+  <div id="viewDemo">
   <div class="banner" id="simBanner">
     <b>MODE SIMULASI</b>. Hasil di halaman ini dibuat oleh browser untuk latihan, <b>bukan</b> oleh board.
     Saat demo resmi, matikan mode simulasi dan sambungkan ke board.
   </div>
-
-  <section class="card asst" aria-label="Mastekkom asisten suara">
-    <div class="orb" id="asOrb" aria-hidden="true"></div>
-    <div style="min-width:0">
-      <h2 style="margin-bottom:4px">Mastekkom · asisten suara</h2>
-      <div class="asNow" id="asNow" aria-live="polite">Sambungkan ke board, lalu ucapkan perintah.</div>
-      <div class="asBar">
-        <label class="toggle"><input type="checkbox" id="asChk" checked> balas dengan suara</label>
-        <button id="asTest" type="button">🔊 Tes suara</button>
-        <span class="note" id="asVoice" style="margin:0"></span>
-      </div>
-      <div id="asLog" style="margin-top:6px"></div>
-    </div>
-  </section>
 
   <div class="grid">
     <section class="card lamp" aria-label="Status lampu">
@@ -325,6 +340,133 @@ kbd{font:12px ui-monospace,Consolas,monospace;padding:1px 5px;border:1px solid v
     </div>
   </section>
 
+  </div>
+
+  <div id="viewMP" hidden>
+  <section class="card mpHero" aria-label="Ringkasan proyek">
+    <h2>Running project · Mini Project 1–16</h2>
+    <p class="mpLead">Sistem <b>keyword spotting</b> 4 perintah (<i>nyala, mati, naik, turun</i>) untuk lampu, dibangun bertahap dari
+      perekaman sinyal sampai AI yang berjalan di <b>ESP32</b>. Setiap mini project membaca artefak MP sebelumnya
+      (<code>project_status.json</code> serial: <code>ready_for_mp02</code> … <code>project_complete</code>).</p>
+    <div class="flow" aria-label="Alur sistem">
+      <span>🎤 Mic 16 kHz<small>MP1–2</small></span><b>→</b>
+      <span>Filter IIR<small>MP5–6</small></span><b>→</b>
+      <span>Preprocessing + VAD<small>MP7</small></span><b>→</b>
+      <span>Fitur 39-D / log-Mel<small>MP8</small></span><b>→</b>
+      <span>Dataset 96 WAV<small>MP9</small></span><b>→</b>
+      <span>RFE-8<small>MP10</small></span><b>→</b>
+      <span>Model<small>MP11–13</small></span><b>→</b>
+      <span>Real-time + INT8<small>MP14–15</small></span><b>→</b>
+      <span class="hl">💡 ESP32 + aksi<small>MP16</small></span>
+    </div>
+    <div class="kpis">
+      <div><b>16/16</b>MP lulus, status <code>project_complete</code></div>
+      <div><b>96</b>rekaman asli 4 penutur</div>
+      <div><b>15/16</b>test MP13 (logreg)</div>
+      <div><b>16/16</b>test DS-CNN INT8 (Siklus 2)</div>
+      <div><b>15 KB</b>model AI di ESP32</div>
+    </div>
+    <p class="note">Klik kartu untuk melihat tugas wajib, hasil, dan fitur tambahan. Angka diambil dari file metrik di tiap folder <code>Mini Project NN/results/metrics</code>.</p>
+  </section>
+
+  <h3 class="phase">Fase 1 · Sinyal dan kanal (MP1–6)</h3>
+  <div class="mpGrid">
+    <details class="card mp"><summary><span class="mpN">1</span><span><b>Inisialisasi proyek &amp; rekaman pertama</b><small>nyala_001.wav · 16 kHz mono 16-bit · QC PASS</small></span></summary>
+      <dl><dt>Wajib</dt><dd>Struktur folder, <code>project_config.json</code>, rekam 2 s, cek kualitas: peak 0,71, RMS 0,215, clipping 0.</dd>
+      <dt>Fitur tambahan</dt><dd>Analisis sinyal: peak −3,0 dBFS, RMS −13,4 dBFS, ZCR 0,062, centroid 1.550 Hz, frekuensi dominan 163 Hz.</dd></dl></details>
+    <details class="card mp"><summary><span class="mpN">2</span><span><b>Sampling &amp; kuantisasi</b><small>dipilih 16 kHz / 16-bit</small></span></summary>
+      <dl><dt>Wajib</dt><dd>Bandingkan 16k/16, 8k/16, 16k/8, 8k/8. Kuantisasi 8-bit SNR 36,6 dB; resampling 8 kHz bolak-balik SNR 23,9 dB → baseline 16 kHz/16-bit.</dd>
+      <dt>Fitur tambahan</dt><dd>PSNR/MSE/MAE, bitrate 256 → 64 kbps, bandwidth −50 %, energi HF hilang 0,4 %; laporan jawaban soal PDF.</dd></dl></details>
+    <details class="card mp"><summary><span class="mpN">3</span><span><b>FFT &amp; STFT</b><small>frame 25 ms · hop 10 ms · resolusi 31,25 Hz</small></span></summary>
+      <dl><dt>Wajib</dt><dd>STFT 400/160 sampel, NFFT 512, 198 frame; frekuensi dominan 125–500 Hz (pita fundamental suara). Parameter ini dipakai sampai MP16.</dd>
+      <dt>Fitur tambahan</dt><dd>— (tidak ada modul terpisah).</dd></dl></details>
+    <details class="card mp"><summary><span class="mpN">4</span><span><b>Kanal akustik &amp; ruangan</b><small>RIR sintetis · RT60 0,35 s</small></span></summary>
+      <dl><dt>Wajib</dt><dd>Konvolusi dengan room impulse response, RT60 0,35 s, jarak spektral 5,55 dB.</dd>
+      <dt>Fitur tambahan</dt><dd>Metrik ruangan: C50 −0,33 dB, DRR −2,03 dB, EDT 1,08 s, analisis comb filtering (notch 51 dB).</dd></dl></details>
+    <details class="card mp"><summary><span class="mpN">5</span><span><b>Filter FIR vs IIR (hum 50 Hz)</b><small>IIR 5 kali lipat/sampel vs FIR 129</small></span></summary>
+      <dl><dt>Wajib</dt><dd>Redaman 50 Hz: FIR −9,6 dB (delay 4 ms), IIR notch −15,0 dB. Biaya: FIR 129 vs IIR 5 perkalian/sampel.</dd>
+      <dt>Fitur tambahan</dt><dd>Stabilitas pole (r = 0,99967), bandwidth −3 dB 1,66 Hz (teori 1,67), settling 1,31 s, SNR 13,3 → 27,0 dB (40,8 dB setelah settling).</dd></dl></details>
+    <details class="card mp"><summary><span class="mpN">6</span><span><b>Desain &amp; pemilihan filter final</b><small>IIR elliptic high-pass dipilih</small></span></summary>
+      <dl><dt>Wajib</dt><dd>6 kandidat (FIR Hamming/Remez, IIR elliptic, notch Q20/30/40). Terpilih <b>iir_ellip_hp</b>: redaman hum 50,3 dB, distorsi 0,87 dB RMS, 9 perkalian/sampel. Header C koefisien + SOS CMSIS.</dd>
+      <dt>Fitur tambahan</dt><dd>Kesiapan firmware: settling 70 ms, error float32 3,5×10⁻⁴, robustness antar kandidat.</dd></dl></details>
+  </div>
+
+  <h3 class="phase">Fase 2 · Fitur dan dataset (MP7–10)</h3>
+  <div class="mpGrid">
+    <details class="card mp"><summary><span class="mpN">7</span><span><b>Pipeline preprocessing baku</b><small>2,35 s → 0,615 s aktif · 60 frame</small></span></summary>
+      <dl><dt>Wajib</dt><dd>DC removal, normalisasi peak 0,95, VAD adaptif, spectral subtraction, trim, pre-emphasis 0,97, Hamming. Active ratio 0,258, tanpa clipping.</dd>
+      <dt>Fitur tambahan</dt><dd>Perbandingan normalisasi; VAD energi+ZCR+hangover; uji denoise SS vs Wiener-DD; DC-block + pre-emphasis <b>Q15</b> + header C.</dd></dl></details>
+    <details class="card mp"><summary><span class="mpN">8</span><span><b>Feature schema 39-D</b><small>log-Mel 26 · MFCC 13 · spektral · pitch</small></span></summary>
+      <dl><dt>Wajib</dt><dd>RMS, ZCR, centroid, bandwidth, roll-off, log-Mel 26, MFCC 13, pitch → vektor 39-D (mean/std), tanpa NaN/Inf.</dd>
+      <dt>Fitur tambahan</dt><dd>Delta/delta², flux, flatness; validasi pitch <b>YIN</b>; biaya per fitur (µs &amp; MAC); tabel mel sparse untuk firmware C.</dd></dl></details>
+    <details class="card mp"><summary><span class="mpN">9</span><span><b>Dataset &amp; split beku</b><small>96 WAV · 4 penutur × 6 block × 4 kata</small></span></summary>
+      <dl><dt>Wajib</dt><dd>Rekaman asli kelompok, split per acquisition block: train 64 (block 1–4) / val 16 (block 5) / test 16 (block 6), tanpa overlap grup.</dd>
+      <dt>Fitur tambahan</dt><dd>Web perekam + upload Google Drive dengan cek kata otomatis; front-end beku <code>kws_frontend.py</code> (bit-exact); audit kualitas per penutur; manifest SHA-256; leakage guard; Fisher score.</dd></dl></details>
+    <details class="card mp"><summary><span class="mpN">10</span><span><b>Seleksi fitur</b><small>RFE-8 · CV-F1 0,931</small></span></summary>
+      <dl><dt>Wajib</dt><dd>MI, RFE, PCA, LDA dengan GroupKFold (fit train saja). Dipilih dimensi terkecil dalam toleransi 0,03 dari terbaik (0,952) → 8 fitur MFCC + RMS.</dd>
+      <dt>Fitur tambahan</dt><dd>L1/RF/RFE vs MI + stabilitas Jaccard; kurva k; permutation importance; analisis biaya front-end: <b>hemat 88 % MAC</b>, pitch bisa dilewati.</dd></dl></details>
+  </div>
+
+  <h3 class="phase">Fase 3 · Model dan evaluasi (MP11–13)</h3>
+  <div class="mpGrid">
+    <details class="card mp"><summary><span class="mpN">11</span><span><b>Classifier klasik</b><small>logistic regression C=1 · 64 operasi</small></span></summary>
+      <dl><dt>Wajib</dt><dd>6 keluarga (kNN, logreg, SVM, tree, RF, MLP), tuning GroupKFold, pilih dengan validation (F1 0,937). Test tetap terkunci.</dd>
+      <dt>Fitur tambahan</dt><dd>SVM-RBF/GNB/LDA; robustness terhadap derau fitur; arsip semua model + SHA-256; <b>export C float diuji gcc</b> (agreement 1,00).</dd></dl></details>
+    <details class="card mp"><summary><span class="mpN">12</span><span><b>Tiny CNN log-Mel</b><small>1.340 parameter · 898k MAC</small></span></summary>
+      <dl><dt>Wajib</dt><dd>CNN 2 konvolusi + GAP, dipilih dengan validation. Val-F1 0,514: <b>underfitting</b>, dicatat jujur.</dd>
+      <dt>Fitur tambahan</dt><dd>Diagnosis underfitting; varian DS-CNN (val-F1 0,937) &amp; freq-pool; stabilitas seed; ekspor ONNX; profil memori aktivasi; saliency.</dd></dl></details>
+    <details class="card mp"><summary><span class="mpN">13</span><span><b>Test set dibuka sekali</b><small>logreg 15/16 · F1 0,937</small></span></summary>
+      <dl><dt>Wajib</dt><dd>Evaluasi kedua model tanpa tuning ulang. Logreg akurasi 15/16 (Wilson 95 % [0,72; 0,99]), CNN F1 0,560. Hash model sebelum = sesudah test.</dd>
+      <dt>Fitur tambahan</dt><dd>Bootstrap CI; uji McNemar exact (p = 0,031); Brier/NLL/ECE; ROC-AUC 0,995; stress test SNR 30 → 0 dB, gain, time shift.</dd></dl></details>
+  </div>
+
+  <h3 class="phase">Fase 4 · Sistem embedded (MP14–16)</h3>
+  <div class="mpGrid">
+    <details class="card mp"><summary><span class="mpN">14</span><span><b>Scheduler streaming real-time</b><small>DMA 10 ms · stride 100 ms · overflow 0</small></span></summary>
+      <dl><dt>Wajib</dt><dd>Konteks 96 frame / 975 ms, simulasi DMA, realtime PASS, header konstanta C untuk firmware.</dd>
+      <dt>Fitur tambahan</dt><dd>Profil per tahap; proyeksi MCU ESP32-S3; CPU stress (overflow baru muncul ×32); ring buffer C; <b>streaming kontinu 80 ucapan</b>: 57 hit, 0 false alarm, hemat 96 % inferensi.</dd></dl></details>
+    <details class="card mp"><summary><span class="mpN">15</span><span><b>Kuantisasi INT8 &amp; paket deploy</b><small>model 164 byte · INT8 = float</small></span></summary>
+      <dl><dt>Wajib</dt><dd><code>classical_logreg_int8</code> terpilih, kalibrasi train saja, agreement INT8 vs float 1,00, header C + manifest.</dd>
+      <dt>Fitur tambahan</dt><dd>C INT8 == Python == float (gcc, 96 sampel); jalur SVM INT8 buku; sweep bit 8 → 2 (≥ 0,99 sampai 4 bit); FP16; paket ZIP SHA-256.</dd></dl></details>
+    <details class="card mp"><summary><span class="mpN">16</span><span><b>Integrasi end-to-end &amp; acceptance</b><small>acceptance PASS · project_complete</small></span></summary>
+      <dl><dt>Wajib</dt><dd>Replay = MP13 (akurasi 0,9375, agreement 1,00), RTF p95 0,0035, aksi nyala=ON, mati=OFF, naik/turun = level ±1 (0..10) dengan fail-safe.</dd>
+      <dt>Fitur tambahan</dt><dd>Gate penolakan non-keyword (Mahalanobis); command state machine Python == C; stream 241 s: <b>92/96 keyword</b>; event log JSONL; dashboard Streamlit; laporan final HTML.</dd></dl></details>
+  </div>
+
+  <h3 class="phase">Fitur tambahan besar · Siklus 2: AI deep learning di ESP32</h3>
+  <section class="card">
+    <p class="mpLead" style="margin-top:0">Di atas MP16, kelompok menambahkan model <b>DS-CNN INT8</b> yang dilatih dari 96 rekaman kelompok (+ augmentasi 17.196 sampel)
+      dan berjalan <b>sepenuhnya di ESP32</b>: mic I2S → log-Mel 98×40 → DS-CNN → kata + penutur → lampu. Halaman ini juga disajikan oleh ESP32.</p>
+    <div class="tblWrap"><table class="mpT">
+      <thead><tr><th>Uji (test block 6)</th><th>DS-CNN INT8 · ESP32</th><th>Logreg MP16</th></tr></thead>
+      <tbody>
+        <tr><td>16 klip bersih</td><td><b>16/16</b></td><td>15/16</td></tr>
+        <tr><td>Recall perintah (1.212 jendela, derau acak)</td><td>0,887</td><td>—</td></tr>
+        <tr><td>Kata asing / diam ditolak</td><td>0,776 / 0,93</td><td>—</td></tr>
+        <tr><td>Akurasi pada SNR 10–19 dB</td><td>0,979</td><td>—</td></tr>
+        <tr><td>Kenali penutur (klip bersih)</td><td>0,81</td><td>—</td></tr>
+        <tr><td>Firmware C == Python</td><td>1,00</td><td>1,00</td></tr>
+        <tr><td>Ukuran model · komputasi</td><td>15 KB · 3,5 juta MAC</td><td>164 B</td></tr>
+      </tbody></table></div>
+    <ul class="mpList">
+      <li><b>Kenali siapa yang bicara</b> + <b>kunci suara</b> (hanya penutur terdaftar).</li>
+      <li><b>Daftar pengguna baru few-shot</b>: 12 ucapan, disimpan di flash ESP32, tanpa training ulang.</li>
+      <li><b>Visualisasi AI</b>: spektrogram input + peta perhatian (CAM) + probabilitas tiap kelas.</li>
+      <li><b>Web dashboard dari ESP32</b> (WiFi AP <code>KWS-Lampu</code>), firmware ESP32 &amp; ESP32-S3 lolos compile (flash ±50 %).</li>
+    </ul>
+  </section>
+
+  <section class="card" style="margin-top:14px">
+    <h2>Catatan kejujuran</h2>
+    <ul class="mpList">
+      <li>Test berisi penutur yang sudah dikenal (block 6), hanya 16 klip → interval kepercayaan lebar.</li>
+      <li>Kata "lain" untuk penolakan sebagian besar TTS, bukan ucapan manusia.</li>
+      <li>Block 6 sudah dibuka di MP13; Siklus 2 tidak melatih dengannya, tetapi test ini tidak sepenuhnya "segar".</li>
+      <li>Latency yang tampil saat memakai board tiruan adalah latency PC, bukan ESP32.</li>
+    </ul>
+  </section>
+  </div>
+
   <footer>
     <span id="devInfo">Model: DS-CNN INT8 (kata + penutur) · log-Mel 98×40 · 16 kHz</span>
     <span>Siklus 2 (deep learning) di atas MP16 · Teknik Pemrosesan Suara dan AI pada Sistem Embedded</span>
@@ -457,7 +599,6 @@ function onBoardMsg(m){
       if (Array.isArray(m.users)) { S.users = m.users; renderUsers(); }
       if (m.lock !== undefined) setLockUi(!!m.lock);
       if (m.spk_threshold !== undefined) S.spkThr = m.spk_threshold;
-      if (!S.welcomed){ S.welcomed = true; assistantWelcome(); }
       if (m.macs) $("devInfo").textContent += ` · ${(m.macs/1e6).toFixed(2)} M MAC/inferensi`;
       break;
     case "users": S.users = m.list || []; renderUsers(); break;
@@ -576,7 +717,6 @@ function renderAI(e){
     $("cmpDl").textContent = (e.kind === "keyword" || e.action === "REJECT_SPEAKER") ? "“" + e.label + "”" : "ditolak";
     $("cmpCl").textContent = e.classical.reject ? "ditolak (OOD)" : "“" + e.classical.label + "”";
   }
-  assistantOnEvent(e);
 }
 $("camChk").onchange = () => { $("camCv").style.opacity = $("camChk").checked ? 1 : 0; };
 
@@ -596,8 +736,7 @@ function setLockUi(on){
   $("lockNote").innerHTML = on ? '<span class="lockOn">Kunci suara AKTIF</span>: hanya pengguna terdaftar yang bisa mengendalikan lampu.'
                                : '<span class="lockOff">Kunci suara mati</span>: semua orang bisa memberi perintah.';
 }
-$("lockChk").onchange = () => { const on = $("lockChk").checked; if (S.sim) setLockUi(on); else wsSend({type:"set", lock:on});
-  say([on ? "kunci_on" : "kunci_off"]); };
+$("lockChk").onchange = () => { const on = $("lockChk").checked; if (S.sim) setLockUi(on); else wsSend({type:"set", lock:on}); };
 function wsSend(o){ if (S.connected && S.ws) S.ws.send(JSON.stringify(o)); }
 
 // ---------- pendaftaran pengguna baru ----------
@@ -607,19 +746,16 @@ function onEnroll(m){
     S.enroll = {name:m.name, index:m.index}; $("enrIdle").hidden = true; $("enrRun").hidden = false;
     $("enrWord").textContent = "“" + m.word + "”"; $("enrCount").textContent = m.index + " / " + (m.total || ENR_TOTAL);
     $("enrProg").style.width = (100 * m.index / (m.total || ENR_TOTAL)) + "%";
-    say(m.index === 0 ? ["daftar_mulai", "kata_" + m.word] : ["kata_" + m.word]);
   } else if (m.state === "retry"){
-    $("enrCount").textContent += " · ulangi: " + (m.reason || "kurang jelas"); say(["ulangi"]);
+    $("enrCount").textContent += " · ulangi: " + (m.reason || "kurang jelas");
   } else if (m.state === "done"){
     S.enroll = null; $("enrIdle").hidden = false; $("enrRun").hidden = true; $("enrName").value = "";
-    say(["daftar_selesai"]);
     addLog({kind:"manual", label:null, action:"ENROLL", source:"web", sim:S.sim, state:S.state, power:S.power, level:S.level});
   } else if (m.state === "cancelled"){
     S.enroll = null; $("enrIdle").hidden = false; $("enrRun").hidden = true;
   }
 }
 $("enrBtn").onclick = () => {
-  assistantUnlock();
   const name = $("enrName").value.trim(); if (!name) { $("enrName").focus(); return; }
   if (S.sim){ S.enrollSim = {name, i:0}; onEnroll({state:"prompt", name, index:0, total:ENR_TOTAL, word:ENR_WORDS[0]}); }
   else wsSend({type:"enroll_start", name});
@@ -654,110 +790,6 @@ function simAI(k, stranger){
     classical: {label: k < 4 && Math.random() < 0.8 ? CLASSES[k] : CLASSES[Math.floor(Math.random()*4)], reject: k >= 4 && Math.random() < 0.5}};
 }
 
-// ---------- MASTEKKOM: asisten suara ----------
-// Board = telinga + otak (kata & penutur, di ESP32). Mastekkom = mulut: membalas dengan rekaman suara Ivang
-// (potongan clips/<id>.wav dari phrases.json). Bila ada potongan yang belum direkam -> suara TTS browser.
-const AS = {on:true, voice:null, lastSpk:null, lastSpkT:0, greeted:{}, unlocked:false, phrases:{}, clips:{}, nClips:0, q:[], playing:false};
-function pickVoice(){
-  const vs = (window.speechSynthesis && speechSynthesis.getVoices()) || [];
-  AS.voice = vs.find(v => /^id(-|_)/i.test(v.lang)) || vs.find(v => /indonesia/i.test(v.name)) || null;
-  renderVoiceInfo();
-}
-function renderVoiceInfo(){
-  const n = Object.keys(AS.phrases).length;
-  $("asVoice").textContent = AS.nClips ? `suara Ivang: ${AS.nClips}/${n} potongan` + (AS.nClips < n ? " (sisanya TTS browser)" : "")
-    : (AS.voice ? "suara TTS: " + AS.voice.name : "suara TTS bawaan browser");
-}
-if (window.speechSynthesis){ speechSynthesis.onvoiceschanged = pickVoice; setTimeout(pickVoice, 300); }
-async function loadMastekkom(){
-  if (!/^https?:$/.test(location.protocol)) return;
-  try {
-    const r = await fetch("mastekkom/phrases.json", {cache:"no-store"}); if (!r.ok) return;
-    AS.phrases = (await r.json()).frasa || {};
-    await Promise.all(Object.keys(AS.phrases).map(async id => {
-      try { const c = await fetch("mastekkom/clips/" + id + ".wav", {cache:"no-store"});
-        if (c.ok && (c.headers.get("content-type") || "").includes("audio")){ AS.clips[id] = URL.createObjectURL(await c.blob()); AS.nClips++; } } catch(e){}
-    }));
-  } catch(e){}
-  renderVoiceInfo();
-}
-function assistantUnlock(){ if (!AS.unlocked && window.speechSynthesis){ AS.unlocked = true; try { speechSynthesis.speak(new SpeechSynthesisUtterance("")); } catch(e){} } }
-document.addEventListener("pointerdown", assistantUnlock, {once:true});
-// parts: array berisi id frasa (string) atau {text, opt:true} = teks bebas (mis. nama pengguna baru) yang dilewati saat mode rekaman
-function say(parts, mood){
-  const text = parts.map(p => typeof p === "string" ? (AS.phrases[p] || PHRASE_FALLBACK[p] || p) : p.text).join(" ");
-  const box = $("asLog"), row = document.createElement("div"); row.className = "asMsg" + (mood ? " " + mood : "");
-  row.innerHTML = "<b>Mastekkom:</b> "; row.appendChild(document.createTextNode(text));
-  box.prepend(row); while (box.children.length > 6) box.lastChild.remove();
-  $("asNow").textContent = text;
-  if (!AS.on) return;
-  const ids = parts.filter(p => typeof p === "string");
-  const useClips = ids.length && ids.every(id => AS.clips[id]) && parts.every(p => typeof p === "string" || p.opt);
-  AS.q.push(useClips ? {clips: ids.map(id => AS.clips[id])} : {text}); if (!AS.playing) playNext();
-}
-function playNext(){
-  const it = AS.q.shift(), orb = $("asOrb");
-  if (!it){ AS.playing = false; orb.classList.remove("talk"); return; }
-  AS.playing = true; orb.classList.add("talk");
-  if (it.clips){
-    let i = 0; const a = new Audio();
-    const nx = () => { if (i >= it.clips.length) { playNext(); return; } a.src = it.clips[i++]; a.play().catch(() => playNext()); };
-    a.onended = nx; a.onerror = nx; nx();
-  } else if (window.speechSynthesis){
-    try {
-      const u = new SpeechSynthesisUtterance(it.text); u.lang = "id-ID"; if (AS.voice) u.voice = AS.voice; u.rate = 1.02;
-      u.onend = u.onerror = () => playNext(); speechSynthesis.speak(u);
-    } catch(e){ playNext(); }
-  } else playNext();
-}
-// dipakai saat phrases.json tidak bisa dimuat (mis. dibuka dari file:// atau mode simulasi offline)
-const PHRASE_FALLBACK = {perkenalan:"Halo, saya Mastekkom, asisten lampu kelompok Ezra, Abdillah, Ivang, dan Jahzeel.",
-  siap:"Sistem lampu suara siap. Silakan beri perintah: nyala, mati, naik, atau turun.", simulasi:"Mode simulasi. Ini latihan tanpa board.",
-  pagi:"Selamat pagi,", siang:"Selamat siang,", sore:"Selamat sore,", malam:"Selamat malam,", datang:"Selamat datang.", halo_lagi:"Halo lagi,",
-  lampu_nyala:"Siap, lampu saya nyalakan.", lampu_mati:"Baik, lampu saya matikan.", lebih_terang:"Lebih terang.", lebih_redup:"Saya redupkan.",
-  tingkat:"Sekarang tingkat", paling_terang:"Lampu sudah paling terang.", paling_redup:"Lampu sudah paling redup.",
-  masih_mati:"Lampu masih mati. Katakan nyala dulu ya.", bukan_perintah:"Maaf, itu bukan perintah yang saya kenal. Coba: nyala, mati, naik, atau turun.",
-  asing:"Maaf, suara Anda belum saya kenal. Kunci suara sedang aktif. Silakan daftar dulu.",
-  kunci_on:"Kunci suara aktif. Saya hanya menuruti suara yang saya kenal.", kunci_off:"Kunci suara dimatikan. Semua orang boleh memberi perintah.",
-  daftar_mulai:"Baik, saya akan belajar mengenali suara Anda. Ucapkan setiap kata yang muncul di layar.", ulangi:"Maaf, kurang jelas. Ulangi ya.",
-  daftar_selesai:"Terima kasih. Suara Anda sudah saya simpan. Mulai sekarang saya mengenali Anda.",
-  kata_nyala:"nyala.", kata_mati:"mati.", kata_naik:"naik.", kata_turun:"turun.",
-  nama_ezra:"Ezra.", nama_abdillah:"Abdillah.", nama_ivang:"Ivang.", nama_jahzeel:"Jahzeel."};
-["nol","satu","dua","tiga","empat","lima","enam","tujuh","delapan","sembilan","sepuluh"].forEach((w, i) => PHRASE_FALLBACK["n" + i] = w + ".");
-const BUILTIN = {ezra:"nama_ezra", abdillah:"nama_abdillah", ivang:"nama_ivang", jahzeel:"nama_jahzeel"};
-function nameParts(n){ const id = BUILTIN[String(n).toLowerCase()]; return id ? [id] : [{text: n + ".", opt:true}]; }
-function greetId(){ const h = new Date().getHours(); return h < 11 ? "pagi" : h < 15 ? "siang" : h < 18 ? "sore" : "malam"; }
-function assistantSay(text){ say([{text}]); }
-function assistantOnEvent(e){
-  if (S.enroll) return;
-  const now = Date.now(), who = e.speaker; let parts = [];
-  if (who && (who !== AS.lastSpk || now - AS.lastSpkT > 5*60*1000)){       // sapaan: orang berganti / lama tidak bicara
-    parts = AS.greeted[who] ? ["halo_lagi", ...nameParts(who)] : [greetId(), ...nameParts(who), "datang"];
-    AS.greeted[who] = true;
-  }
-  if (who){ AS.lastSpk = who; AS.lastSpkT = now; }
-  if (e.kind === "keyword"){
-    const lv = "n" + Math.max(0, Math.min(10, e.level | 0));
-    switch (e.action){
-      case "ON": parts.push("lampu_nyala", "tingkat", lv); break;
-      case "OFF": parts.push("lampu_mati"); break;
-      case "LEVEL_UP": parts.push("lebih_terang", "tingkat", lv); break;
-      case "LEVEL_DOWN": parts.push("lebih_redup", "tingkat", lv); break;
-      case "IGNORED_BOUND": parts.push(e.level >= LVL_MAX ? "paling_terang" : "paling_redup"); break;
-      case "NONE": if ((e.label === "naik" || e.label === "turun") && !e.power) parts.push("masih_mati"); break;
-    }
-  } else if (e.action === "REJECT_SPEAKER"){
-    parts.push("asing");
-  } else if (e.kind === "reject" && e.probs){
-    const k = e.probs.indexOf(Math.max(...e.probs));
-    if (CLASSES[k] === "lain" && e.probs[k] > 0.6) parts.push("bukan_perintah");
-  }
-  if (parts.length) say(parts, e.action === "REJECT_SPEAKER" ? "bad" : "");
-}
-function assistantWelcome(){ say([greetId(), "perkenalan", "siap"]); }
-$("asChk").onchange = () => { AS.on = $("asChk").checked; if (!AS.on){ AS.q = []; if (window.speechSynthesis) speechSynthesis.cancel(); } else assistantUnlock(); };
-$("asTest").onclick = () => { assistantUnlock(); say([greetId(), "perkenalan"]); };
-loadMastekkom();
 
 // ---------- mode simulasi (FSM sama dengan MP16, tanpa model) ----------
 let simCool = 0, simMeterT = null, simFault = false;
@@ -832,7 +864,6 @@ function setSim(on){
     disconnect(); S.connSince = Date.now(); setConn("sim", "SIMULASI (tanpa board)");
     $("devInfo").textContent = "SIMULASI · tampilan contoh, angka & gambar AI dibuat browser (bukan model)";
     S.users = [{name:"Ezra"},{name:"Abdillah"},{name:"Ivang"},{name:"Jahzeel"}]; renderUsers();
-    say(["simulasi"]);
     simMeterT = setInterval(() => setMeter(rnd(-66, -60), false), 120);
   } else {
     S.connSince = 0; setConn("off", "Belum terhubung"); setMeter(NaN, false);
@@ -926,6 +957,17 @@ $("clrBtn").onclick = () => {
   if (servedByBoard) connect();                     // dibuka dari board -> langsung sambung
   else if (!saved) $("connNote").innerHTML = "Belum ada board? Aktifkan <b>Mode simulasi</b> untuk latihan. Protokol: <kbd>ws://&lt;alamat&gt;/ws</kbd>.";
 })();
+
+// ---------- tab: Demo Aplikasi | Presentasi MP 1-16 ----------
+function showView(mp){
+  $("viewDemo").hidden = mp; $("viewMP").hidden = !mp;
+  $("tabDemo").setAttribute("aria-selected", String(!mp)); $("tabMP").setAttribute("aria-selected", String(mp));
+  if (location.hash !== (mp ? "#mp" : "")) history.replaceState(null, "", mp ? "#mp" : location.pathname);
+  if (!mp) window.dispatchEvent(new Event("resize"));
+}
+$("tabDemo").onclick = () => showView(false);
+$("tabMP").onclick = () => showView(true);
+if (location.hash === "#mp") showView(true);
 </script>
 </body>
 </html>
