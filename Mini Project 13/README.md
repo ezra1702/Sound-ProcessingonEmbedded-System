@@ -9,29 +9,41 @@
 | Jahzeel Erason Nicodemus | 245150300111002 |
 
 ## Tujuan
-Mengevaluasi kedua kandidat beku — **classical (decision tree MP11)** dan **Tiny CNN (MP12)** — pada test set block 6
-**satu kali**, tanpa mengubah model. SHA-256 model/config dihitung sebelum & sesudah test (audit trail). Kedua kandidat
-diteruskan; keputusan deployment ditunda ke MP15. Status → `ready_for_mp14`.
+Mengevaluasi kedua kandidat beku pada test set block 6 (16 sampel = 4 penutur × 4 kata) **satu kali**, tanpa mengubah model.
+- Kandidat 1: **classical (logistic regression MP11)**.
+- Kandidat 2: **Tiny CNN (MP12)**.
+
+SHA-256 model/config dihitung sebelum & sesudah test (audit trail). Kedua kandidat diteruskan, dan keputusan deployment
+ditunda ke MP15. Status → `ready_for_mp14`.
 
 ## Cara menjalankan
 ```bash
 python run_all_mini_projects.py --only 13
-# menjalankan ulang langsung di folder ini -> "reproduction run": hash & metrik diverifikasi identik
-cd "Mini Project 13" && python mini_project_13.py
+# menjalankan ulang pada folder yang sama -> "reproduction run": hash & metrik diverifikasi identik
+python run_all_mini_projects.py --only 13 --no-copy
 ```
 
 ## Hasil frozen test (catat hasil)
-| Metrik | Classical (tree) | Tiny CNN |
+| Metrik | Classical (logreg) | Tiny CNN |
 |---|---|---|
-| Accuracy | **1,00** | 0,50 |
-| Balanced accuracy | 1,00 | 0,50 |
-| Macro precision / recall | 1,00 / 1,00 | 0,25 / 0,50 |
-| **Macro-F1** | **1,00** | **0,333** |
-| Wilson 95% (accuracy) | [0,51; 1,00] | [0,15; 0,85] |
+| Accuracy | **0,9375 (15/16)** | 0,5625 (9/16) |
+| Balanced accuracy | 0,9375 | 0,5625 |
+| Macro precision / recall | 0,950 / 0,9375 | 0,567 / 0,5625 |
+| **Macro-F1** | **0,937** | **0,560** |
+| Wilson 95% (accuracy) | [0,72; 0,99] | [0,33; 0,77] |
 
-Prediksi per sampel (`results/predictions/mp13_test_predictions.csv`): classical benar 4/4; CNN salah pada `naik_b06`→nyala dan
-`turun_b06`→mati. **Hash valid** (model/config tidak berubah selama test), `post_test_tuning_performed = false`.
-Interpretasi: dengan n = 4, interval kepercayaan sangat lebar — hasil ini konsistensi, bukan bukti generalisasi.
+Per kelas (classical): mati, nyala F1 1,00; naik 0,889; turun 0,857.
+Confusion matrix classical (mati, naik, nyala, turun): `[[4,0,0,0],[0,4,0,0],[0,0,4,0],[0,1,0,3]]`.
+
+Prediksi per sampel ada di `results/predictions/mp13_test_predictions.csv`:
+- Classical salah 1×, yaitu `ezra_turun_b06` → *naik* (margin 1,01). Prediksi dengan margin terkecil yang masih benar: `abdillah_mati_b06` (0,16).
+- CNN salah 7×, dengan softmax maksimum hanya 0,27–0,40, artinya model hampir menebak.
+
+**Hash valid** (model/config tidak berubah selama test), dan `post_test_tuning_performed = false`.
+
+**Interpretasi:**
+- Test berisi penutur yang sama dengan train (sesi/block berbeda). Angka ini mengukur generalisasi ke **sesi baru** penutur yang dikenal, bukan ke penutur baru.
+- Dengan n = 16, interval kepercayaan masih lebar.
 
 | Pemeriksaan | Hasil |
 |---|---|
@@ -42,25 +54,32 @@ Interpretasi: dengan n = 4, interval kepercayaan sangat lebar — hasil ini kons
 | Status akhir | `ready_for_mp14` |
 
 ## FITUR TAMBAHAN (`features/mp13_extension_evaluation_analysis.py`)
-Semua model dibaca beku dan **hash diverifikasi**; hasil tidak dipakai untuk memilih/mengubah model.
-1. **Bootstrap 95% CI** macro-F1 (2.000 resample): tree [1,00; 1,00], CNN [0,00; 1,00].
-2. **Uji McNemar exact** classical vs CNN: tree-benar-saja = 2, CNN-benar-saja = 0, **p = 0,5** → perbedaan tidak dapat diklaim signifikan pada n = 4.
-3. **Kalibrasi**: Brier / ECE — tree 0,000 / 0,000; CNN 0,632 / 0,165 (softmax CNN hampir rata ≈0,33 → kurang percaya diri). ROC-AUC OvR CNN 0,833.
-4. **Robustness stress test** (derau putih ditambahkan ke WAV test, front-end beku `kws_frontend.py`, 5 ulangan):
+Semua model dibaca dalam keadaan beku dan **hash diverifikasi**. Hasilnya tidak dipakai untuk memilih atau mengubah model.
+1. **Bootstrap 95% CI** macro-F1 (2.000 resample): logreg [0,73; 1,00], CNN [0,27; 0,77]. Interval hanya overlap tipis di 0,73–0,77.
+2. **Uji McNemar exact** classical vs CNN:
+   - Kasus yang hanya benar di logreg = 6, yang hanya benar di CNN = 0.
+   - **p = 0,031**, jadi logreg lebih baik secara signifikan (α = 0,05) pada test ini.
+3. **Kalibrasi** (Brier / NLL / ECE 5-bin):
+   - logreg 0,134 / 0,261 / 0,128, dengan ROC-AUC OvR **0,995** dan PR-AP 0,988.
+   - CNN 0,703 / 1,299 / 0,252, dengan AUC 0,755. Softmax CNN hampir rata (rata-rata keyakinan 0,31), jadi CNN kurang percaya diri.
+4. **Robustness stress test**: derau putih ditambahkan ke WAV test, fitur dihitung ulang dengan front-end beku `kws_frontend.py`, 5 ulangan.
 
    | Model | bersih | SNR 30 | SNR 20 | SNR 10 | SNR 5 | SNR 0 | gain −12 dB / +6 dB | shift 200 ms |
    |---|---|---|---|---|---|---|---|---|
-   | **tree [resmi]** | 1,00 | 1,00 | 0,65 | 0,00 | 0,30 | 0,25 | 1,00 / 1,00 | 1,00 |
-   | tiny CNN [resmi] | 0,50 | 0,50 | 0,45 | 0,30 | 0,25 | 0,25 | 0,50 / 0,50 | 0,50 |
-   | linear SVM* | 1,00 | 1,00 | 0,75 | 0,25 | 0,25 | 0,30 | 1,00 / 1,00 | 1,00 |
-   | MLP* | 1,00 | 1,00 | 0,75 | 0,25 | 0,25 | 0,25 | 1,00 / 1,00 | 1,00 |
-   | CNN freq-pool* | 1,00 | 1,00 | **1,00** | **0,85** | **0,60** | 0,25 | 1,00 / 1,00 | 1,00 |
+   | **logreg [resmi]** | 0,94 | 0,96 | 0,79 | 0,69 | 0,59 | 0,23 | 0,94 / 0,94 | 0,94 |
+   | tiny CNN [resmi] | 0,56 | 0,51 | 0,38 | 0,33 | 0,35 | 0,30 | 0,56 / 0,56 | 0,56 |
+   | kNN* | 1,00 | 1,00 | 0,76 | 0,63 | 0,41 | 0,14 | 1,00 / 1,00 | 1,00 |
+   | linear SVM* | 0,94 | 1,00 | **0,93** | 0,69 | 0,53 | 0,31 | 0,94 / 0,94 | 0,94 |
+   | DS-CNN* | 0,88 | 0,93 | 0,86 | 0,53 | 0,33 | 0,24 | 0,88 / 0,88 | 0,88 |
 
-   \* = eksplorasi. Temuan: model klasik **runtuh di bawah SNR 20 dB** (fitur MFCC/centroid tergeser derau), sedangkan varian
-   CNN freq-pool paling tahan derau → rekomendasi siklus berikutnya: augmentasi derau saat training / data baru.
-   Invariant terhadap gain dan time-shift karena normalisasi peak + VAD.
-5. **Evaluasi eksploratif semua kandidat beku** (arsip MP11 & varian MP12, hash valid 9/9): klasik semua F1 1,00; CNN long 0,667, DS-CNN 0,667, freq-pool 1,00 — dilaporkan terpisah, **bukan** dasar seleksi.
-6. Konsistensi: F1 hasil re-ekstraksi dari WAV = laporan resmi (1,00 & 0,333).
+   \* = eksplorasi. Temuan:
+   - Model klasik masih ≥ 0,79 pada SNR 20 dB, tetapi menurun tajam di bawah 10 dB karena fitur MFCC tergeser derau.
+     Rekomendasi siklus berikutnya: augmentasi derau saat training.
+   - Semua model invariant terhadap gain dan time-shift, berkat normalisasi peak + VAD.
+5. **Evaluasi eksploratif semua kandidat beku** (arsip MP11 & varian MP12, hash valid 9/9), dilaporkan terpisah dan **bukan** dasar seleksi:
+   - Klasik: kNN 1,00, linear SVM 0,937, MLP 0,937, RF 0,874, tree 0,803.
+   - CNN: DS-CNN 0,874, freq-pool 0,867, long 0,493.
+6. **Konsistensi**: F1 hasil re-ekstraksi dari WAV sama dengan laporan resmi (0,937 & 0,560).
 7. Output: `results/metrics/mp13_extension_evaluation_metrics.json`, `results/figures/mp13_extension_evaluation_analysis.png`.
 
 ## Adaptasi

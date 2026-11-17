@@ -1,10 +1,10 @@
 {
   "project_complete": true,
-  "selected_model": "classical_tree_int8",
+  "selected_model": "classical_logreg_int8",
   "primary_runtime": "Raspberry Pi/Python reference or ESP32/C++ port using frozen header",
   "model_package": "models/mp15_classical_int8.npz",
   "model_c_header": "firmware/mp15_classical_model_int8.h",
-  "model_c_header_sha256": "26c2bf2db71636f15657b9b613894c8ced66850df32f26af1976a1938adf45b5",
+  "model_c_header_sha256": "8d1a028b7a63baf3f89b1b1502f96cbd79397a9d459aed7210e7b584db343c00",
   "project_c_header": "firmware/mp16_project_config.h",
   "system_config": "config/system_integration_config.json",
   "acceptance_metrics": "results/metrics/mp16_acceptance_metrics.json",

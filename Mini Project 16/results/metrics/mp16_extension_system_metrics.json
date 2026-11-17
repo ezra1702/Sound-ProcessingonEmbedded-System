@@ -1,242 +1,674 @@
 {
   "ood_gate": {
     "method": "LedoitWolf Mahalanobis 39-D (fit train)",
-    "threshold": 9.026535602366053,
+    "threshold": 11.806019691800575,
     "calibration": "train+val only",
     "isolated_distractors": [
       {
         "name": "halo_david",
         "type": "non_keyword_speech",
-        "pred_without_gate": "nyala",
-        "ood_distance": 11.528649917515603,
+        "pred_without_gate": "turun",
+        "ood_distance": 12.324539138441072,
         "rejected": true
       },
       {
         "name": "halo_zira",
         "type": "non_keyword_speech",
-        "pred_without_gate": "nyala",
-        "ood_distance": 11.139285794292238,
-        "rejected": true
+        "pred_without_gate": "turun",
+        "ood_distance": 9.637381133104514,
+        "rejected": false
       },
       {
         "name": "lampu_david",
         "type": "non_keyword_speech",
         "pred_without_gate": "mati",
-        "ood_distance": 10.767110498639015,
-        "rejected": true
+        "ood_distance": 9.051609256899841,
+        "rejected": false
       },
       {
         "name": "lampu_zira",
         "type": "non_keyword_speech",
         "pred_without_gate": "mati",
-        "ood_distance": 8.748003258974922,
+        "ood_distance": 9.266105345068759,
         "rejected": false
       },
       {
         "name": "satu_david",
         "type": "non_keyword_speech",
-        "pred_without_gate": "turun",
-        "ood_distance": 9.447227609085072,
+        "pred_without_gate": "nyala",
+        "ood_distance": 17.820780852520585,
         "rejected": true
       },
       {
         "name": "satu_zira",
         "type": "non_keyword_speech",
         "pred_without_gate": "mati",
-        "ood_distance": 9.645016340737296,
+        "ood_distance": 18.831371008632235,
         "rejected": true
       },
       {
         "name": "tolong_david",
         "type": "non_keyword_speech",
-        "pred_without_gate": "nyala",
-        "ood_distance": 10.360285340342266,
-        "rejected": true
+        "pred_without_gate": "turun",
+        "ood_distance": 10.392980512186883,
+        "rejected": false
       },
       {
         "name": "tolong_zira",
         "type": "non_keyword_speech",
         "pred_without_gate": "turun",
-        "ood_distance": 8.31940190138565,
-        "rejected": false
+        "ood_distance": 14.794077369682594,
+        "rejected": true
       },
       {
         "name": "noise_burst",
         "type": "non_speech",
-        "pred_without_gate": "nyala",
-        "ood_distance": 35.209698580115464,
+        "pred_without_gate": "turun",
+        "ood_distance": 29.208680598308096,
         "rejected": true
       },
       {
         "name": "tone_1khz",
         "type": "non_speech",
-        "pred_without_gate": "nyala",
-        "ood_distance": 36.879103292660005,
+        "pred_without_gate": "turun",
+        "ood_distance": 32.158311825290674,
         "rejected": true
       },
       {
         "name": "hum_50hz",
         "type": "non_speech",
         "pred_without_gate": "turun",
-        "ood_distance": 29.04973700138486,
+        "ood_distance": 21.899396658785513,
         "rejected": true
       },
       {
         "name": "clap",
         "type": "non_speech",
-        "pred_without_gate": "nyala",
-        "ood_distance": 38.04581142847218,
+        "pred_without_gate": "mati",
+        "ood_distance": 30.73585279826544,
         "rejected": true
       }
     ],
     "isolated_keywords": [
       {
-        "id": "nyala_b01",
+        "id": "ezra_nyala_b01",
         "split": "train/val",
-        "ood_distance": 4.092680803738101,
+        "ood_distance": 4.7099952133227685,
         "accepted": true
       },
       {
-        "id": "mati_b01",
+        "id": "ezra_mati_b01",
         "split": "train/val",
-        "ood_distance": 3.27139196716548,
+        "ood_distance": 5.733126876770276,
         "accepted": true
       },
       {
-        "id": "naik_b01",
+        "id": "ezra_naik_b01",
         "split": "train/val",
-        "ood_distance": 3.8626792694199388,
+        "ood_distance": 5.4997446425286025,
         "accepted": true
       },
       {
-        "id": "turun_b01",
+        "id": "ezra_turun_b01",
         "split": "train/val",
-        "ood_distance": 4.2203285232582735,
+        "ood_distance": 4.821601059291427,
         "accepted": true
       },
       {
-        "id": "nyala_b02",
+        "id": "abdillah_nyala_b01",
         "split": "train/val",
-        "ood_distance": 4.025033912632113,
+        "ood_distance": 5.679205446245259,
         "accepted": true
       },
       {
-        "id": "mati_b02",
+        "id": "abdillah_mati_b01",
         "split": "train/val",
-        "ood_distance": 4.0276749653212915,
+        "ood_distance": 4.869480529926651,
         "accepted": true
       },
       {
-        "id": "naik_b02",
+        "id": "abdillah_naik_b01",
         "split": "train/val",
-        "ood_distance": 4.142875528309784,
+        "ood_distance": 5.569640713137944,
         "accepted": true
       },
       {
-        "id": "turun_b02",
+        "id": "abdillah_turun_b01",
         "split": "train/val",
-        "ood_distance": 3.7922672996206734,
+        "ood_distance": 4.845754895453769,
         "accepted": true
       },
       {
-        "id": "nyala_b03",
+        "id": "ivang_nyala_b01",
         "split": "train/val",
-        "ood_distance": 3.6997316788820673,
+        "ood_distance": 4.4810691126639,
         "accepted": true
       },
       {
-        "id": "mati_b03",
+        "id": "ivang_mati_b01",
         "split": "train/val",
-        "ood_distance": 3.254997022686606,
+        "ood_distance": 4.705232306889009,
         "accepted": true
       },
       {
-        "id": "naik_b03",
+        "id": "ivang_naik_b01",
         "split": "train/val",
-        "ood_distance": 3.3069495008443894,
+        "ood_distance": 5.193667740403344,
         "accepted": true
       },
       {
-        "id": "turun_b03",
+        "id": "ivang_turun_b01",
         "split": "train/val",
-        "ood_distance": 3.840432598575758,
+        "ood_distance": 6.494125225244816,
         "accepted": true
       },
       {
-        "id": "nyala_b04",
+        "id": "jahzeel_nyala_b01",
         "split": "train/val",
-        "ood_distance": 3.794653058272832,
+        "ood_distance": 4.953390482452416,
         "accepted": true
       },
       {
-        "id": "mati_b04",
+        "id": "jahzeel_mati_b01",
         "split": "train/val",
-        "ood_distance": 4.094730299898457,
+        "ood_distance": 5.131601812293627,
         "accepted": true
       },
       {
-        "id": "naik_b04",
+        "id": "jahzeel_naik_b01",
         "split": "train/val",
-        "ood_distance": 3.9877476526958144,
+        "ood_distance": 4.79099673590964,
         "accepted": true
       },
       {
-        "id": "turun_b04",
+        "id": "jahzeel_turun_b01",
         "split": "train/val",
-        "ood_distance": 4.129326850289406,
+        "ood_distance": 5.284819617321978,
         "accepted": true
       },
       {
-        "id": "nyala_b05",
+        "id": "ezra_nyala_b02",
         "split": "train/val",
-        "ood_distance": 6.163434918685108,
+        "ood_distance": 4.57726705260338,
         "accepted": true
       },
       {
-        "id": "mati_b05",
+        "id": "ezra_mati_b02",
         "split": "train/val",
-        "ood_distance": 6.092436832433844,
+        "ood_distance": 4.6127021783326665,
         "accepted": true
       },
       {
-        "id": "naik_b05",
+        "id": "ezra_naik_b02",
         "split": "train/val",
-        "ood_distance": 5.681776123677476,
+        "ood_distance": 4.851216065293345,
         "accepted": true
       },
       {
-        "id": "turun_b05",
+        "id": "ezra_turun_b02",
         "split": "train/val",
-        "ood_distance": 7.221228481892843,
+        "ood_distance": 4.4865405560736455,
         "accepted": true
       },
       {
-        "id": "nyala_b06",
+        "id": "abdillah_nyala_b02",
+        "split": "train/val",
+        "ood_distance": 4.853964766148867,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_mati_b02",
+        "split": "train/val",
+        "ood_distance": 4.836656870207355,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_naik_b02",
+        "split": "train/val",
+        "ood_distance": 4.098763127084623,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_turun_b02",
+        "split": "train/val",
+        "ood_distance": 4.426498553551524,
+        "accepted": true
+      },
+      {
+        "id": "ivang_nyala_b02",
+        "split": "train/val",
+        "ood_distance": 4.510668516444924,
+        "accepted": true
+      },
+      {
+        "id": "ivang_mati_b02",
+        "split": "train/val",
+        "ood_distance": 4.488404838501799,
+        "accepted": true
+      },
+      {
+        "id": "ivang_naik_b02",
+        "split": "train/val",
+        "ood_distance": 4.898059404217978,
+        "accepted": true
+      },
+      {
+        "id": "ivang_turun_b02",
+        "split": "train/val",
+        "ood_distance": 4.7870147511599725,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_nyala_b02",
+        "split": "train/val",
+        "ood_distance": 4.721805813425012,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_mati_b02",
+        "split": "train/val",
+        "ood_distance": 4.945389360389747,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_naik_b02",
+        "split": "train/val",
+        "ood_distance": 5.952048167387294,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_turun_b02",
+        "split": "train/val",
+        "ood_distance": 4.225150252706557,
+        "accepted": true
+      },
+      {
+        "id": "ezra_nyala_b03",
+        "split": "train/val",
+        "ood_distance": 4.784021927957596,
+        "accepted": true
+      },
+      {
+        "id": "ezra_mati_b03",
+        "split": "train/val",
+        "ood_distance": 4.197235298060941,
+        "accepted": true
+      },
+      {
+        "id": "ezra_naik_b03",
+        "split": "train/val",
+        "ood_distance": 5.242146412540925,
+        "accepted": true
+      },
+      {
+        "id": "ezra_turun_b03",
+        "split": "train/val",
+        "ood_distance": 3.892876052914461,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_nyala_b03",
+        "split": "train/val",
+        "ood_distance": 4.756964487997272,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_mati_b03",
+        "split": "train/val",
+        "ood_distance": 4.685610745433858,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_naik_b03",
+        "split": "train/val",
+        "ood_distance": 5.713662583386376,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_turun_b03",
+        "split": "train/val",
+        "ood_distance": 5.271065800897847,
+        "accepted": true
+      },
+      {
+        "id": "ivang_nyala_b03",
+        "split": "train/val",
+        "ood_distance": 4.867169185292054,
+        "accepted": true
+      },
+      {
+        "id": "ivang_mati_b03",
+        "split": "train/val",
+        "ood_distance": 5.112166950603058,
+        "accepted": true
+      },
+      {
+        "id": "ivang_naik_b03",
+        "split": "train/val",
+        "ood_distance": 4.736882358765205,
+        "accepted": true
+      },
+      {
+        "id": "ivang_turun_b03",
+        "split": "train/val",
+        "ood_distance": 4.326559851271192,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_nyala_b03",
+        "split": "train/val",
+        "ood_distance": 5.322403772710935,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_mati_b03",
+        "split": "train/val",
+        "ood_distance": 4.717129640454061,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_naik_b03",
+        "split": "train/val",
+        "ood_distance": 5.406215951589975,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_turun_b03",
+        "split": "train/val",
+        "ood_distance": 5.455488137167046,
+        "accepted": true
+      },
+      {
+        "id": "ezra_nyala_b04",
+        "split": "train/val",
+        "ood_distance": 5.25907035169009,
+        "accepted": true
+      },
+      {
+        "id": "ezra_mati_b04",
+        "split": "train/val",
+        "ood_distance": 4.389664614090998,
+        "accepted": true
+      },
+      {
+        "id": "ezra_naik_b04",
+        "split": "train/val",
+        "ood_distance": 5.138616891766185,
+        "accepted": true
+      },
+      {
+        "id": "ezra_turun_b04",
+        "split": "train/val",
+        "ood_distance": 4.966702241239476,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_nyala_b04",
+        "split": "train/val",
+        "ood_distance": 5.223482833643108,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_mati_b04",
+        "split": "train/val",
+        "ood_distance": 5.22439188564227,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_naik_b04",
+        "split": "train/val",
+        "ood_distance": 5.126746400735935,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_turun_b04",
+        "split": "train/val",
+        "ood_distance": 5.141893688660651,
+        "accepted": true
+      },
+      {
+        "id": "ivang_nyala_b04",
+        "split": "train/val",
+        "ood_distance": 5.106893217888691,
+        "accepted": true
+      },
+      {
+        "id": "ivang_mati_b04",
+        "split": "train/val",
+        "ood_distance": 4.022481514305919,
+        "accepted": true
+      },
+      {
+        "id": "ivang_naik_b04",
+        "split": "train/val",
+        "ood_distance": 3.9849917183341077,
+        "accepted": true
+      },
+      {
+        "id": "ivang_turun_b04",
+        "split": "train/val",
+        "ood_distance": 4.399878086745138,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_nyala_b04",
+        "split": "train/val",
+        "ood_distance": 4.771872627745662,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_mati_b04",
+        "split": "train/val",
+        "ood_distance": 5.400713441985003,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_naik_b04",
+        "split": "train/val",
+        "ood_distance": 6.030420532867409,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_turun_b04",
+        "split": "train/val",
+        "ood_distance": 4.9453680032089835,
+        "accepted": true
+      },
+      {
+        "id": "ezra_nyala_b05",
+        "split": "train/val",
+        "ood_distance": 6.4419758646972,
+        "accepted": true
+      },
+      {
+        "id": "ezra_mati_b05",
+        "split": "train/val",
+        "ood_distance": 9.042932617281059,
+        "accepted": true
+      },
+      {
+        "id": "ezra_naik_b05",
+        "split": "train/val",
+        "ood_distance": 6.073225511634255,
+        "accepted": true
+      },
+      {
+        "id": "ezra_turun_b05",
+        "split": "train/val",
+        "ood_distance": 6.475861879224223,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_nyala_b05",
+        "split": "train/val",
+        "ood_distance": 5.889933204717296,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_mati_b05",
+        "split": "train/val",
+        "ood_distance": 4.975192277455689,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_naik_b05",
+        "split": "train/val",
+        "ood_distance": 7.691877730267018,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_turun_b05",
+        "split": "train/val",
+        "ood_distance": 9.44481575344046,
+        "accepted": true
+      },
+      {
+        "id": "ivang_nyala_b05",
+        "split": "train/val",
+        "ood_distance": 5.874569573657121,
+        "accepted": true
+      },
+      {
+        "id": "ivang_mati_b05",
+        "split": "train/val",
+        "ood_distance": 6.648390316364163,
+        "accepted": true
+      },
+      {
+        "id": "ivang_naik_b05",
+        "split": "train/val",
+        "ood_distance": 5.669069052475575,
+        "accepted": true
+      },
+      {
+        "id": "ivang_turun_b05",
+        "split": "train/val",
+        "ood_distance": 4.866674140541824,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_nyala_b05",
+        "split": "train/val",
+        "ood_distance": 9.071810220541773,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_mati_b05",
+        "split": "train/val",
+        "ood_distance": 8.353630371445785,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_naik_b05",
+        "split": "train/val",
+        "ood_distance": 7.6863994661933,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_turun_b05",
+        "split": "train/val",
+        "ood_distance": 7.325074889057669,
+        "accepted": true
+      },
+      {
+        "id": "ezra_nyala_b06",
         "split": "test",
-        "ood_distance": 6.213210851475756,
+        "ood_distance": 4.884925819868964,
         "accepted": true
       },
       {
-        "id": "mati_b06",
+        "id": "ezra_mati_b06",
         "split": "test",
-        "ood_distance": 6.981980169693609,
+        "ood_distance": 5.608846324157074,
         "accepted": true
       },
       {
-        "id": "naik_b06",
+        "id": "ezra_naik_b06",
         "split": "test",
-        "ood_distance": 6.97937966994781,
+        "ood_distance": 5.493678017947427,
         "accepted": true
       },
       {
-        "id": "turun_b06",
+        "id": "ezra_turun_b06",
         "split": "test",
-        "ood_distance": 6.626949210452736,
+        "ood_distance": 5.5465191102689,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_nyala_b06",
+        "split": "test",
+        "ood_distance": 5.439316322462804,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_mati_b06",
+        "split": "test",
+        "ood_distance": 8.321090422012348,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_naik_b06",
+        "split": "test",
+        "ood_distance": 6.793591896428767,
+        "accepted": true
+      },
+      {
+        "id": "abdillah_turun_b06",
+        "split": "test",
+        "ood_distance": 6.127883397004125,
+        "accepted": true
+      },
+      {
+        "id": "ivang_nyala_b06",
+        "split": "test",
+        "ood_distance": 4.920384378663663,
+        "accepted": true
+      },
+      {
+        "id": "ivang_mati_b06",
+        "split": "test",
+        "ood_distance": 4.76198243299784,
+        "accepted": true
+      },
+      {
+        "id": "ivang_naik_b06",
+        "split": "test",
+        "ood_distance": 5.77336041900915,
+        "accepted": true
+      },
+      {
+        "id": "ivang_turun_b06",
+        "split": "test",
+        "ood_distance": 4.8676085711200985,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_nyala_b06",
+        "split": "test",
+        "ood_distance": 6.787423471201859,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_mati_b06",
+        "split": "test",
+        "ood_distance": 7.242823496575479,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_naik_b06",
+        "split": "test",
+        "ood_distance": 6.392280141566681,
+        "accepted": true
+      },
+      {
+        "id": "jahzeel_turun_b06",
+        "split": "test",
+        "ood_distance": 10.53855047437463,
         "accepted": true
       }
     ],
     "keyword_test_acceptance": 1.0,
-    "nonkw_speech_rejection": 0.75,
+    "nonkw_speech_rejection": 0.5,
     "non_speech_rejection": 1.0
   },
   "fsm": {
@@ -248,7 +680,7 @@
     ],
     "c_equivalence": {
       "compiled": true,
-      "n_ticks": 855,
+      "n_ticks": 2463,
       "trace_identical": true,
       "actions_covered": [
         "FAILSAFE_OFF",
@@ -265,362 +697,982 @@
     }
   },
   "stream_scores": {
-    "keywords": 24,
-    "kw_hit": 24,
+    "keywords": 96,
+    "kw_hit": 92,
     "kw_false_reject": 0,
-    "kw_substitution": 0,
-    "kw_miss": 0,
-    "nonkw_correct_reject": 6,
-    "nonkw_false_accept": 2,
+    "kw_substitution": 2,
+    "kw_miss": 2,
+    "nonkw_correct_reject": 3,
+    "nonkw_false_accept": 5,
     "nonspeech_correct_reject": 4,
     "nonspeech_false_accept": 0,
     "failsafe_events": 1,
     "recover_events": 1,
     "level_always_within_bounds": true,
-    "stream_duration_s": 80.64775,
+    "stream_duration_s": 241.400375,
     "failed_segments": [
-      "tolong_zira:false_accept",
-      "lampu_zira:false_accept"
+      "ezra_turun_b06:substitution",
+      "lampu_zira:false_accept",
+      "tolong_david:false_accept",
+      "halo_zira:false_accept",
+      "jahzeel_nyala_b03:miss",
+      "halo_david:false_accept",
+      "lampu_david:false_accept",
+      "ivang_mati_b05:substitution",
+      "jahzeel_naik_b04:miss"
     ]
   },
   "endpoint_design_comparison": {
     "v1_baseline": {
       "win_s": 0.975,
       "rel_drop_db": null,
-      "keywords": 24,
-      "kw_hit": 22,
-      "kw_false_reject": 0,
+      "keywords": 96,
+      "kw_hit": 66,
+      "kw_false_reject": 3,
       "kw_substitution": 1,
-      "kw_miss": 1,
-      "nonkw_correct_reject": 6,
-      "nonkw_false_accept": 2,
+      "kw_miss": 26,
+      "nonkw_correct_reject": 4,
+      "nonkw_false_accept": 4,
       "nonspeech_correct_reject": 4,
       "nonspeech_false_accept": 0,
       "failsafe_events": 1,
       "recover_events": 1,
       "level_always_within_bounds": true,
-      "stream_duration_s": 80.64775,
+      "stream_duration_s": 241.400375,
       "failed_segments": [
-        "tolong_zira:false_accept",
-        "turun_b06:substitution",
-        "lampu_zira:false_accept",
-        "nyala_b04:miss"
+        "ezra_mati_b01:miss",
+        "ezra_turun_b06:miss",
+        "abdillah_naik_b04:miss",
+        "ezra_nyala_b02:miss",
+        "ezra_mati_b06:miss",
+        "tolong_david:false_accept",
+        "ezra_mati_b03:miss",
+        "ivang_nyala_b03:miss",
+        "halo_zira:false_accept",
+        "jahzeel_nyala_b03:miss",
+        "ezra_turun_b01:miss",
+        "jahzeel_turun_b06:false_reject",
+        "ezra_turun_b05:miss",
+        "ivang_turun_b06:substitution",
+        "jahzeel_naik_b05:miss",
+        "halo_david:false_accept",
+        "ivang_mati_b02:false_reject",
+        "ezra_naik_b06:miss",
+        "jahzeel_nyala_b06:miss",
+        "ivang_nyala_b02:miss",
+        "ivang_mati_b03:miss",
+        "ezra_turun_b04:miss",
+        "jahzeel_naik_b06:miss",
+        "ezra_naik_b05:miss",
+        "lampu_david:false_accept",
+        "ezra_naik_b02:miss",
+        "jahzeel_mati_b04:miss",
+        "ezra_nyala_b04:miss",
+        "ezra_mati_b04:miss",
+        "ezra_mati_b05:miss",
+        "jahzeel_mati_b06:false_reject",
+        "ezra_nyala_b05:miss",
+        "ezra_turun_b02:miss",
+        "jahzeel_naik_b04:miss"
       ]
     },
     "v2_final": {
       "win_s": 1.2,
       "rel_drop_db": 20.0,
-      "keywords": 24,
-      "kw_hit": 24,
+      "keywords": 96,
+      "kw_hit": 92,
       "kw_false_reject": 0,
-      "kw_substitution": 0,
-      "kw_miss": 0,
-      "nonkw_correct_reject": 6,
-      "nonkw_false_accept": 2,
+      "kw_substitution": 2,
+      "kw_miss": 2,
+      "nonkw_correct_reject": 3,
+      "nonkw_false_accept": 5,
       "nonspeech_correct_reject": 4,
       "nonspeech_false_accept": 0,
       "failsafe_events": 1,
       "recover_events": 1,
       "level_always_within_bounds": true,
-      "stream_duration_s": 80.64775,
+      "stream_duration_s": 241.400375,
       "failed_segments": [
-        "tolong_zira:false_accept",
-        "lampu_zira:false_accept"
+        "ezra_turun_b06:substitution",
+        "lampu_zira:false_accept",
+        "tolong_david:false_accept",
+        "halo_zira:false_accept",
+        "jahzeel_nyala_b03:miss",
+        "halo_david:false_accept",
+        "lampu_david:false_accept",
+        "ivang_mati_b05:substitution",
+        "jahzeel_naik_b04:miss"
       ]
     }
   },
   "stream_segments": [
     {
-      "kind": "nonkw",
-      "name": "satu_david",
-      "label": null,
-      "start_s": 1.0136875,
-      "end_s": 1.44925,
-      "outcome": "correct_reject"
-    },
-    {
       "kind": "kw",
-      "name": "turun_b03",
-      "label": "turun",
-      "start_s": 3.2043125,
-      "end_s": 3.7393125,
-      "outcome": "hit"
-    },
-    {
-      "kind": "kw",
-      "name": "naik_b04",
-      "label": "naik",
-      "start_s": 5.61125,
-      "end_s": 5.88625,
-      "outcome": "hit"
-    },
-    {
-      "kind": "nonkw",
-      "name": "tolong_zira",
-      "label": null,
-      "start_s": 7.67225,
-      "end_s": 8.195125,
-      "outcome": "false_accept"
-    },
-    {
-      "kind": "kw",
-      "name": "mati_b04",
+      "name": "ezra_mati_b01",
       "label": "mati",
-      "start_s": 10.578,
-      "end_s": 10.873,
-      "outcome": "hit"
-    },
-    {
-      "kind": "nonkw",
-      "name": "halo_zira",
-      "label": null,
-      "start_s": 12.5695,
-      "end_s": 12.908,
-      "outcome": "correct_reject"
-    },
-    {
-      "kind": "kw",
-      "name": "naik_b01",
-      "label": "naik",
-      "start_s": 14.47625,
-      "end_s": 14.93125,
+      "start_s": 1.4588125,
+      "end_s": 1.8538125,
       "outcome": "hit"
     },
     {
       "kind": "kw",
-      "name": "nyala_b05",
+      "name": "abdillah_nyala_b04",
       "label": "nyala",
-      "start_s": 17.102,
-      "end_s": 17.617,
+      "start_s": 3.7506875,
+      "end_s": 4.4456875,
       "outcome": "hit"
     },
     {
       "kind": "kw",
-      "name": "nyala_b03",
-      "label": "nyala",
-      "start_s": 19.2186875,
-      "end_s": 19.8836875,
-      "outcome": "hit"
-    },
-    {
-      "kind": "nonkw",
-      "name": "satu_zira",
-      "label": null,
-      "start_s": 21.3485,
-      "end_s": 21.866375,
-      "outcome": "correct_reject"
-    },
-    {
-      "kind": "nonkw",
-      "name": "tolong_david",
-      "label": null,
-      "start_s": 23.4748125,
-      "end_s": 23.957875,
-      "outcome": "correct_reject"
+      "name": "ezra_turun_b06",
+      "label": "turun",
+      "start_s": 5.982625,
+      "end_s": 6.377625,
+      "outcome": "substitution"
     },
     {
       "kind": "kw",
-      "name": "mati_b05",
+      "name": "abdillah_turun_b04",
+      "label": "turun",
+      "start_s": 8.3911875,
+      "end_s": 8.6761875,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "abdillah_mati_b03",
       "label": "mati",
-      "start_s": 25.450375,
-      "end_s": 25.985375,
-      "outcome": "hit"
-    },
-    {
-      "kind": "nonspeech",
-      "name": "tone_1khz",
-      "label": null,
-      "start_s": 27.5646875,
-      "end_s": 28.0413125,
-      "outcome": "correct_reject"
-    },
-    {
-      "kind": "nonkw",
-      "name": "lampu_david",
-      "label": null,
-      "start_s": 29.438,
-      "end_s": 30.2045,
-      "outcome": "correct_reject"
-    },
-    {
-      "kind": "kw",
-      "name": "naik_b03",
-      "label": "naik",
-      "start_s": 31.8341875,
-      "end_s": 32.3391875,
+      "start_s": 10.718375,
+      "end_s": 11.123375,
       "outcome": "hit"
     },
     {
       "kind": "kw",
-      "name": "mati_b01",
+      "name": "abdillah_mati_b02",
       "label": "mati",
-      "start_s": 34.1446875,
-      "end_s": 34.7396875,
+      "start_s": 12.751,
+      "end_s": 13.146,
       "outcome": "hit"
     },
     {
-      "kind": "nonkw",
-      "name": "halo_david",
-      "label": null,
-      "start_s": 36.43475,
-      "end_s": 36.7584375,
-      "outcome": "correct_reject"
-    },
-    {
-      "kind": "nonspeech",
-      "name": "hum_50hz",
-      "label": null,
-      "start_s": 38.7819375,
-      "end_s": 39.2583125,
-      "outcome": "correct_reject"
-    },
-    {
       "kind": "kw",
-      "name": "mati_b02",
+      "name": "ivang_mati_b01",
       "label": "mati",
-      "start_s": 40.8833125,
-      "end_s": 41.2583125,
+      "start_s": 15.1405,
+      "end_s": 15.7655,
       "outcome": "hit"
     },
     {
       "kind": "kw",
-      "name": "turun_b06",
-      "label": "turun",
-      "start_s": 42.7984375,
-      "end_s": 43.3134375,
-      "outcome": "hit"
-    },
-    {
-      "kind": "kw",
-      "name": "nyala_b01",
-      "label": "nyala",
-      "start_s": 44.920625,
-      "end_s": 45.445625,
-      "outcome": "hit"
-    },
-    {
-      "kind": "kw",
-      "name": "turun_b01",
-      "label": "turun",
-      "start_s": 47.0098125,
-      "end_s": 47.4848125,
-      "outcome": "hit"
-    },
-    {
-      "kind": "nonkw",
-      "name": "lampu_zira",
-      "label": null,
-      "start_s": 49.11325,
-      "end_s": 49.939375,
-      "outcome": "false_accept"
-    },
-    {
-      "kind": "kw",
-      "name": "naik_b05",
-      "label": "naik",
-      "start_s": 50.9804375,
-      "end_s": 51.3754375,
-      "outcome": "hit"
-    },
-    {
-      "kind": "kw",
-      "name": "turun_b02",
-      "label": "turun",
-      "start_s": 53.1725625,
-      "end_s": 53.6475625,
-      "outcome": "hit"
-    },
-    {
-      "kind": "kw",
-      "name": "turun_b05",
-      "label": "turun",
-      "start_s": 55.6093125,
-      "end_s": 56.0743125,
+      "name": "ivang_mati_b06",
+      "label": "mati",
+      "start_s": 17.2561875,
+      "end_s": 18.0111875,
       "outcome": "hit"
     },
     {
       "kind": "nonspeech",
       "name": "noise_burst",
       "label": null,
-      "start_s": 57.6636875,
-      "end_s": 58.11775,
+      "start_s": 19.4328125,
+      "end_s": 19.886875,
       "outcome": "correct_reject"
     },
     {
       "kind": "kw",
-      "name": "nyala_b04",
-      "label": "nyala",
-      "start_s": 59.581,
-      "end_s": 60.036,
-      "outcome": "hit"
-    },
-    {
-      "kind": "kw",
-      "name": "mati_b06",
-      "label": "mati",
-      "start_s": 62.26825,
-      "end_s": 62.69325,
-      "outcome": "hit"
-    },
-    {
-      "kind": "kw",
-      "name": "nyala_b06",
-      "label": "nyala",
-      "start_s": 64.3763125,
-      "end_s": 65.0513125,
-      "outcome": "hit"
-    },
-    {
-      "kind": "kw",
-      "name": "naik_b06",
+      "name": "abdillah_naik_b04",
       "label": "naik",
-      "start_s": 66.5355625,
-      "end_s": 66.9305625,
+      "start_s": 21.7443125,
+      "end_s": 22.4793125,
       "outcome": "hit"
     },
     {
       "kind": "kw",
-      "name": "mati_b03",
-      "label": "mati",
-      "start_s": 68.421125,
-      "end_s": 69.146125,
-      "outcome": "hit"
-    },
-    {
-      "kind": "kw",
-      "name": "naik_b02",
+      "name": "jahzeel_naik_b03",
       "label": "naik",
-      "start_s": 70.7664375,
-      "end_s": 71.1114375,
+      "start_s": 24.370125,
+      "end_s": 24.765125,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_naik_b02",
+      "label": "naik",
+      "start_s": 26.17975,
+      "end_s": 26.57475,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_mati_b05",
+      "label": "mati",
+      "start_s": 28.3765625,
+      "end_s": 28.7815625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_mati_b02",
+      "label": "mati",
+      "start_s": 30.5806875,
+      "end_s": 30.9456875,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_turun_b04",
+      "label": "turun",
+      "start_s": 32.7001875,
+      "end_s": 33.4251875,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_nyala_b04",
+      "label": "nyala",
+      "start_s": 34.827125,
+      "end_s": 35.502125,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "abdillah_naik_b06",
+      "label": "naik",
+      "start_s": 37.3140625,
+      "end_s": 37.4990625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "abdillah_nyala_b02",
+      "label": "nyala",
+      "start_s": 39.62325,
+      "end_s": 40.06825,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_nyala_b02",
+      "label": "nyala",
+      "start_s": 42.0491875,
+      "end_s": 42.4541875,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_naik_b06",
+      "label": "naik",
+      "start_s": 44.362625,
+      "end_s": 44.877625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "nonkw",
+      "name": "lampu_zira",
+      "label": null,
+      "start_s": 46.406625,
+      "end_s": 47.23275,
+      "outcome": "false_accept"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_mati_b04",
+      "label": "mati",
+      "start_s": 48.645125,
+      "end_s": 49.430125,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_mati_b06",
+      "label": "mati",
+      "start_s": 51.2346875,
+      "end_s": 51.6096875,
+      "outcome": "hit"
+    },
+    {
+      "kind": "nonkw",
+      "name": "tolong_david",
+      "label": null,
+      "start_s": 53.3495625,
+      "end_s": 53.832625,
+      "outcome": "false_accept"
+    },
+    {
+      "kind": "kw",
+      "name": "abdillah_naik_b03",
+      "label": "naik",
+      "start_s": 55.768375,
+      "end_s": 56.223375,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_nyala_b01",
+      "label": "nyala",
+      "start_s": 58.08025,
+      "end_s": 58.65525,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_nyala_b06",
+      "label": "nyala",
+      "start_s": 60.54,
+      "end_s": 60.865,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_mati_b03",
+      "label": "mati",
+      "start_s": 62.9828125,
+      "end_s": 63.3278125,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_nyala_b03",
+      "label": "nyala",
+      "start_s": 65.0194375,
+      "end_s": 65.7144375,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_naik_b01",
+      "label": "naik",
+      "start_s": 67.5055,
+      "end_s": 67.8605,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "abdillah_turun_b03",
+      "label": "turun",
+      "start_s": 69.616625,
+      "end_s": 70.151625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_nyala_b03",
+      "label": "nyala",
+      "start_s": 72.1085625,
+      "end_s": 72.4735625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_mati_b02",
+      "label": "mati",
+      "start_s": 73.809375,
+      "end_s": 74.174375,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_mati_b03",
+      "label": "mati",
+      "start_s": 75.8876875,
+      "end_s": 76.3326875,
+      "outcome": "hit"
+    },
+    {
+      "kind": "nonkw",
+      "name": "halo_zira",
+      "label": null,
+      "start_s": 78.123875,
+      "end_s": 78.462375,
+      "outcome": "false_accept"
+    },
+    {
+      "kind": "kw",
+      "name": "abdillah_nyala_b06",
+      "label": "nyala",
+      "start_s": 80.2304375,
+      "end_s": 80.5054375,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_nyala_b03",
+      "label": "nyala",
+      "start_s": 82.3001875,
+      "end_s": 82.7651875,
+      "outcome": "miss"
+    },
+    {
+      "kind": "kw",
+      "name": "abdillah_mati_b05",
+      "label": "mati",
+      "start_s": 84.8150625,
+      "end_s": 85.1900625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_turun_b02",
+      "label": "turun",
+      "start_s": 86.88125,
+      "end_s": 87.65625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_turun_b01",
+      "label": "turun",
+      "start_s": 89.30425,
+      "end_s": 89.72925,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "abdillah_nyala_b03",
+      "label": "nyala",
+      "start_s": 91.4454375,
+      "end_s": 91.7804375,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_naik_b01",
+      "label": "naik",
+      "start_s": 93.628375,
+      "end_s": 94.173375,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_naik_b01",
+      "label": "naik",
+      "start_s": 95.6590625,
+      "end_s": 96.0340625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "abdillah_turun_b02",
+      "label": "turun",
+      "start_s": 97.8355625,
+      "end_s": 98.2405625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_turun_b03",
+      "label": "turun",
+      "start_s": 99.89025,
+      "end_s": 100.64525,
       "outcome": "hit"
     },
     {
       "kind": "nonspeech",
       "name": "clap",
       "label": null,
-      "start_s": 73.011,
-      "end_s": 73.53625,
+      "start_s": 102.34425,
+      "end_s": 102.8695,
+      "outcome": "correct_reject"
+    },
+    {
+      "kind": "nonspeech",
+      "name": "tone_1khz",
+      "label": null,
+      "start_s": 104.5638125,
+      "end_s": 105.0404375,
       "outcome": "correct_reject"
     },
     {
       "kind": "kw",
-      "name": "nyala_b02",
-      "label": "nyala",
-      "start_s": 75.254625,
-      "end_s": 75.819625,
+      "name": "abdillah_turun_b05",
+      "label": "turun",
+      "start_s": 107.0853125,
+      "end_s": 107.3003125,
       "outcome": "hit"
     },
     {
       "kind": "kw",
-      "name": "turun_b04",
+      "name": "abdillah_turun_b01",
       "label": "turun",
-      "start_s": 78.02775,
-      "end_s": 78.36275,
+      "start_s": 109.45425,
+      "end_s": 109.94925,
       "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_turun_b06",
+      "label": "turun",
+      "start_s": 111.44575,
+      "end_s": 111.88075,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_turun_b05",
+      "label": "turun",
+      "start_s": 113.434125,
+      "end_s": 113.829125,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_turun_b06",
+      "label": "turun",
+      "start_s": 115.299,
+      "end_s": 116.074,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_naik_b05",
+      "label": "naik",
+      "start_s": 117.47025,
+      "end_s": 117.95525,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_turun_b03",
+      "label": "turun",
+      "start_s": 119.93525,
+      "end_s": 120.34025,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_nyala_b01",
+      "label": "nyala",
+      "start_s": 122.2639375,
+      "end_s": 122.5789375,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_naik_b05",
+      "label": "naik",
+      "start_s": 124.2545,
+      "end_s": 124.7795,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_naik_b03",
+      "label": "naik",
+      "start_s": 126.5148125,
+      "end_s": 126.7998125,
+      "outcome": "hit"
+    },
+    {
+      "kind": "nonkw",
+      "name": "halo_david",
+      "label": null,
+      "start_s": 128.176625,
+      "end_s": 128.5003125,
+      "outcome": "false_accept"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_mati_b02",
+      "label": "mati",
+      "start_s": 130.3901875,
+      "end_s": 131.1551875,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_naik_b06",
+      "label": "naik",
+      "start_s": 132.8254375,
+      "end_s": 133.1304375,
+      "outcome": "hit"
+    },
+    {
+      "kind": "nonkw",
+      "name": "satu_david",
+      "label": null,
+      "start_s": 134.8815625,
+      "end_s": 135.317125,
+      "outcome": "correct_reject"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_turun_b01",
+      "label": "turun",
+      "start_s": 137.2183125,
+      "end_s": 137.8933125,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_turun_b03",
+      "label": "turun",
+      "start_s": 139.501875,
+      "end_s": 139.916875,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_nyala_b06",
+      "label": "nyala",
+      "start_s": 141.426,
+      "end_s": 141.891,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_turun_b05",
+      "label": "turun",
+      "start_s": 143.201625,
+      "end_s": 143.946625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_nyala_b02",
+      "label": "nyala",
+      "start_s": 145.38775,
+      "end_s": 146.00275,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_mati_b01",
+      "label": "mati",
+      "start_s": 147.431875,
+      "end_s": 147.776875,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_mati_b03",
+      "label": "mati",
+      "start_s": 149.4801875,
+      "end_s": 150.2251875,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_turun_b01",
+      "label": "turun",
+      "start_s": 151.8016875,
+      "end_s": 152.2266875,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_turun_b04",
+      "label": "turun",
+      "start_s": 154.403375,
+      "end_s": 154.818375,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_nyala_b05",
+      "label": "nyala",
+      "start_s": 156.644625,
+      "end_s": 157.369625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_naik_b06",
+      "label": "naik",
+      "start_s": 158.998125,
+      "end_s": 159.423125,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "abdillah_mati_b04",
+      "label": "mati",
+      "start_s": 160.79675,
+      "end_s": 161.59175,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_nyala_b06",
+      "label": "nyala",
+      "start_s": 163.2216875,
+      "end_s": 163.9066875,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_naik_b05",
+      "label": "naik",
+      "start_s": 165.4584375,
+      "end_s": 165.8234375,
+      "outcome": "hit"
+    },
+    {
+      "kind": "nonkw",
+      "name": "lampu_david",
+      "label": null,
+      "start_s": 167.4474375,
+      "end_s": 168.2139375,
+      "outcome": "false_accept"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_naik_b02",
+      "label": "naik",
+      "start_s": 169.5178125,
+      "end_s": 170.0428125,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_naik_b02",
+      "label": "naik",
+      "start_s": 172.0564375,
+      "end_s": 172.3814375,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_turun_b02",
+      "label": "turun",
+      "start_s": 174.437,
+      "end_s": 174.852,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_mati_b04",
+      "label": "mati",
+      "start_s": 176.8434375,
+      "end_s": 177.3184375,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_nyala_b02",
+      "label": "nyala",
+      "start_s": 178.919,
+      "end_s": 179.424,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_nyala_b04",
+      "label": "nyala",
+      "start_s": 181.381875,
+      "end_s": 181.736875,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_naik_b04",
+      "label": "naik",
+      "start_s": 183.536625,
+      "end_s": 184.051625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_mati_b04",
+      "label": "mati",
+      "start_s": 185.7090625,
+      "end_s": 186.1240625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "abdillah_nyala_b01",
+      "label": "nyala",
+      "start_s": 187.99625,
+      "end_s": 188.46125,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "abdillah_turun_b06",
+      "label": "turun",
+      "start_s": 190.2748125,
+      "end_s": 190.5298125,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_naik_b03",
+      "label": "naik",
+      "start_s": 192.4811875,
+      "end_s": 193.0061875,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_mati_b05",
+      "label": "mati",
+      "start_s": 194.7495625,
+      "end_s": 195.1145625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "nonkw",
+      "name": "tolong_zira",
+      "label": null,
+      "start_s": 196.5474375,
+      "end_s": 197.0703125,
+      "outcome": "correct_reject"
+    },
+    {
+      "kind": "kw",
+      "name": "abdillah_mati_b01",
+      "label": "mati",
+      "start_s": 198.706875,
+      "end_s": 199.141875,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_mati_b06",
+      "label": "mati",
+      "start_s": 201.0279375,
+      "end_s": 201.5629375,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_nyala_b05",
+      "label": "nyala",
+      "start_s": 203.5495625,
+      "end_s": 203.9245625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_nyala_b01",
+      "label": "nyala",
+      "start_s": 205.5476875,
+      "end_s": 205.9526875,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_naik_b04",
+      "label": "naik",
+      "start_s": 207.6895,
+      "end_s": 208.0045,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ezra_turun_b02",
+      "label": "turun",
+      "start_s": 209.5766875,
+      "end_s": 209.9816875,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "abdillah_naik_b01",
+      "label": "naik",
+      "start_s": 211.5450625,
+      "end_s": 211.9600625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_nyala_b04",
+      "label": "nyala",
+      "start_s": 213.6735625,
+      "end_s": 214.1085625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_nyala_b05",
+      "label": "nyala",
+      "start_s": 215.9308125,
+      "end_s": 216.3558125,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "abdillah_mati_b06",
+      "label": "mati",
+      "start_s": 218.1255,
+      "end_s": 218.3905,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "abdillah_naik_b02",
+      "label": "naik",
+      "start_s": 220.5446875,
+      "end_s": 220.8596875,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "ivang_mati_b05",
+      "label": "mati",
+      "start_s": 222.570125,
+      "end_s": 223.325125,
+      "outcome": "substitution"
+    },
+    {
+      "kind": "kw",
+      "name": "abdillah_naik_b05",
+      "label": "naik",
+      "start_s": 224.77675,
+      "end_s": 224.98175,
+      "outcome": "hit"
+    },
+    {
+      "kind": "nonspeech",
+      "name": "hum_50hz",
+      "label": null,
+      "start_s": 226.964625,
+      "end_s": 227.441,
+      "outcome": "correct_reject"
+    },
+    {
+      "kind": "kw",
+      "name": "abdillah_nyala_b05",
+      "label": "nyala",
+      "start_s": 229.08475,
+      "end_s": 229.74975,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_naik_b04",
+      "label": "naik",
+      "start_s": 231.4181875,
+      "end_s": 231.8231875,
+      "outcome": "miss"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_turun_b04",
+      "label": "turun",
+      "start_s": 233.9545625,
+      "end_s": 234.3895625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "kw",
+      "name": "jahzeel_turun_b05",
+      "label": "turun",
+      "start_s": 236.1055625,
+      "end_s": 236.5905625,
+      "outcome": "hit"
+    },
+    {
+      "kind": "nonkw",
+      "name": "satu_zira",
+      "label": null,
+      "start_s": 238.4356875,
+      "end_s": 238.9535625,
+      "outcome": "correct_reject"
     }
   ],
   "event_log": "results/logs/mp16_event_log.jsonl",
-  "n_events": 38,
+  "n_events": 109,
   "dashboard_test": {
     "file": "dashboard_mp16.py",
     "apptest_ran": true,
@@ -637,5 +1689,5 @@
   },
   "model_changed": false,
   "post_test_tuning_performed": false,
-  "note": "Stream memakai seluruh 24 ucapan (termasuk test yang sudah dibuka MP13) -> uji integrasi sistem, bukan estimasi akurasi baru."
+  "note": "Stream memakai seluruh 96 ucapan (termasuk test yang sudah dibuka MP13) -> uji integrasi sistem, bukan estimasi akurasi baru."
 }

@@ -9,7 +9,7 @@
 # 3. **Leakage guard**: duplikat eksak (hash) dan *near-duplicate* (cosine similarity 39-D
 #    terstandar dengan scaler TRAIN) antar split.
 # 4. **Front-end beku reusable** `features/kws_frontend.py` + self-test bit-exact terhadap dataset MP9.
-# 5. **Galeri log-Mel 4×6** (kelas × block) untuk audit visual konsistensi label.
+# 5. **Galeri log-Mel kelas × penutur** + kualitas per block dan per penutur (4 anggota kelompok).
 # 6. **Preview separabilitas training-only**: Fisher score per fitur (hanya TRAIN, tanpa validation/test).
 #
 # Anggota Kelompok : Christama Ezra Yudianto (245150307111009), Abdillah Fatah Suryanto (245150300111008),
@@ -60,7 +60,7 @@ for r in meta:
     p_act = np.mean(x[seg]**2) if seg.any() else 0.0
     p_bg = np.mean(x[~seg]**2) if (~seg).any() else 1e-12
     row = {
-        'sample_id': r['sample_id'], 'label': r['label'], 'group_id': r['group_id'], 'split': r['split'],
+        'sample_id': r['sample_id'], 'label': r['label'], 'group_id': r['group_id'], 'subject_id': r.get('subject_id', ''), 'split': r['split'],
         'peak': float(np.max(np.abs(x))), 'clipping_samples': int(np.sum(np.abs(x) >= 0.999)),
         'dc_offset': float(np.mean(x)), 'rms_dbfs': float(20*np.log10(np.sqrt(np.mean(x**2))+1e-12)),
         'snr_est_db': float(10*np.log10(max(p_act-p_bg, 1e-12)/(p_bg+1e-12))),
@@ -151,31 +151,37 @@ ext = {'quality_audit_csv': 'results/metrics/mp09_extension_quality_audit.csv',
                                                     ['too_quiet', 'clipping', 'word_touches_record_edge', 'low_snr', 'dc_offset']},
        'snr_est_db': {'min': min(r['snr_est_db'] for r in audit), 'mean': float(np.mean([r['snr_est_db'] for r in audit])),
                       'max': max(r['snr_est_db'] for r in audit)},
+       'snr_est_db_per_subject': {s: {'min': float(min(v)), 'median': float(np.median(v)), 'max': float(max(v))}
+                                  for s in sorted({r['subject_id'] for r in audit})
+                                  for v in [[r['snr_est_db'] for r in audit if r['subject_id'] == s]]},
        'leakage_guard': leak, 'frontend_selftest': st,
        'fisher_score_train_only_top10': [{'feature': str(names[i]), 'score': float(fisher[i])} for i in order[:10]],
        'reproducibility_manifest': 'results/metrics/mp09_extension_reproducibility_manifest.json'}
 (OUT_MET/'mp09_extension_dataset_metrics.json').write_text(json.dumps(ext, indent=2), encoding='utf-8')
 
 # %% [markdown]
-# ### 6. Visualisasi: galeri log-Mel 4×6, kualitas per block, similarity, Fisher score
+# ### 6. Visualisasi: galeri log-Mel (kelas × penutur), kualitas per block & penutur, similarity, Fisher score
 
 # %%
-fig, axes = plt.subplots(len(labels), 6, figsize=(15, 8), sharey=True)
+subjects = sorted({r['subject_id'] for r in meta}, key=lambda s: [r['subject_id'] for r in meta].index(s))
+fig, axes = plt.subplots(len(labels), len(subjects), figsize=(3.2*len(subjects)+1, 8), sharey=True, squeeze=False)
 for i, lab in enumerate(labels):
-    for b in range(1, 7):
-        lm = np.load(ROOT/'features/logmel/mp09'/f'{lab}_b{b:02d}.npz')['log_mel']
-        ax = axes[i, b-1]; ax.imshow(lm.T, aspect='auto', origin='lower', cmap='magma')
-        sp = 'train' if b <= 4 else ('val' if b == 5 else 'test')
-        ax.set_title(f'{lab} b{b:02d} ({sp})', fontsize=8); ax.set_xticks([])
-        if b == 1: ax.set_ylabel('Mel bin')
-fig.suptitle('MP9 FITUR TAMBAHAN - galeri log-Mel (baris = kelas, kolom = acquisition block)')
+    for j, sj in enumerate(subjects):
+        r = next(r for r in meta if r['label'] == lab and r['subject_id'] == sj and r['group_id'] == 'block_01')
+        lm = np.load(ROOT/'features/logmel/mp09'/f"{r['sample_id']}.npz")['log_mel']
+        ax = axes[i, j]; ax.imshow(lm.T, aspect='auto', origin='lower', cmap='magma')
+        ax.set_title(f'{lab} · {sj} (block 01)', fontsize=8); ax.set_xticks([])
+        if j == 0: ax.set_ylabel('Mel bin')
+fig.suptitle('MP9 FITUR TAMBAHAN - galeri log-Mel (baris = kelas, kolom = penutur; block 01 / train)')
 fig.tight_layout(); fig.savefig(OUT_FIG/'mp09_extension_logmel_gallery.png', dpi=130); plt.close(fig)
 
-fig, ax = plt.subplots(1, 3, figsize=(16, 4.6))
+fig, ax = plt.subplots(1, 4, figsize=(21, 4.6))
 blk = [f'block_{b:02d}' for b in range(1, 7)]
 for lab in labels:
-    ax[0].plot(range(1, 7), [next(r['snr_est_db'] for r in audit if r['group_id'] == g and r['label'] == lab) for g in blk], 'o-', label=lab)
-ax[0].set_xlabel('Acquisition block'); ax[0].set_ylabel('SNR estimasi (dB)'); ax[0].set_title('Kualitas per block'); ax[0].legend(); ax[0].grid(alpha=.2)
+    ax[0].plot(range(1, 7), [np.mean([r['snr_est_db'] for r in audit if r['group_id'] == g and r['label'] == lab]) for g in blk], 'o-', label=lab)
+ax[0].set_xlabel('Acquisition block'); ax[0].set_ylabel('SNR estimasi rata-rata penutur (dB)'); ax[0].set_title('Kualitas per block'); ax[0].legend(); ax[0].grid(alpha=.2)
+ax[3].boxplot([[r['snr_est_db'] for r in audit if r['subject_id'] == sj] for sj in subjects]); ax[3].set_xticks(range(1, len(subjects)+1), subjects)
+ax[3].set_ylabel('SNR estimasi (dB)'); ax[3].set_title('Kualitas per penutur (24 sampel/penutur)'); ax[3].grid(axis='y', alpha=.2)
 im = ax[1].imshow(S, vmin=-1, vmax=1, cmap='coolwarm'); fig.colorbar(im, ax=ax[1], fraction=.046)
 ax[1].set_title('Cosine similarity 39-D (scaler TRAIN)'); ax[1].set_xlabel('sample idx'); ax[1].set_ylabel('sample idx')
 k = 12

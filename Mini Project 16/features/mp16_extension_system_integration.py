@@ -3,12 +3,12 @@
 # Modul mandiri setelah `mini_project_16.py`. Model, fitur, split, dan scale **tidak diubah**.
 # Ambang penolakan dikalibrasi **hanya dari train+validation** (ditetapkan sebelum melihat distraktor/test).
 #
-# 1. **Penolakan out-of-vocabulary** (tree tidak punya kelas "unknown"): jarak Mahalanobis (Ledoit-Wolf, 39-D z-score,
-#    fit train) dengan ambang = 1,25 × jarak maksimum train+val. Diuji pada 8 ucapan **non-keyword** (TTS: halo, lampu,
-#    satu, tolong) + 4 distraktor non-speech (burst noise, tone 1 kHz, hum, tepukan).
+# 1. **Penolakan out-of-vocabulary** (classifier klasik 4 kelas tidak punya kelas "unknown"): jarak Mahalanobis (Ledoit-Wolf,
+#    39-D z-score, fit train) dengan ambang = 1,25 × jarak maksimum train+val. Diuji pada 8 ucapan **non-keyword** (TTS: halo,
+#    lampu, satu, tolong — kelompok tidak merekam kata non-keyword) + 4 distraktor non-speech (burst noise, tone 1 kHz, hum, tepukan).
 # 2. **Command state machine** IDLE → COOLDOWN, FAULT (watchdog audio 500 ms → fail-safe OFF), aksi
 #    nyala=ON, mati=OFF, naik=level+, turun=level− dengan batas 0..10; implementasi **Python & C identik** (diuji gcc).
-# 3. **Demo stream kontinu** (semua 24 keyword + distraktor + simulasi DMA stall) memakai VAD-endpoint trigger MP14
+# 3. **Demo stream kontinu** (semua 96 keyword 4 penutur + distraktor + simulasi DMA stall) memakai VAD-endpoint trigger MP14
 #    (desain awal v1 vs desain final v2 setelah analisis kegagalan, keduanya dilaporkan),
 #    menghasilkan **event log JSONL** (timestamp, kelas, jarak OOD, aksi, state, latency, SHA-256 model).
 # 4. **Sketch ESP32 (Arduino/ESP-IDF I2S)** sebagai baseline porting + header FSM C.
@@ -170,17 +170,20 @@ class CommandFSM:
         return act
 
 # %% [markdown]
-# ### 4. Demo stream kontinu (24 keyword + distraktor + DMA stall) → event log JSONL
+# ### 4. Demo stream kontinu (semua 96 keyword + distraktor + DMA stall) → event log JSONL
 
 # %%
-segs = [('kw', sid, sid.split('_b')[0], fe.read_wav(ROOT/'data/raw/mp09_dataset'/f'{sid}.wav'))
+segs = [('kw', sid, sid.split('_b')[0].split('_')[-1], fe.read_wav(ROOT/'data/raw/mp09_dataset'/f'{sid}.wav'))
         for sid in split['train_ids']+split['validation_ids']+split['test_ids']]
 segs += [('nonkw', k, None, y) for k, y in nonkw.items()] + [('nonspeech', k, None, y) for k, y in synth.items()]
 segs = [segs[i] for i in rng.permutation(len(segs))]
 gap_rms = float(np.median([np.sqrt(np.mean(s[3][:800]**2)) for s in segs if s[0] == 'kw']))
 pieces, truth, cur = [], [], 0
+# Derau jeda sebelum keyword = derau latar rekaman itu sendiri (mic/ruangan penutur yang sama; level antar penutur
+# berbeda hingga ~12 dB). Distraktor sintetis tidak punya derau latar asli -> pakai median derau keyword.
 for kind, name, lab, y in segs:
-    g = rng.normal(scale=gap_rms, size=int(FS*rng.uniform(0.7, 1.3))); pieces += [g, y]; cur += len(g)
+    g_rms = float(np.sqrt(np.mean(y[:800]**2))) if kind == 'kw' else gap_rms
+    g = rng.normal(scale=g_rms, size=int(FS*rng.uniform(0.7, 1.3))); pieces += [g, y]; cur += len(g)
     if kind == 'kw': _, (s0, s1) = fe.preprocess(y, return_bounds=True)
     else:
         e = np.abs(y) > 0.1*np.abs(y).max(); s0, s1 = int(np.argmax(e)), int(len(e)-np.argmax(e[::-1]))
@@ -464,17 +467,20 @@ def img(rel, w=560):
 m7, m8, m9 = jl('results/metrics/mp07_preprocessing_metrics.json'), jl('results/metrics/mp08_feature_metrics.json'), jl('results/metrics/mp09_dataset_metrics.json')
 m10, m11, m12 = jl('config/feature_reduction_config.json'), jl('config/classifier_config.json'), jl('results/metrics/mp12_deep_learning_metrics.json')
 m13, m14, m15 = jl('results/metrics/mp13_final_test_metrics.json'), jl('results/metrics/mp14_realtime_metrics.json'), jl('results/metrics/mp15_deployment_metrics.json')
+m11m = jl('results/metrics/mp11_classifier_metrics.json'); dcfg = jl('config/dataset_config.json')
+n_kw = stream_scores['keywords']
 x14 = jl('results/metrics/mp14_extension_realtime_metrics.json')
 rows_html = [
     ('MP07 Preprocessing', 'DC removal, normalisasi peak, VAD, spectral subtraction', f"aktif {m7.get('active_ratio', '-')}"),
     ('MP08 Feature', 'log-Mel 26, MFCC 13, spektral, pitch → vektor 39-D', f"dim {m8.get('sample_vector_dim', m8.get('feature_dim', 39))}"),
-    ('MP09 Dataset', '24 WAV (6 block × 4 kelas), split group 16/4/4', 'TTS tersimulasi kanal (lihat README)'),
+    ('MP09 Dataset', f"{m9.get('n_samples')} WAV ({dcfg.get('n_speakers', 1)} penutur × 6 block × 4 kelas), split per block {m9.get('n_train')}/{m9.get('n_validation')}/{m9.get('n_test')}",
+     'rekaman suara asli 4 anggota kelompok' if dcfg.get('acquisition_mode') == 'group' else f"mode {dcfg.get('acquisition_mode')}"),
     ('MP10 Seleksi fitur', f"{m10.get('chosen_candidate', '-')}", ', '.join(m10.get('selected_feature_names', []))),
-    ('MP11 Classifier klasik', f"{m11.get('chosen_family', '-')} {m11.get('chosen_params', '')}", 'val F1 1,00'),
-    ('MP12 Tiny CNN', f"params {m12.get('parameter_count', '-')}, MAC {m12.get('estimated_macs_per_inference', '-')}", f"val F1 {m12.get('validation_macro_f1', '-')}"),
-    ('MP13 Frozen test', f"classical F1 {m13.get('classical', {}).get('macro_f1', '-')}", f"CNN F1 {round(m13.get('tiny_cnn', {}).get('macro_f1', 0), 3)}"),
+    ('MP11 Classifier klasik', f"{m11.get('chosen_family', '-')} {m11.get('chosen_params', '')}", f"val F1 {round(m11m.get('chosen_validation_macro_f1', float('nan')), 3)}"),
+    ('MP12 Tiny CNN', f"params {m12.get('parameter_count', '-')}, MAC {m12.get('estimated_macs_per_inference', '-')}", f"val F1 {round(m12.get('validation_macro_f1', float('nan')), 3)}"),
+    ('MP13 Frozen test', f"classical F1 {round(m13.get('classical', {}).get('macro_f1', 0), 3)} (n = {m13.get('n_test')})", f"CNN F1 {round(m13.get('tiny_cnn', {}).get('macro_f1', 0), 3)}"),
     ('MP14 Real-time', f"p95 blok {round(m14.get('p95_block_compute_ms', 0), 3)} ms / 10 ms", f"overflow {m14.get('overflow_count', '-')}"),
-    ('MP15 Deployment', f"{m15.get('selection', {}).get('selected_model', '-')}", f"payload {m15.get('classical_int8', {}).get('payload_bytes_estimate', '-')} B, agreement {m15.get('classical_int8', {}).get('agreement_all_24_vs_float', '-')}"),
+    ('MP15 Deployment', f"{m15.get('selection', {}).get('selected_model', '-')}", f"payload {m15.get('classical_int8', {}).get('payload_bytes_estimate', '-')} B, agreement {m15.get('classical_int8', {}).get('agreement_all_vs_float', '-')}"),
     ('MP16 Acceptance', 'replay test + aksi + FSM', f"{'PASS' if acc['required_acceptance_pass'] else 'FAIL'} | RTF {acc['pipeline_rtf_p95']:.4f}"),
 ]
 html = f'''<!doctype html><html lang="id"><head><meta charset="utf-8"><title>Laporan Final KWS Embedded</title>
@@ -492,8 +498,8 @@ Ivang Arfandia (245150307111003), Jahzeel Erason Nicodemus (245150300111002)</p>
 {''.join(f'<tr><td>{k}</td><td class="{"pass" if v else "fail"}">{"PASS" if v else "FAIL"}</td></tr>' for k, v in acc['acceptance_checks'].items())}</table>
 <h2>Fitur tambahan sistem (MP14–MP16)</h2><table><tr><th>Uji</th><th>Hasil</th></tr>
 <tr><td>Streaming KWS VAD-endpoint (MP14, train+val)</td><td>{x14.get('continuous_stream', {}).get('results', {}).get('VAD-endpoint trigger (1 inferensi per ucapan)', {}).get('hits', '-')}/{x14.get('continuous_stream', {}).get('n_words', '-')} hit</td></tr>
-<tr><td>Stream MP16 desain awal v1 (jendela 975 ms, endpoint absolut)</td><td>{stream_compare['v1_baseline']['kw_hit']}/24 hit; gagal: {', '.join(stream_compare['v1_baseline']['failed_segments'])}</td></tr>
-<tr><td>Stream MP16 desain final v2 (jendela 1,2 s, + drop relatif 20 dB) (24 keyword)</td><td>{stream_scores['kw_hit']} hit, {stream_scores['kw_false_reject']} false-reject, {stream_scores['kw_substitution']} substitusi</td></tr>
+<tr><td>Stream MP16 desain awal v1 (jendela 975 ms, endpoint absolut)</td><td>{stream_compare['v1_baseline']['kw_hit']}/{n_kw} hit; {len(stream_compare['v1_baseline']['failed_segments'])} segmen gagal</td></tr>
+<tr><td>Stream MP16 desain final v2 (jendela 1,2 s, + drop relatif 20 dB) ({n_kw} keyword)</td><td>{stream_scores['kw_hit']}/{n_kw} hit, {stream_scores['kw_false_reject']} false-reject, {stream_scores['kw_substitution']} substitusi</td></tr>
 <tr><td>Non-keyword speech ditolak</td><td>{stream_scores['nonkw_correct_reject']}/{len(nonkw)}</td></tr>
 <tr><td>Non-speech ditolak</td><td>{stream_scores['nonspeech_correct_reject']}/{len(synth)}</td></tr>
 <tr><td>Watchdog DMA stall</td><td>fail-safe {stream_scores['failsafe_events']}×, recover {stream_scores['recover_events']}×</td></tr>
@@ -504,9 +510,11 @@ Ivang Arfandia (245150307111003), Jahzeel Erason Nicodemus (245150300111002)</p>
 <figure>{img('results/figures/mp15_extension_quantization_analysis.png', 1000)}<figcaption>MP15 kuantisasi</figcaption></figure>
 <figure>{img('results/figures/mp16_extension_system_analysis.png', 1000)}<figcaption>MP16 sistem</figcaption></figure>
 <h2>Catatan kejujuran ilmiah</h2><ul>
-<li>Dataset MP9 dibuat dengan Windows SAPI TTS + simulasi kanal per block (tidak ada akses mikrofon saat pengerjaan otomatis); hasil
-akurasi 1,00 berlaku untuk data tersebut dan <b>bukan</b> estimasi generalisasi ke penutur manusia. Rekam ulang dengan <code>MP09_MODE=mic</code>.</li>
-<li>Test set (4 sampel) dibuka sekali di MP13; interval kepercayaan lebar (lihat MP13 bootstrap/Wilson).</li>
+<li>Dataset MP9 = rekaman suara asli 4 anggota kelompok (96 WAV); split per acquisition block sehingga setiap penutur ada di
+train, validation, dan test. Test berisi penutur yang <b>sudah dikenal</b> model (sesi berbeda), jadi akurasi bukan estimasi untuk penutur baru.</li>
+<li>Test set ({m13.get('n_test')} sampel) dibuka sekali di MP13; interval kepercayaan masih lebar (Wilson 95% akurasi
+{[round(v, 2) for v in m13.get('classical', {}).get('accuracy_wilson_95', [])]}).</li>
+<li>Ucapan non-keyword untuk uji penolakan adalah TTS (kelompok tidak merekam kata non-keyword), sehingga laju penolakan belum mewakili suara manusia.</li>
 <li>Latency/RAM perangkat (ESP32/RPi) belum diukur; sketch ESP32 disediakan sebagai baseline porting.</li></ul>
 </body></html>'''
 (ROOT/'deployment/mp16_final_report.html').write_text(html, encoding='utf-8')
@@ -538,7 +546,7 @@ ext = {'ood_gate': {'method': 'LedoitWolf Mahalanobis 39-D (fit train)', 'thresh
        'esp32_sketch': 'firmware/esp32_kws_mp16/esp32_kws_mp16.ino', 'final_report': 'deployment/mp16_final_report.html',
        'final_package': {'zip': 'deployment/mp16_final_package.zip', 'n_files': len(final_files), 'integrity_ok': zip_ok},
        'model_changed': False, 'post_test_tuning_performed': False,
-       'note': 'Stream memakai seluruh 24 ucapan (termasuk test yang sudah dibuka MP13) -> uji integrasi sistem, bukan estimasi akurasi baru.'}
+       'note': f'Stream memakai seluruh {n_kw} ucapan (termasuk test yang sudah dibuka MP13) -> uji integrasi sistem, bukan estimasi akurasi baru.'}
 (OUT_MET/'mp16_extension_system_metrics.json').write_text(json.dumps(ext, indent=2, default=lambda o: o.item() if hasattr(o, 'item') else str(o)), encoding='utf-8')
 print('Fitur tambahan MP16 selesai -> results/metrics/mp16_extension_system_metrics.json, deployment/mp16_final_report.html')
 

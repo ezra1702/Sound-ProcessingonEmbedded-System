@@ -47,15 +47,15 @@
     14
   ],
   "mp10": {
-    "chosen_candidate": "mi8",
-    "final_method": "mutual_information",
+    "chosen_candidate": "rfe8",
+    "final_method": "recursive_feature_elimination",
     "output_dim": 8,
     "feature_reduction_config": "config/feature_reduction_config.json",
     "final_feature_dataset": "features/dataset/mp10_features_final.npz",
     "metrics": "results/metrics/mp10_feature_reduction_metrics.json"
   },
   "mp11": {
-    "chosen_family": "tree",
+    "chosen_family": "logreg",
     "classifier_config": "config/classifier_config.json",
     "model_file": "models/mp11_classical_baseline.joblib",
     "parameter_file": "models/mp11_model_parameters.npz",

@@ -2,13 +2,13 @@
 #pragma once
 #include <stdint.h>
 #include <math.h>
-static const float SVM_IN_SCALE = 0.0151333837f;
-static const int32_t SVM_IDX[8] = {2, 3, 7, 8, 28, 29, 30, 31};
-static const float SVM_MEAN[8] = {0.526658719f, 4.87777164f, 2.87890223f, -2.58045432f, 0.27257485f, 0.0974067861f, 1965.99218f, 871.798551f};
-static const float SVM_SCALE[8] = {2.36671478f, 2.65812235f, 0.827549787f, 1.93496642f, 0.0601364703f, 0.0419211745f, 500.994766f, 379.860914f};
-static const int8_t SVM_WQ[32] = {-40, 2, 127, -97, 84, 87, 100, 91, -21, -102, 127, 119, 30, -113, 22, -89, 34, -37, -66, -127, -40, 6, -36, -11, 23, 116, -109, 127, -34, 26, -42, 26};
-static const float SVM_WS[4] = {0.00186276528f, 0.00235459819f, 0.00306426709f, 0.00254802055f};
-static const float SVM_B[4] = {-0.458516217f, -0.417422295f, -0.397752653f, -0.384422482f};
+static const float SVM_IN_SCALE = 0.0291919783f;
+static const int32_t SVM_IDX[8] = {0, 4, 6, 7, 11, 12, 21, 26};
+static const float SVM_MEAN[8] = {-3.71215049f, -3.82435837f, 1.19398804f, 3.01063671f, 1.45001238f, -0.0335881028f, 0.955705956f, 0.0395954548f};
+static const float SVM_SCALE[8] = {4.18022037f, 3.68923748f, 2.69562483f, 1.15169474f, 0.494389732f, 1.44786538f, 0.304245014f, 0.0159747109f};
+static const int8_t SVM_WQ[32] = {-87, -22, -29, 127, -32, 107, -10, -83, 67, 7, 108, 24, 93, -127, -48, 41, 75, -68, -127, 68, -39, -22, 71, 9, 35, 44, 21, -127, -30, 14, 6, -20};
+static const float SVM_WS[4] = {0.0103177286f, 0.018562377f, 0.0248148791f, 0.0193759304f};
+static const float SVM_B[4] = {-1.38364012f, -1.56277062f, -3.17419818f, -1.99162642f};
 static const uint8_t SVM_CLASS[4] = {0, 1, 2, 3};
 static inline int svm_int8_predict(const float *x39){ int8_t zq[8]; int best=0; float bs=-1e30f;
   for(int i=0;i<8;++i){ float q=roundf(((x39[SVM_IDX[i]]-SVM_MEAN[i])/SVM_SCALE[i])/SVM_IN_SCALE); zq[i]=(int8_t)(q>127.f?127:(q<-127.f?-127:q)); }

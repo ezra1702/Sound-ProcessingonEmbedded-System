@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rekam Suara Perintah</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: wizard — Nama → Pilih Rekaman → halaman Rekaman (rekam + dengar + ulang per kata) → Cek semua */
+:root{
+  --bg:#f3f5f4; --panel:#ffffff; --fg:#17201d; --muted:#5d6b66; --line:#d5ddd9;
+  --accent:#0f7a5c; --accent-fg:#ffffff; --soft:#e3f1ec; --ok:#13814f; --bad:#c0392b; --warn:#a86a12; --live:#c0392b; --livebg:#fbe9e6;
+  --sans:"IBM Plex Sans",system-ui,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0f1513; --panel:#17201d; --fg:#e6eeea; --muted:#94a49e; --line:#2a3632;
+  --accent:#3fcf9c; --accent-fg:#06231a; --soft:#1d3a30; --ok:#4fd18f; --bad:#ff7a6b; --warn:#f0b54d; --live:#ff7a6b; --livebg:#3a1f1b; color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}   /* tanpa ini .panel/.recbox (display:grid) tetap tampil walau hidden */
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.5 var(--sans)}
+.wrap{max-width:640px;margin:0 auto;padding:24px max(16px,env(safe-area-inset-left,0px)) 64px;display:grid;gap:16px}
+h1{font-size:1.3rem;margin:0}
+h2{font-size:1.35rem;margin:0;text-wrap:balance}
+p{margin:0}
+.muted{color:var(--muted)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;gap:16px}
+.steps{display:flex;gap:6px;flex-wrap:wrap;font-size:.85rem;color:var(--muted)}
+.steps span{padding:3px 10px;border-radius:99px;border:1px solid var(--line)}
+.steps span.on{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.choices{display:grid;gap:10px}
+.choices.two{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+button{font:inherit;cursor:pointer;border-radius:10px}
+button:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.choice{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;padding:15px 16px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-weight:500}
+.choice:hover:not(:disabled){border-color:var(--accent)}
+.choice.done{background:var(--soft);border-color:var(--accent)}
+.tag{font-size:.85rem;font-weight:500;color:var(--muted);white-space:nowrap}
+.choice.done .tag{color:var(--ok)}
+.btn{padding:11px 18px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-weight:500}
+.btn.main{background:var(--accent);border-color:var(--accent);color:var(--accent-fg);font-weight:600;font-size:1.1rem;padding:15px 34px}
+.btn.small{padding:7px 12px;font-size:.92rem}
+.link{background:none;border:0;color:var(--accent);padding:0;text-decoration:underline;font-weight:500;justify-self:start}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.between{justify-content:space-between}
+.center{justify-content:center;text-align:center}
+.recbox{display:grid;gap:12px;justify-items:center;text-align:center;padding:20px 14px;border-radius:12px;background:var(--bg);border:1px solid var(--line)}
+.recbox.live{background:var(--livebg);border-color:var(--live)}
+.word{font-family:var(--mono);font-size:clamp(3.2rem,15vw,5.5rem);font-weight:600;line-height:1.05}
+.cue{font-weight:600;font-size:1.15rem;min-height:1.7em}
+.recbox.live .cue{color:var(--live)}
+.bar{height:8px;width:100%;background:var(--line);border-radius:4px;overflow:hidden}
+.bar>i{display:block;height:100%;width:0;background:var(--live)}
+.status{min-height:1.5em;font-weight:500;max-width:52ch}
+.ok{color:var(--ok)} .bad{color:var(--bad)} .warn{color:var(--warn)}
+.donebox{display:grid;gap:12px;justify-items:center;text-align:center;padding:20px 14px;border-radius:12px;background:var(--soft);border:1px solid var(--accent)}
+.big{font-size:2.6rem;line-height:1;color:var(--ok)}
+.list{display:grid;gap:8px}
+.wrow{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:10px}
+.wrow.cur{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.wname{font-family:var(--mono);font-weight:600;font-size:1.1rem}
+.wstate{font-size:.88rem;font-weight:500}
+.wbtns{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.card{display:grid;gap:10px;padding:14px;border:1px solid var(--line);border-radius:12px}
+.card.done{border-color:var(--accent)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:6px 11px;border-radius:99px;border:1px solid var(--line);background:var(--bg);color:var(--muted);font-size:.92rem;font-family:var(--mono)}
+.chip.ok{border-color:var(--accent);color:var(--ok);background:var(--soft)}
+.chip.fail{border-color:var(--bad);color:var(--bad)}
+input[type=text]{font:inherit;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);width:100%}
+input[type=text]:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.alert{border:1px solid var(--bad);color:var(--bad);border-radius:10px;padding:14px}
+ul.tips{margin:0;padding-left:1.2em;color:var(--muted);display:grid;gap:4px}
+@media (max-width:460px){.wrow{grid-template-columns:1fr}.wbtns{justify-content:flex-start}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header style="display:grid;gap:10px">
+    <h1>Rekam Suara Perintah</h1>
+    <div class="steps" id="steps"><span>1 Nama</span><span>2 Pilih Rekaman</span><span>3 Rekam</span><span>4 Cek semua</span></div>
+  </header>
+
+  <div id="unsupported" class="alert" hidden>Browser ini belum bisa dipakai. Buka halaman ini di <b>Google Chrome</b> atau <b>Microsoft Edge</b> di laptop.</div>
+  <div id="noUpload" class="alert" style="border-color:var(--warn);color:var(--warn)" hidden>Penyimpanan online belum diatur, jadi rekaman hanya ada di halaman ini. Setelah selesai, buka "Cek semua" lalu tekan "Simpan ke laptop".</div>
+
+  <!-- 1. Nama -->
+  <section class="panel" id="sName">
+    <div id="codeBox" style="display:grid;gap:6px">
+      <label for="code" style="font-weight:600">Kode kelompok</label>
+      <input id="code" type="text" autocomplete="off" spellcheck="false" placeholder="Minta kodenya ke ketua kelompok">
+      <p id="codeMsg" class="muted"></p>
+    </div>
+    <h2>Siapa yang merekam?</h2>
+    <div class="choices" id="names"></div>
+    <ul class="tips">
+      <li>Cari tempat yang tenang.</li>
+      <li>Ada 6 Rekaman. Tiap Rekaman berisi 4 kata: <b>nyala, mati, naik, turun</b>.</li>
+      <li>Kalau kata yang terdengar salah, kamu diminta mengulang.</li>
+    </ul>
+  </section>
+
+  <!-- 2. Pilih Rekaman -->
+  <section class="panel" id="sPick" hidden>
+    <div class="row between">
+      <button class="link" id="pickBack">‹ Ganti nama</button>
+      <span class="muted" id="pickWho"></span>
+    </div>
+    <div style="display:grid;gap:4px">
+      <h2>Pilih Rekaman</h2>
+      <p class="muted" id="pickInfo"></p>
+    </div>
+    <div class="choices two" id="blocks"></div>
+    <button class="btn" id="toCheck">Cek &amp; dengarkan semua rekaman</button>
+  </section>
+
+  <!-- 3. Halaman satu Rekaman -->
+  <section class="panel" id="sBlock" hidden>
+    <div class="row between">
+      <button class="link" id="blkBack">‹ Pilih Rekaman</button>
+      <span class="muted" id="blkWho"></span>
+    </div>
+    <h2 id="blkTitle"></h2>
+
+    <div class="recbox" id="recBox">
+      <p class="muted" id="recStep"></p>
+      <p class="muted">Ucapkan kata ini:</p>
+      <div class="word" id="word"></div>
+      <div class="cue" id="cue"></div>
+      <div class="bar"><i id="prog"></i></div>
+      <div class="status" id="status"></div>
+      <button class="btn main" id="btnRec">Rekam</button>
+    </div>
+
+    <div class="donebox" id="doneBox" hidden>
+      <div class="big">✓</div>
+      <h2 id="doneTitle"></h2>
+      <p class="muted" id="doneText"></p>
+      <div class="row center">
+        <button class="btn main" id="btnNextBlock"></button>
+        <button class="btn" id="doneCheck">Cek semua</button>
+      </div>
+    </div>
+
+    <div style="display:grid;gap:8px">
+      <p class="muted">Isi Rekaman ini. Tekan <b>Dengarkan</b> untuk memutar, atau <b>Ulang</b> kalau kurang bagus.</p>
+      <div class="list" id="wordList"></div>
+    </div>
+  </section>
+
+  <!-- 4. Cek semua -->
+  <section class="panel" id="sCheck" hidden>
+    <div class="row between">
+      <button class="link" id="checkBack">‹ Pilih Rekaman</button>
+      <span class="muted" id="checkWho"></span>
+    </div>
+    <div style="display:grid;gap:4px">
+      <h2 id="checkTitle"></h2>
+      <p class="muted">Tekan kata untuk mendengarkan. Tekan "Buka" untuk merekam yang belum atau mengulang.</p>
+    </div>
+    <div class="list" id="checkList"></div>
+    <p id="sendInfo"></p>
+    <div class="row">
+      <button class="btn main" id="btnMissing">Rekam yang belum</button>
+      <button class="btn" id="btnRetry" hidden>Kirim ulang yang gagal</button>
+    </div>
+    <button class="link" id="btnZip" hidden>Simpan ke laptop (ZIP)</button>
+  </section>
+</div>
+
+<script>
+"use strict";
+// ===== KONFIGURASI GOOGLE DRIVE (isi setelah deploy Apps Script) =====
+const UPLOAD_URL = "https://script.google.com/macros/s/AKfycbzYWFBP2GNol-Ze2HBlaJqHMWF-pc1Wih6YEgHiggxIrw7yfgafcFO_RXdd80E23qa3/exec";                             // URL Web App Apps Script, berakhiran /exec
+// Kode kelompok (= SECRET di Apps Script) TIDAK ditulis di sini: diketik tiap anggota di layar pertama, diingat browser.
+let SECRET = "";
+try { SECRET = localStorage.getItem("mp09_kode") || ""; } catch (e) {}
+// =====================================================================
+const LABELS = ["nyala", "mati", "naik", "turun"];
+const MEMBERS = ["Christama Ezra Yudianto", "Abdillah Fatah Suryanto", "Ivang Arfandia", "Jahzeel Erason Nicodemus"];
+const N_BLOCKS = 6, FS = 16000, OUT_N = 19200;   // file akhir tetap 1,2 s @ 16 kHz (sama dengan skrip MP9)
+const REC_S = 10;                                 // waktu maksimal untuk bicara; berhenti lebih awal begitu kata terdengar
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+const $ = id => document.getElementById(id);
+const key = (lab, b) => `${lab}_b${String(b).padStart(2, "0")}`;
+const store = {};          // "<orang>|<key>" -> {wav, pcm, heard, at, up}
+const urls = {};           // cache URL audio untuk diputar
+let person = null, block = 1, target = null, returnTo = null, busy = false, saved = true;
+let ctx = null, capture = null, player = null;
+let driveFiles = [], driveErr = "";
+const who = () => MEMBERS[person];
+const sk = (l, b) => `${person}|${key(l, b)}`;
+const local = (l, b) => store[sk(l, b)];
+const onDrive = (l, b) => driveFiles.some(f => f.recorder === who() && f.name === key(l, b) + ".wav");
+const isDone = (l, b) => !!local(l, b) || onDrive(l, b);
+const blockCount = b => LABELS.filter(l => isDone(l, b)).length;
+const totalDone = () => { let n = 0; for (let b = 1; b <= N_BLOCKS; b++) n += blockCount(b); return n; };
+const firstOpenBlock = () => { for (let b = 1; b <= N_BLOCKS; b++) if (blockCount(b) < 4) return b; return null; };
+const firstOpenWord = b => { const l = LABELS.find(l => !isDone(l, b)); return l || null; };
+
+// ---------- Navigasi ----------
+const SCREENS = ["sName", "sPick", "sBlock", "sCheck"];
+const STEP_OF = {sName: 0, sPick: 1, sBlock: 2, sCheck: 3};
+let screen = "sName";
+function show(id) {
+  screen = id;
+  SCREENS.forEach(s => $(s).hidden = s !== id);
+  [...$("steps").children].forEach((el, i) => el.className = i === STEP_OF[id] ? "on" : "");
+  renderAll();
+  window.scrollTo(0, 0);
+}
+function renderAll() { ({sPick: renderPick, sBlock: renderBlock, sCheck: renderCheck}[screen] || (() => {}))(); }
+
+MEMBERS.forEach((m, i) => {
+  const b = document.createElement("button");
+  b.className = "choice"; b.innerHTML = `<span>${m}</span><span class="tag">Pilih ›</span>`;
+  b.onclick = async () => {
+    if (UPLOAD_URL) {
+      const msg = (t, cls = "bad") => { $("codeMsg").textContent = t; $("codeMsg").className = cls; };
+      SECRET = $("code").value.trim();
+      if (!SECRET) { msg("Isi kode kelompok dulu."); $("code").focus(); return; }
+      msg("Mengecek kode…", "muted");
+      await refreshDrive();
+      if (driveErr) { msg(/rahasia/.test(driveErr) ? "Kode kelompok salah. Tanyakan ke ketua kelompok." : "Tidak bisa terhubung. Cek internet lalu coba lagi."); return; }
+      msg("Kode benar ✓", "ok");
+      try { localStorage.setItem("mp09_kode", SECRET); } catch (e) {}
+    }
+    person = i; show("sPick");
+  };
+  $("names").appendChild(b);
+});
+$("pickBack").onclick = () => show("sName");
+$("toCheck").onclick = () => show("sCheck");
+$("blkBack").onclick = () => { if (!busy) show("sPick"); };
+$("doneCheck").onclick = () => show("sCheck");
+$("checkBack").onclick = () => show("sPick");
+$("btnMissing").onclick = () => { const b = firstOpenBlock(); if (b) openBlock(b); };
+
+function renderPick() {
+  $("pickWho").textContent = who();
+  $("pickInfo").textContent = `${totalDone()} dari 24 kata sudah direkam.` + (driveErr ? " (Tidak bisa mengecek penyimpanan online.)" : "");
+  const box = $("blocks"); box.innerHTML = "";
+  for (let b = 1; b <= N_BLOCKS; b++) {
+    const n = blockCount(b), el = document.createElement("button");
+    el.className = "choice" + (n === 4 ? " done" : "");
+    el.innerHTML = `<span>Rekaman ${b}</span><span class="tag">${n === 4 ? "Selesai ✓" : n ? `${n} dari 4` : "Belum"}</span>`;
+    el.onclick = () => openBlock(b);
+    box.appendChild(el);
+  }
+}
+
+function openBlock(b, word = null, back = null) {
+  block = b; returnTo = back;
+  target = word || firstOpenWord(b);
+  setStatus("");
+  show("sBlock");
+}
+
+function renderBlock() {
+  $("blkWho").textContent = who();
+  $("blkTitle").textContent = `Rekaman ${block}`;
+  const n = blockCount(block);
+  $("recBox").hidden = !target;
+  $("doneBox").hidden = !!target || n < 4;
+  if (target) {
+    $("recStep").textContent = `Kata ${LABELS.indexOf(target) + 1} dari 4` + (isDone(target, block) ? " · rekam ulang" : "");
+    $("word").textContent = target;
+    $("btnRec").disabled = !SR || busy;
+    $("btnRec").textContent = busy ? "Merekam…" : "Rekam";
+    if (!busy) $("cue").textContent = "Tekan Rekam, lalu ucapkan saat tulisan merah muncul.";
+  } else if (n === 4) {
+    const nb = firstOpenBlock();
+    $("doneTitle").textContent = `Rekaman ${block} selesai`;
+    if (nb) {
+      $("doneText").textContent = `Istirahat 5–10 detik dan geser posisi laptop atau mic sedikit, lalu lanjut ke Rekaman ${nb}.`;
+      $("btnNextBlock").textContent = `Lanjut ke Rekaman ${nb}`;
+      $("btnNextBlock").onclick = () => openBlock(nb);
+    } else {
+      $("doneText").textContent = "Semua 6 Rekaman (24 kata) sudah lengkap. Terima kasih!";
+      $("btnNextBlock").textContent = "Cek semua";
+      $("btnNextBlock").onclick = () => show("sCheck");
+    }
+  }
+  const list = $("wordList"); list.innerHTML = "";
+  LABELS.forEach(l => {
+    const done = isDone(l, block), s = local(l, block);
+    const row = document.createElement("div");
+    row.className = "wrow" + (l === target ? " cur" : "");
+    const st = !done ? `<span class="muted">Belum direkam</span>` : s && s.up === "fail" ? `<span class="bad">✓ Sudah · belum terkirim</span>`
+      : s && s.up === "sending" ? `<span class="muted">✓ Sudah · mengirim…</span>` : `<span class="ok">✓ Sudah</span>`;
+    row.innerHTML = `<div><div class="wname">${l}</div><div class="wstate">${st}</div></div><div class="wbtns"></div>`;
+    const btns = row.querySelector(".wbtns");
+    if (done) btns.appendChild(mkBtn("▶ Dengarkan", () => play(l, block, row)));
+    btns.appendChild(mkBtn(done ? "Ulang" : "Rekam", () => { target = l; setStatus(""); renderBlock(); }));
+    list.appendChild(row);
+  });
+  list.querySelectorAll("button").forEach(x => x.disabled = busy);
+  $("blkBack").disabled = busy;
+}
+function mkBtn(text, fn, cls = "btn small") { const b = document.createElement("button"); b.className = cls; b.textContent = text; b.onclick = fn; return b; }
+function setStatus(t, cls = "") { const s = $("status"); s.textContent = t; s.className = "status " + cls; }
+
+function renderCheck() {
+  $("checkWho").textContent = who();
+  const t = totalDone();
+  $("checkTitle").textContent = t === 24 ? "Semua sudah lengkap ✓ (24 dari 24)" : `Sudah ${t} dari 24 kata`;
+  const list = $("checkList"); list.innerHTML = "";
+  for (let b = 1; b <= N_BLOCKS; b++) {
+    const n = blockCount(b), card = document.createElement("div");
+    card.className = "card" + (n === 4 ? " done" : "");
+    card.innerHTML = `<div class="row between"><b>Rekaman ${b}</b><span class="${n === 4 ? "ok" : "muted"}">${n === 4 ? "Selesai ✓" : n ? `${n} dari 4` : "Belum"}</span></div><div class="chips"></div>`;
+    const chips = card.querySelector(".chips");
+    LABELS.forEach(l => {
+      const s = local(l, b), done = isDone(l, b);
+      const c = mkBtn(done ? `▶ ${l}` : `— ${l}`, () => done ? play(l, b, c) : openBlock(b, l, "sCheck"), "chip" + (done ? (s && s.up === "fail" ? " fail" : " ok") : ""));
+      c.title = done ? "Dengarkan" : "Belum direkam — tekan untuk merekam";
+      chips.appendChild(c);
+    });
+    chips.appendChild(mkBtn(n === 4 ? "Buka / ulang" : "Buka", () => openBlock(b, null, "sCheck"), "btn small"));
+    list.appendChild(card);
+  }
+  const vals = Object.entries(store).filter(([k]) => k.startsWith(person + "|")).map(([, v]) => v);
+  const fail = vals.filter(s => s.up === "fail").length, sending = vals.filter(s => s.up === "sending").length;
+  $("btnRetry").hidden = !fail;
+  $("btnMissing").hidden = t === 24;
+  $("btnZip").hidden = !vals.length;
+  $("sendInfo").innerHTML = !UPLOAD_URL ? `<span class="warn">Penyimpanan online belum diatur. Tekan "Simpan ke laptop" lalu kirim file ZIP ke grup.</span>`
+    : fail ? `<span class="bad">${fail} rekaman belum terkirim. Cek internet lalu tekan "Kirim ulang yang gagal".</span>`
+    : sending ? `<span class="muted">Sedang mengirim ${sending} rekaman…</span>`
+    : driveErr ? `<span class="warn">Tidak bisa mengecek penyimpanan online. Cek internet lalu buka ulang halaman.</span>`
+    : `<span class="ok">Semua rekaman sudah tersimpan online.</span>`;
+}
+
+// ---------- Putar rekaman ----------
+async function play(l, b, el) {
+  const id = sk(l, b);
+  try {
+    if (!urls[id]) {
+      const s = local(l, b);
+      let bytes;
+      if (s) bytes = s.wav;
+      else {
+        if (el) el.textContent = "Memuat…";
+        const r = await fetch(`${UPLOAD_URL}?secret=${encodeURIComponent(SECRET)}&recorder=${encodeURIComponent(who())}&file=${encodeURIComponent(key(l, b) + ".wav")}`);
+        const j = await r.json();
+        if (!j.ok) throw new Error(j.error);
+        bytes = Uint8Array.from(atob(j.data), c => c.charCodeAt(0));
+      }
+      urls[id] = URL.createObjectURL(new Blob([bytes], {type: "audio/wav"}));
+    }
+    if (player) player.pause();
+    player = new Audio(urls[id]);
+    await player.play();
+  } catch (e) {
+    if (screen === "sBlock") setStatus("Rekaman tidak bisa diputar. Cek internet lalu coba lagi.", "bad");
+    else $("sendInfo").innerHTML = `<span class="bad">Rekaman tidak bisa diputar. Cek internet lalu coba lagi.</span>`;
+  }
+  renderAll();
+}
+
+// ---------- Audio ----------
+async function ensureMic() {
+  if (ctx) return;
+  const stream = await navigator.mediaDevices.getUserMedia({audio: {channelCount: 1, echoCancellation: false, noiseSuppression: false, autoGainControl: false}});
+  ctx = new AudioContext({sampleRate: FS});
+  const src = ctx.createMediaStreamSource(stream), proc = ctx.createScriptProcessor(2048, 1, 1);
+  proc.onaudioprocess = e => { if (capture) capture.push(new Float32Array(e.inputBuffer.getChannelData(0))); };
+  src.connect(proc); proc.connect(ctx.destination);
+}
+const wait = ms => new Promise(r => setTimeout(r, ms));
+function concat(ch) { const n = ch.reduce((a, c) => a + c.length, 0), x = new Float32Array(n); let o = 0; for (const c of ch) { x.set(c, o); o += c.length; } return x; }
+
+function analyse(x) {
+  const F = 320, nF = Math.floor(x.length / F), E = new Float32Array(nF);
+  let peak = 0;
+  for (let i = 0; i < x.length; i++) peak = Math.max(peak, Math.abs(x[i]));
+  for (let f = 0; f < nF; f++) { let s = 0; for (let i = f * F; i < (f + 1) * F; i++) s += x[i] * x[i]; E[f] = s / F; }
+  const sorted = Array.from(E).sort((a, b) => a - b), floor = sorted[Math.floor(nF * 0.1)] + 1e-10, maxE = sorted[nF - 1];
+  const thr = Math.max(floor * 8, maxE * 0.02);
+  let first = -1, last = -1;
+  for (let f = 0; f < nF; f++) if (E[f] > thr) { if (first < 0) first = f; last = f; }
+  if (peak < 0.03 || first < 0 || 10 * Math.log10(maxE / floor) < 12) return {ok: false, why: "Suaranya terlalu pelan. Dekatkan mic dan bicara lebih jelas."};
+  if (peak > 0.985) return {ok: false, why: "Suaranya terlalu keras sampai pecah. Jauhkan sedikit mic-nya."};
+  if (first <= 1) return {ok: false, why: "Kamu bicara terlalu cepat. Tunggu tulisan merah muncul dulu."};
+  if (last >= nF - 2) return {ok: false, why: "Ucapannya terpotong. Bicara segera setelah tulisan merah muncul."};
+  if ((last - first + 1) * F / FS > 1.1) return {ok: false, why: "Terdengar suara terlalu panjang. Ucapkan satu kata saja, tanpa suara lain."};
+  const center = Math.round((first + last + 1) / 2 * F);
+  return {ok: true, start: Math.min(Math.max(center - OUT_N / 2, 0), x.length - OUT_N)};
+}
+
+// ---------- Pengecekan kata ----------
+function words(s) { return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z\s]/g, " ").split(/\s+/).filter(Boolean); }
+function lev(a, b) {
+  const d = Array.from({length: a.length + 1}, (_, i) => [i]);
+  for (let j = 1; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++)
+    d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+  return d[a.length][b.length];
+}
+function sameWord(w, t) {
+  if (w === t) return true;
+  if (LABELS.includes(w)) return false;
+  return lev(w, t) <= 1 && !LABELS.some(l => l !== t && lev(w, l) <= 1);
+}
+function judge(t, heard) {
+  const w = words(heard);
+  if (!w.length) return {ok: false, why: "Tidak ada kata yang terdengar. Coba lagi dengan lebih jelas."};
+  if (w.length === 1 && sameWord(w[0], t)) return {ok: true};
+  const other = LABELS.find(l => l !== t && w.includes(l));
+  if (other) return {ok: false, why: `Yang terdengar "${other}", padahal yang diminta "${t}". Coba lagi.`};
+  if (w.length > 1) return {ok: false, why: `Terdengar lebih dari satu kata ("${w.join(" ")}"). Ucapkan "${t}" saja.`};
+  return {ok: false, why: `Yang terdengar "${w[0]}", bukan "${t}". Coba lagi.`};
+}
+
+// ---------- Rekam ----------
+async function record() {
+  if (busy || !target) return;
+  const label = target, b = block;
+  busy = true; setStatus(""); renderBlock();
+  try { await ensureMic(); if (ctx.state === "suspended") await ctx.resume(); }
+  catch (e) { busy = false; renderBlock(); setStatus("Mic tidak bisa dibuka. Klik ikon gembok di kiri alamat web, izinkan Mikrofon, lalu coba lagi.", "bad"); return; }
+
+  let heard = "", srErr = null, srEnded = false;
+  const rec = new SR();
+  rec.lang = "id-ID"; rec.continuous = false; rec.interimResults = false; rec.maxAlternatives = 1;
+  rec.onresult = e => { heard = Array.from(e.results).map(r => r[0].transcript).join(" "); };
+  rec.onerror = e => { srErr = e.error; };
+  let endAt = 0;
+  rec.onend = () => { srEnded = true; endAt = performance.now(); };
+  rec.onspeechend = () => { if (!endAt) endAt = performance.now(); };
+
+  $("cue").textContent = "Siap-siap…";
+  capture = [];
+  try { rec.start(); } catch (e) { srErr = "start"; }
+  await wait(500);
+  $("recBox").classList.add("live");
+  const t0 = performance.now(), dur = REC_S * 1000;
+  while (true) {
+    const now = performance.now(), el = now - t0;
+    if (el >= dur) break;
+    if (endAt && heard && now - endAt > 600) break;         // kata sudah terdengar -> berhenti lebih awal
+    if (srEnded && !heard) { try { rec.start(); srEnded = false; endAt = 0; } catch (e) {} }   // pengenal berhenti tanpa kata -> dengarkan lagi
+    $("cue").textContent = `BICARA SEKARANG: “${label}” · sisa ${Math.ceil((dur - el) / 1000)} detik`;
+    $("prog").style.width = (el / dur * 100) + "%";
+    await wait(50);
+  }
+  const x = concat(capture); capture = null;
+  $("recBox").classList.remove("live");
+  $("prog").style.width = "0"; $("cue").textContent = "Mengecek…";
+  try { rec.stop(); } catch (e) {}
+  for (const tEnd = performance.now() + 5000; !srEnded && performance.now() < tEnd;) await wait(50);
+  if (!srEnded) try { rec.abort(); } catch (e) {}
+  busy = false;
+
+  const fail = msg => { renderBlock(); $("cue").textContent = ""; setStatus("✗ " + msg, "bad"); };
+  if (srErr && srErr !== "no-speech") return fail({network: "Pengecekan suara butuh internet. Cek koneksi lalu coba lagi.", "not-allowed": "Izin mikrofon ditolak. Klik ikon gembok di kiri alamat web, izinkan Mikrofon, lalu coba lagi."}[srErr] || "Pengecekan suara bermasalah. Coba lagi.");
+  const j = judge(label, heard); if (!j.ok) return fail(j.why);
+  const a = analyse(x); if (!a.ok) return fail(a.why);
+
+  const id = sk(label, b), pcm = x.slice(a.start, a.start + OUT_N);
+  if (urls[id]) { URL.revokeObjectURL(urls[id]); delete urls[id]; }
+  store[id] = {wav: encodeWav(pcm), pcm, heard: heard.trim(), at: new Date().toISOString(), up: ""};
+  saved = false;
+  upload(id, label, b);
+  target = null;   // tampilkan hasil dulu
+  renderBlock();
+  setStatus("");
+  const msg = document.createElement("p"); msg.className = "ok"; msg.style.fontWeight = "600"; msg.textContent = `✓ Bagus! “${label}” diterima.`;
+  $("wordList").prepend(msg);
+  await wait(1200);
+  if (returnTo) { const r = returnTo; returnTo = null; show(r); return; }
+  target = firstOpenWord(b);
+  renderBlock();
+}
+$("btnRec").onclick = record;
+
+// ---------- WAV + ZIP ----------
+function encodeWav(pcm) {
+  const buf = new ArrayBuffer(44 + pcm.length * 2), v = new DataView(buf);
+  const s = (o, t) => { for (let i = 0; i < t.length; i++) v.setUint8(o + i, t.charCodeAt(i)); };
+  s(0, "RIFF"); v.setUint32(4, 36 + pcm.length * 2, true); s(8, "WAVE"); s(12, "fmt ");
+  v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, FS, true);
+  v.setUint32(28, FS * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); s(36, "data"); v.setUint32(40, pcm.length * 2, true);
+  for (let i = 0; i < pcm.length; i++) v.setInt16(44 + i * 2, Math.round(Math.max(-1, Math.min(1, pcm[i])) * 32767), true);
+  return new Uint8Array(buf);
+}
+const CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+function crc32(d) { let c = 0xFFFFFFFF; for (let i = 0; i < d.length; i++) c = CRC[(c ^ d[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+function makeZip(files) {
+  const enc = new TextEncoder(), parts = [], central = []; let off = 0;
+  for (const f of files) {
+    const name = enc.encode(f.name), crc = crc32(f.data), h = new DataView(new ArrayBuffer(30));
+    h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x0800, true); h.setUint32(14, crc, true);
+    h.setUint32(18, f.data.length, true); h.setUint32(22, f.data.length, true); h.setUint16(26, name.length, true);
+    parts.push(new Uint8Array(h.buffer), name, f.data);
+    const c = new DataView(new ArrayBuffer(46));
+    c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true); c.setUint16(8, 0x0800, true); c.setUint32(16, crc, true);
+    c.setUint32(20, f.data.length, true); c.setUint32(24, f.data.length, true); c.setUint16(28, name.length, true); c.setUint32(42, off, true);
+    central.push(new Uint8Array(c.buffer), name);
+    off += 30 + name.length + f.data.length;
+  }
+  const cSize = central.reduce((a, p) => a + p.length, 0), e = new DataView(new ArrayBuffer(22));
+  e.setUint32(0, 0x06054b50, true); e.setUint16(8, files.length, true); e.setUint16(10, files.length, true);
+  e.setUint32(12, cSize, true); e.setUint32(16, off, true);
+  return new Blob([...parts, ...central, new Uint8Array(e.buffer)], {type: "application/zip"});
+}
+$("btnZip").onclick = () => {
+  const nm = who(), items = [];
+  for (let b = 1; b <= N_BLOCKS; b++) LABELS.forEach(l => { if (local(l, b)) items.push({l, b}); });
+  if (!items.length) return;
+  const files = items.map(q => ({name: `${nm}/block_${String(q.b).padStart(2, "0")}/${key(q.l, q.b)}.wav`, data: local(q.l, q.b).wav}));
+  const info = {recorder: nm, sample_rate_hz: FS, duration_s: OUT_N / FS, format: "PCM16 mono", created: new Date().toISOString(), user_agent: navigator.userAgent,
+    files: items.map(q => ({file: key(q.l, q.b) + ".wav", label: q.l, block: q.b, recognized_text: local(q.l, q.b).heard, recorded_at: local(q.l, q.b).at}))};
+  files.push({name: `${nm}/recorder_info.json`, data: new TextEncoder().encode(JSON.stringify(info, null, 2))});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(makeZip(files));
+  a.download = `rekaman_${nm.split(" ")[0].toLowerCase()}.zip`;
+  document.body.appendChild(a); a.click(); a.remove();
+  saved = true;
+};
+
+// ---------- Upload Google Drive (via Apps Script) ----------
+function b64(u8) { let s = ""; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); }
+async function upload(id) {
+  if (!UPLOAD_URL) return;
+  const s = store[id], [p, k] = id.split("|"), rec = MEMBERS[+p];
+  s.up = "sending"; renderAll();
+  try {
+    const r = await fetch(UPLOAD_URL, {method: "POST", headers: {"Content-Type": "text/plain;charset=utf-8"},
+      body: JSON.stringify({secret: SECRET, name: k + ".wav", data: b64(s.wav), recorder: rec, heard: s.heard, at: s.at})});
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || "ditolak");
+    s.up = "sent";
+    if (!driveFiles.some(f => f.recorder === rec && f.name === k + ".wav")) driveFiles.push({recorder: rec, name: k + ".wav"});
+  } catch (e) { s.up = "fail"; }
+  if (!busy) renderAll();
+}
+async function refreshDrive() {
+  if (!UPLOAD_URL) return;
+  try {
+    const r = await fetch(UPLOAD_URL + "?secret=" + encodeURIComponent(SECRET));
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error);
+    driveFiles = j.files.map(f => ({recorder: f.recorder, name: f.name})); driveErr = "";
+  } catch (e) { driveErr = e.message || "gagal"; }
+}
+$("btnRetry").onclick = () => Object.keys(store).filter(k => store[k].up === "fail").forEach(upload);
+
+window.addEventListener("beforeunload", e => {
+  const pending = Object.values(store).some(s => UPLOAD_URL ? s.up !== "sent" : !saved);
+  if (pending) { e.preventDefault(); e.returnValue = ""; }
+});
+if (!SR) $("unsupported").hidden = false;
+if (!UPLOAD_URL) { $("noUpload").hidden = false; $("codeBox").hidden = true; }
+$("code").value = SECRET;
+show("sName");
+</script>
+</body>
+</html>

@@ -1,17 +1,39 @@
 {
   "quality_audit_csv": "results/metrics/mp09_extension_quality_audit.csv",
-  "n_flagged_samples": 0,
+  "n_flagged_samples": 1,
   "flag_summary": {
-    "too_quiet": 0,
+    "too_quiet": 1,
     "clipping": 0,
     "word_touches_record_edge": 0,
     "low_snr": 0,
     "dc_offset": 0
   },
   "snr_est_db": {
-    "min": 19.76293192089293,
-    "mean": 23.778480628646196,
-    "max": 27.929831204895976
+    "min": 11.027690183212277,
+    "mean": 22.576635906297103,
+    "max": 41.735639122385706
+  },
+  "snr_est_db_per_subject": {
+    "abdillah": {
+      "min": 13.77271635331224,
+      "median": 21.014992846271554,
+      "max": 29.239401471218088
+    },
+    "ezra": {
+      "min": 21.77971996473104,
+      "median": 29.92062309212418,
+      "max": 41.735639122385706
+    },
+    "ivang": {
+      "min": 14.334379172652019,
+      "median": 20.61893164598773,
+      "max": 26.970278846451656
+    },
+    "jahzeel": {
+      "min": 11.027690183212277,
+      "median": 17.250983771981396,
+      "max": 28.357933471549785
+    }
   },
   "leakage_guard": {
     "exact_duplicate_pairs": [],
@@ -19,80 +41,80 @@
     "near_duplicate_cross_split_pairs": [],
     "top5_most_similar_cross_split": [
       {
-        "cos": 0.7964631855871135,
-        "a": "mati_b01",
-        "b": "mati_b05"
+        "cos": 0.9388699229754628,
+        "a": "ivang_naik_b03",
+        "b": "ivang_naik_b05"
       },
       {
-        "cos": 0.7954545023093875,
-        "a": "nyala_b02",
-        "b": "nyala_b06"
+        "cos": 0.9219764192112846,
+        "a": "ivang_nyala_b03",
+        "b": "ivang_nyala_b06"
       },
       {
-        "cos": 0.7886668887599929,
-        "a": "naik_b02",
-        "b": "naik_b06"
+        "cos": 0.9187903133143004,
+        "a": "ivang_naik_b04",
+        "b": "ivang_naik_b05"
       },
       {
-        "cos": 0.7712296594795884,
-        "a": "mati_b02",
-        "b": "mati_b06"
+        "cos": 0.9111641370125287,
+        "a": "ivang_mati_b02",
+        "b": "ivang_mati_b06"
       },
       {
-        "cos": 0.7655130551392598,
-        "a": "naik_b01",
-        "b": "naik_b05"
+        "cos": 0.8978193074637595,
+        "a": "ivang_turun_b02",
+        "b": "ivang_turun_b05"
       }
     ],
     "scaler_fit_scope": "training_only",
     "leakage_detected": false
   },
   "frontend_selftest": {
-    "n_samples": 24,
+    "n_samples": 96,
     "max_abs_diff_vec39": 0.0,
     "max_abs_diff_logmel": 0.0,
     "bit_exact": true
   },
   "fisher_score_train_only_top10": [
     {
-      "feature": "mfcc02_std",
-      "score": 7.636946469494827
-    },
-    {
-      "feature": "mfcc05_mean",
-      "score": 6.511021911485637
-    },
-    {
       "feature": "mfcc04_std",
-      "score": 4.646938662278222
+      "score": 2.9074546254237634
     },
     {
-      "feature": "centroid_hz_std",
-      "score": 4.514575315665913
+      "feature": "mfcc01_mean",
+      "score": 2.8777744362704842
+    },
+    {
+      "feature": "mfcc10_std",
+      "score": 1.2603499859634628
     },
     {
       "feature": "centroid_hz_mean",
-      "score": 4.050624277753316
-    },
-    {
-      "feature": "rolloff85_hz_mean",
-      "score": 3.680810997186185
-    },
-    {
-      "feature": "zcr_mean",
-      "score": 3.4879175787067305
-    },
-    {
-      "feature": "zcr_std",
-      "score": 3.4468980666497275
+      "score": 1.240388295382891
     },
     {
       "feature": "mfcc02_mean",
-      "score": 2.773481042881331
+      "score": 1.0439548957190559
     },
     {
-      "feature": "mfcc07_mean",
-      "score": 2.1614619432487236
+      "feature": "mfcc02_std",
+      "score": 0.9215740471343711
+    },
+    {
+      "feature": "zcr_mean",
+      "score": 0.9195435561858969
+    },
+    {
+      "feature": "zcr_std",
+      "score": 0.613169153414121
+    },
+    {
+      "feature": "rolloff85_hz_mean",
+      "score": 0.5892251481140375
+    },
+    {
+      "feature": "mfcc03_mean",
+      "score": 0.5180706825463937
     }
   ],
   "reproducibility_manifest": "results/metrics/mp09_extension_reproducibility_manifest.json"

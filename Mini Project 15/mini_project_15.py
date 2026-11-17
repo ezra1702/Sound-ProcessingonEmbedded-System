@@ -6,9 +6,10 @@
 # Tidak ada retraining / post-test tuning. Status -> `ready_for_mp16`.
 #
 # **Adaptasi family-aware (penting):** kode buku mengasumsikan model klasik = *linear SVM* (`svm.coef_`).
-# Pada running project ini MP11 memilih **decision tree max_depth=2** (validasi F1 1,0; ops terkecil),
-# sehingga skrip ini memilih jalur kuantisasi sesuai family:
-# * family linear (`coef_` ada) → jalur buku apa adanya: bobot INT8 per-kelas + skala input per-tensor → nama `classical_svm_int8`.
+# Family klasik dibaca dari `classifier_config.json` (dipilih MP11); pada dataset 4 penutur MP11 memilih
+# **logistic regression** (linear, validasi macro-F1 0,937, 64 ops/sampel). Jalur kuantisasi dipilih sesuai family:
+# * family linear (`coef_` ada; linear SVM / logreg) → jalur buku: bobot INT8 per-kelas + skala input per-tensor
+#   → nama `classical_svm_int8` atau `classical_<family>_int8` (di sini `classical_logreg_int8`).
 # * family tree (`tree_` ada) → **jalur tree INT8**: input dikuantisasi dengan skala input per-tensor yang sama (training-only),
 #   threshold tiap node dipetakan ke domain integer `t_q = floor(t / x_scale)` sehingga perbandingan `z <= t` menjadi
 #   `z_q <= t_q` (murni integer), daun menyimpan indeks kelas → nama `classical_tree_int8`.
@@ -374,7 +375,7 @@ report = {
     'frozen_test_macro_f1': {'classical': f1_class, 'tiny_cnn': f1_cnn},
     'classical_int8': {
         'name': classical_name, 'family': family, 'kind': classical_kind,
-        'agreement_all_24_vs_float': cls_agree_all,
+        'agreement_all_vs_float': cls_agree_all,
         'agreement_test_vs_float': cls_agree_test,
         'input_quant_scale': x_scale,
         **({'weight_scales': W_scales.tolist()} if classical_kind == 'linear' else
@@ -386,7 +387,7 @@ report = {
     'tiny_cnn_int8': {
         'calibration_scope': 'training_only',
         'quantized_engine': engine,
-        'agreement_all_24_vs_float': cnn_agree_all,
+        'agreement_all_vs_float': cnn_agree_all,
         'agreement_test_vs_float': cnn_agree_test,
         'changed_labels': [list(c) for c in changed],
         'weight_bytes_estimate': cnn_int8_weight_bytes,

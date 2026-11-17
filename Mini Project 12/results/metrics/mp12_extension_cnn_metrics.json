@@ -1,62 +1,62 @@
 {
   "official_underfitting_diagnosis": {
-    "epochs_run": 53,
-    "optimizer_steps": 106,
-    "final_train_loss": 1.1517751216888428,
+    "epochs_run": 37,
+    "optimizer_steps": 296,
+    "final_train_loss": 1.2809497267007828,
     "chance_level_loss_ln4": 1.3862943611198906,
-    "train_set_macro_f1": 0.5708874458874459,
-    "validation_macro_f1": 0.375,
-    "diagnosis": "UNDERFITTING: train loss masih dekat ln(4) dan train-F1 rendah; jumlah langkah optimizer terlalu sedikit (16 sampel / batch 8 = 2 langkah per epoch)."
+    "train_set_macro_f1": 0.3873174801835628,
+    "validation_macro_f1": 0.5138888888888888,
+    "diagnosis": "UNDERFITTING: train loss masih dekat ln(4) dan train-F1 rendah; jumlah langkah optimizer terlalu sedikit (64 sampel / batch 8 = 8 langkah per epoch, 296 langkah total karena early stopping)."
   },
   "exploratory_variants": {
     "tinykws_long": {
-      "val_f1": 0.6666666666666666,
-      "val_loss": 0.9176871180534363,
-      "best_epoch": 147,
+      "val_f1": 0.6934523809523809,
+      "val_loss": 0.9362380504608154,
+      "best_epoch": 194,
       "epochs_run": 300,
-      "optimizer_steps": 600,
+      "optimizer_steps": 2400,
       "params": 1340,
       "macs": 898624,
-      "train_f1": 0.3653846153846154
+      "train_f1": 0.8411637931034484
     },
     "dscnn": {
-      "val_f1": 1.0,
-      "val_loss": 1.2943588495254517,
-      "best_epoch": 40,
+      "val_f1": 0.9365079365079365,
+      "val_loss": 0.4070655405521393,
+      "best_epoch": 261,
       "epochs_run": 300,
-      "optimizer_steps": 600,
+      "optimizer_steps": 2400,
       "params": 1172,
       "macs": 589120,
-      "train_f1": 0.6041666666666666
+      "train_f1": 1.0
     },
     "tinykws_freqpool": {
-      "val_f1": 1.0,
-      "val_loss": 1.0014492273330688,
-      "best_epoch": 20,
-      "epochs_run": 32,
-      "optimizer_steps": 64,
+      "val_f1": 0.8785714285714286,
+      "val_loss": 0.512514054775238,
+      "best_epoch": 57,
+      "epochs_run": 60,
+      "optimizer_steps": 480,
       "params": 2108,
       "macs": 899392,
-      "train_f1": 0.7430555555555555
+      "train_f1": 1.0
     }
   },
   "official_macs_hook_count": 898624,
   "seed_stability_official_val_f1": [
-    0.375,
-    0.41666666666666663,
-    0.125
+    0.42142857142857143,
+    0.43749999999999994,
+    0.38431372549019605
   ],
   "onnx_export": {
     "official_tinykws": {
       "file": "models/mp12_official_tinykws.onnx",
       "bytes": 6780,
-      "max_abs_logit_diff": 4.172325134277344e-07,
+      "max_abs_logit_diff": 2.0563602447509766e-06,
       "argmax_agreement": 1.0
     },
     "best_variant": {
       "file": "models/mp12_best_variant.onnx",
-      "bytes": 9870,
-      "max_abs_logit_diff": 3.5762786865234375e-07,
+      "bytes": 6857,
+      "max_abs_logit_diff": 9.5367431640625e-06,
       "argmax_agreement": 1.0
     }
   },
@@ -162,7 +162,7 @@
       "peak_pingpong_bytes": 99840
     }
   },
-  "saliency_model": "tinykws_freqpool",
+  "saliency_model": "dscnn",
   "candidate_registry": "config/mp12_extension_candidates.json",
   "test_files_loaded": false,
   "note": "Varian eksplorasi dipilih via validation; CNN resmi MP12 tetap kandidat deployment."

@@ -1,58 +1,82 @@
 {
   "consistency_with_official_report": {
-    "classical_macro_f1_report": 1.0,
-    "classical_macro_f1_recomputed": 1.0,
-    "cnn_macro_f1_report": 0.3333333333333333,
-    "cnn_macro_f1_recomputed": 0.3333333333333333
+    "classical_macro_f1_report": 0.9365079365079365,
+    "classical_macro_f1_recomputed": 0.9365079365079365,
+    "cnn_macro_f1_report": 0.5595238095238095,
+    "cnn_macro_f1_recomputed": 0.5595238095238095
   },
   "clean_test_results": {
-    "classical_tree (resmi)": {
-      "macro_f1": 1.0,
-      "accuracy": 1.0,
+    "classical_logreg (resmi)": {
+      "macro_f1": 0.9365079365079365,
+      "accuracy": 0.9375,
       "bootstrap95_macro_f1": [
-        1.0,
+        0.7332692307692308,
         1.0
       ],
       "bootstrap95_accuracy": [
-        1.0,
+        0.8125,
         1.0
       ],
       "predictions": [
         "nyala",
         "mati",
         "naik",
+        "naik",
+        "nyala",
+        "mati",
+        "naik",
+        "turun",
+        "nyala",
+        "mati",
+        "naik",
+        "turun",
+        "nyala",
+        "mati",
+        "naik",
         "turun"
       ],
-      "brier": 0.0,
-      "nll": -0.0,
-      "ece_5bins": 0.0,
-      "mean_confidence": 1.0,
-      "roc_auc_ovr_macro": 1.0,
-      "pr_ap_ovr_macro": 1.0
+      "brier": 0.1342240534769807,
+      "nll": 0.2611978920820033,
+      "ece_5bins": 0.12809032869954642,
+      "mean_confidence": 0.8437750598090474,
+      "roc_auc_ovr_macro": 0.9947916666666666,
+      "pr_ap_ovr_macro": 0.9875
     },
     "tiny_cnn (resmi)": {
-      "macro_f1": 0.3333333333333333,
-      "accuracy": 0.5,
+      "macro_f1": 0.5595238095238095,
+      "accuracy": 0.5625,
       "bootstrap95_macro_f1": [
-        0.0,
-        1.0
+        0.26586080586080585,
+        0.7665611471861472
       ],
       "bootstrap95_accuracy": [
-        0.0,
-        1.0
+        0.3125,
+        0.8125
       ],
       "predictions": [
+        "mati",
+        "mati",
+        "naik",
+        "mati",
+        "naik",
+        "turun",
+        "naik",
+        "turun",
+        "nyala",
+        "turun",
+        "nyala",
+        "turun",
         "nyala",
         "mati",
         "nyala",
-        "mati"
+        "turun"
       ],
-      "brier": 0.6318346819761733,
-      "nll": 1.143986345409379,
-      "ece_5bins": 0.16500112414360046,
-      "mean_confidence": 0.33499887585639954,
-      "roc_auc_ovr_macro": 0.8333333333333335,
-      "pr_ap_ovr_macro": 0.75
+      "brier": 0.7034121489006964,
+      "nll": 1.299130353336591,
+      "ece_5bins": 0.2521805763244629,
+      "mean_confidence": 0.3103194236755371,
+      "roc_auc_ovr_macro": 0.7552083333333334,
+      "pr_ap_ovr_macro": 0.6298706501831501
     },
     "mp11_knn (eksplorasi)": {
       "macro_f1": 1.0,
@@ -69,293 +93,389 @@
         "nyala",
         "mati",
         "naik",
+        "turun",
+        "nyala",
+        "mati",
+        "naik",
+        "turun",
+        "nyala",
+        "mati",
+        "naik",
+        "turun",
+        "nyala",
+        "mati",
+        "naik",
         "turun"
       ],
-      "brier": 0.0,
-      "nll": -0.0,
-      "ece_5bins": 0.0,
-      "mean_confidence": 1.0,
-      "roc_auc_ovr_macro": 1.0,
-      "pr_ap_ovr_macro": 1.0
+      "brier": 0.06944444444444445,
+      "nll": 0.11934640655527741,
+      "ece_5bins": 0.08333333333333334,
+      "mean_confidence": 0.9166666666666666,
+      "roc_auc_ovr_macro": 0.9973958333333333,
+      "pr_ap_ovr_macro": 0.9875
     },
-    "mp11_logreg (eksplorasi)": {
-      "macro_f1": 1.0,
-      "accuracy": 1.0,
+    "mp11_linear_svm (eksplorasi)": {
+      "macro_f1": 0.9365079365079365,
+      "accuracy": 0.9375,
       "bootstrap95_macro_f1": [
-        1.0,
+        0.7272727272727273,
         1.0
       ],
       "bootstrap95_accuracy": [
-        1.0,
+        0.8125,
         1.0
       ],
       "predictions": [
         "nyala",
         "mati",
         "naik",
-        "turun"
-      ],
-      "brier": 0.31595620121545687,
-      "nll": 0.6472004083990708,
-      "ece_5bins": 0.4695409317828301,
-      "mean_confidence": 0.5304590682171699,
-      "roc_auc_ovr_macro": 1.0,
-      "pr_ap_ovr_macro": 1.0
-    },
-    "mp11_linear_svm (eksplorasi)": {
-      "macro_f1": 1.0,
-      "accuracy": 1.0,
-      "bootstrap95_macro_f1": [
-        1.0,
-        1.0
-      ],
-      "bootstrap95_accuracy": [
-        1.0,
-        1.0
-      ],
-      "predictions": [
+        "naik",
+        "nyala",
+        "mati",
+        "naik",
+        "turun",
+        "nyala",
+        "mati",
+        "naik",
+        "turun",
         "nyala",
         "mati",
         "naik",
         "turun"
       ]
     },
+    "mp11_tree (eksplorasi)": {
+      "macro_f1": 0.8031746031746031,
+      "accuracy": 0.8125,
+      "bootstrap95_macro_f1": [
+        0.5207589285714285,
+        1.0
+      ],
+      "bootstrap95_accuracy": [
+        0.625,
+        1.0
+      ],
+      "predictions": [
+        "nyala",
+        "mati",
+        "naik",
+        "nyala",
+        "nyala",
+        "nyala",
+        "naik",
+        "turun",
+        "nyala",
+        "mati",
+        "naik",
+        "naik",
+        "nyala",
+        "mati",
+        "naik",
+        "turun"
+      ],
+      "brier": 0.375,
+      "nll": 5.180816459236603,
+      "ece_5bins": 0.1875,
+      "mean_confidence": 1.0,
+      "roc_auc_ovr_macro": 0.875,
+      "pr_ap_ovr_macro": 0.7260416666666667
+    },
     "mp11_rf (eksplorasi)": {
-      "macro_f1": 1.0,
-      "accuracy": 1.0,
+      "macro_f1": 0.8740079365079365,
+      "accuracy": 0.875,
       "bootstrap95_macro_f1": [
-        1.0,
+        0.6374479166666667,
         1.0
       ],
       "bootstrap95_accuracy": [
-        1.0,
+        0.6875,
         1.0
       ],
       "predictions": [
         "nyala",
         "mati",
         "naik",
-        "turun"
-      ],
-      "brier": 0.06388888888888887,
-      "nll": 0.22357795628884491,
-      "ece_5bins": 0.19999999999999984,
-      "mean_confidence": 0.8,
-      "roc_auc_ovr_macro": 1.0,
-      "pr_ap_ovr_macro": 1.0
-    },
-    "mp11_mlp (eksplorasi)": {
-      "macro_f1": 1.0,
-      "accuracy": 1.0,
-      "bootstrap95_macro_f1": [
-        1.0,
-        1.0
-      ],
-      "bootstrap95_accuracy": [
-        1.0,
-        1.0
-      ],
-      "predictions": [
-        "nyala",
-        "mati",
         "naik",
-        "turun"
-      ],
-      "brier": 5.988979698414381e-08,
-      "nll": 0.0001225295367028304,
-      "ece_5bins": 0.0001225131649760236,
-      "mean_confidence": 0.999877486835024,
-      "roc_auc_ovr_macro": 1.0,
-      "pr_ap_ovr_macro": 1.0
-    },
-    "cnn_tinykws_long (eksplorasi)": {
-      "macro_f1": 0.6666666666666666,
-      "accuracy": 0.75,
-      "bootstrap95_macro_f1": [
-        0.3333333333333333,
-        1.0
-      ],
-      "bootstrap95_accuracy": [
-        0.25,
-        1.0
-      ],
-      "predictions": [
         "nyala",
         "turun",
         "naik",
+        "turun",
+        "nyala",
+        "mati",
+        "naik",
+        "turun",
+        "nyala",
+        "mati",
+        "naik",
         "turun"
       ],
-      "brier": 0.3849423624926131,
-      "nll": 0.7079195649345286,
-      "ece_5bins": 0.24934584647417066,
-      "mean_confidence": 0.5006541609764099,
-      "roc_auc_ovr_macro": 1.0,
-      "pr_ap_ovr_macro": 1.0
+      "brier": 0.2319653268985551,
+      "nll": 0.4768191884248786,
+      "ece_5bins": 0.20276247024210456,
+      "mean_confidence": 0.6722375297578954,
+      "roc_auc_ovr_macro": 0.9947916666666666,
+      "pr_ap_ovr_macro": 0.9875
     },
-    "cnn_dscnn (eksplorasi)": {
-      "macro_f1": 0.6666666666666666,
-      "accuracy": 0.75,
+    "mp11_mlp (eksplorasi)": {
+      "macro_f1": 0.9365079365079365,
+      "accuracy": 0.9375,
       "bootstrap95_macro_f1": [
-        0.3333333333333333,
+        0.7222222222222222,
         1.0
+      ],
+      "bootstrap95_accuracy": [
+        0.8125,
+        1.0
+      ],
+      "predictions": [
+        "nyala",
+        "mati",
+        "naik",
+        "naik",
+        "nyala",
+        "mati",
+        "naik",
+        "turun",
+        "nyala",
+        "mati",
+        "naik",
+        "turun",
+        "nyala",
+        "mati",
+        "naik",
+        "turun"
+      ],
+      "brier": 0.13871819740427532,
+      "nll": 0.37384899331916854,
+      "ece_5bins": 0.07990377270704464,
+      "mean_confidence": 0.970347812832725,
+      "roc_auc_ovr_macro": 0.9895833333333334,
+      "pr_ap_ovr_macro": 0.9791666666666666
+    },
+    "cnn_tinykws_long (eksplorasi)": {
+      "macro_f1": 0.4928571428571428,
+      "accuracy": 0.5,
+      "bootstrap95_macro_f1": [
+        0.3,
+        0.625
       ],
       "bootstrap95_accuracy": [
         0.25,
+        0.75
+      ],
+      "predictions": [
+        "naik",
+        "mati",
+        "nyala",
+        "nyala",
+        "naik",
+        "mati",
+        "turun",
+        "naik",
+        "nyala",
+        "mati",
+        "nyala",
+        "turun",
+        "nyala",
+        "mati",
+        "nyala",
+        "turun"
+      ],
+      "brier": 0.5118449818465063,
+      "nll": 0.8889810832952256,
+      "ece_5bins": 0.06684555858373642,
+      "mean_confidence": 0.5199359655380249,
+      "roc_auc_ovr_macro": 0.8541666666666665,
+      "pr_ap_ovr_macro": 0.7393353174603174
+    },
+    "cnn_dscnn (eksplorasi)": {
+      "macro_f1": 0.8740079365079365,
+      "accuracy": 0.875,
+      "bootstrap95_macro_f1": [
+        0.6309523809523809,
+        1.0
+      ],
+      "bootstrap95_accuracy": [
+        0.6875,
         1.0
       ],
       "predictions": [
         "nyala",
         "mati",
         "naik",
-        "mati"
-      ],
-      "brier": 0.6900989165082604,
-      "nll": 1.2711916022923144,
-      "ece_5bins": 0.46210163831710815,
-      "mean_confidence": 0.28789836168289185,
-      "roc_auc_ovr_macro": 0.8333333333333334,
-      "pr_ap_ovr_macro": 0.8333333333333334
-    },
-    "cnn_tinykws_freqpool (eksplorasi)": {
-      "macro_f1": 1.0,
-      "accuracy": 1.0,
-      "bootstrap95_macro_f1": [
-        1.0,
-        1.0
-      ],
-      "bootstrap95_accuracy": [
-        1.0,
-        1.0
-      ],
-      "predictions": [
+        "turun",
+        "naik",
+        "nyala",
+        "naik",
+        "turun",
+        "nyala",
+        "mati",
+        "naik",
+        "turun",
         "nyala",
         "mati",
         "naik",
         "turun"
       ],
-      "brier": 0.5043235685666747,
-      "nll": 0.9354479726746727,
-      "ece_5bins": 0.6032577455043793,
-      "mean_confidence": 0.3967422544956207,
-      "roc_auc_ovr_macro": 1.0,
-      "pr_ap_ovr_macro": 1.0
+      "brier": 0.19454913134548363,
+      "nll": 0.3881063172877089,
+      "ece_5bins": 0.08686107955873013,
+      "mean_confidence": 0.8358509540557861,
+      "roc_auc_ovr_macro": 0.9739583333333334,
+      "pr_ap_ovr_macro": 0.9458333333333333
+    },
+    "cnn_tinykws_freqpool (eksplorasi)": {
+      "macro_f1": 0.8666666666666667,
+      "accuracy": 0.875,
+      "bootstrap95_macro_f1": [
+        0.6666666666666666,
+        1.0
+      ],
+      "bootstrap95_accuracy": [
+        0.6875,
+        1.0
+      ],
+      "predictions": [
+        "nyala",
+        "naik",
+        "naik",
+        "turun",
+        "nyala",
+        "naik",
+        "naik",
+        "turun",
+        "nyala",
+        "mati",
+        "naik",
+        "turun",
+        "nyala",
+        "mati",
+        "naik",
+        "turun"
+      ],
+      "brier": 0.3200744678966567,
+      "nll": 0.5719986928020518,
+      "ece_5bins": 0.2386583685874939,
+      "mean_confidence": 0.6363416314125061,
+      "roc_auc_ovr_macro": 0.9583333333333334,
+      "pr_ap_ovr_macro": 0.9114583333333333
     }
   },
   "mcnemar_classical_vs_cnn_official": {
-    "a_only_correct": 2,
+    "a_only_correct": 6,
     "b_only_correct": 0,
-    "p_value_exact": 0.5
+    "p_value_exact": 0.03125
   },
   "robustness_accuracy": {
-    "classical_tree (resmi)": {
-      "clean": 1.0,
-      "snr_30dB": 1.0,
-      "snr_20dB": 0.65,
-      "snr_10dB": 0.0,
-      "snr_5dB": 0.3,
-      "snr_0dB": 0.25,
-      "gain_-12dB": 1.0,
-      "gain_+6dB": 1.0,
-      "shift_+200ms": 1.0
+    "classical_logreg (resmi)": {
+      "clean": 0.9375,
+      "snr_30dB": 0.9625,
+      "snr_20dB": 0.7875,
+      "snr_10dB": 0.6875,
+      "snr_5dB": 0.5875,
+      "snr_0dB": 0.225,
+      "gain_-12dB": 0.9375,
+      "gain_+6dB": 0.9375,
+      "shift_+200ms": 0.9375
     },
     "tiny_cnn (resmi)": {
-      "clean": 0.5,
-      "snr_30dB": 0.5,
-      "snr_20dB": 0.45,
-      "snr_10dB": 0.3,
-      "snr_5dB": 0.25,
-      "snr_0dB": 0.25,
-      "gain_-12dB": 0.5,
-      "gain_+6dB": 0.5,
-      "shift_+200ms": 0.5
+      "clean": 0.5625,
+      "snr_30dB": 0.5125,
+      "snr_20dB": 0.375,
+      "snr_10dB": 0.325,
+      "snr_5dB": 0.35,
+      "snr_0dB": 0.3,
+      "gain_-12dB": 0.5625,
+      "gain_+6dB": 0.5625,
+      "shift_+200ms": 0.5625
     },
     "mp11_knn (eksplorasi)": {
       "clean": 1.0,
       "snr_30dB": 1.0,
-      "snr_20dB": 0.5,
-      "snr_10dB": 0.25,
-      "snr_5dB": 0.25,
-      "snr_0dB": 0.25,
-      "gain_-12dB": 1.0,
-      "gain_+6dB": 1.0,
-      "shift_+200ms": 1.0
-    },
-    "mp11_logreg (eksplorasi)": {
-      "clean": 1.0,
-      "snr_30dB": 1.0,
-      "snr_20dB": 0.3,
-      "snr_10dB": 0.25,
-      "snr_5dB": 0.25,
-      "snr_0dB": 0.25,
+      "snr_20dB": 0.7625,
+      "snr_10dB": 0.625,
+      "snr_5dB": 0.4125,
+      "snr_0dB": 0.1375,
       "gain_-12dB": 1.0,
       "gain_+6dB": 1.0,
       "shift_+200ms": 1.0
     },
     "mp11_linear_svm (eksplorasi)": {
-      "clean": 1.0,
+      "clean": 0.9375,
       "snr_30dB": 1.0,
-      "snr_20dB": 0.75,
-      "snr_10dB": 0.25,
-      "snr_5dB": 0.25,
-      "snr_0dB": 0.3,
-      "gain_-12dB": 1.0,
-      "gain_+6dB": 1.0,
-      "shift_+200ms": 1.0
+      "snr_20dB": 0.925,
+      "snr_10dB": 0.6875,
+      "snr_5dB": 0.525,
+      "snr_0dB": 0.3125,
+      "gain_-12dB": 0.9375,
+      "gain_+6dB": 0.9375,
+      "shift_+200ms": 0.9375
+    },
+    "mp11_tree (eksplorasi)": {
+      "clean": 0.8125,
+      "snr_30dB": 0.8125,
+      "snr_20dB": 0.8125,
+      "snr_10dB": 0.6,
+      "snr_5dB": 0.3,
+      "snr_0dB": 0.25,
+      "gain_-12dB": 0.8125,
+      "gain_+6dB": 0.8125,
+      "shift_+200ms": 0.8125
     },
     "mp11_rf (eksplorasi)": {
-      "clean": 1.0,
-      "snr_30dB": 1.0,
-      "snr_20dB": 0.25,
-      "snr_10dB": 0.25,
-      "snr_5dB": 0.05,
-      "snr_0dB": 0.25,
-      "gain_-12dB": 1.0,
-      "gain_+6dB": 1.0,
-      "shift_+200ms": 1.0
+      "clean": 0.875,
+      "snr_30dB": 0.8125,
+      "snr_20dB": 0.6625,
+      "snr_10dB": 0.5,
+      "snr_5dB": 0.35,
+      "snr_0dB": 0.3125,
+      "gain_-12dB": 0.875,
+      "gain_+6dB": 0.875,
+      "shift_+200ms": 0.875
     },
     "mp11_mlp (eksplorasi)": {
-      "clean": 1.0,
-      "snr_30dB": 1.0,
-      "snr_20dB": 0.75,
-      "snr_10dB": 0.25,
-      "snr_5dB": 0.25,
+      "clean": 0.9375,
+      "snr_30dB": 0.9375,
+      "snr_20dB": 0.7375,
+      "snr_10dB": 0.5875,
+      "snr_5dB": 0.3875,
       "snr_0dB": 0.25,
-      "gain_-12dB": 1.0,
-      "gain_+6dB": 1.0,
-      "shift_+200ms": 1.0
+      "gain_-12dB": 0.9375,
+      "gain_+6dB": 0.9375,
+      "shift_+200ms": 0.9375
     },
     "cnn_tinykws_long (eksplorasi)": {
-      "clean": 0.75,
-      "snr_30dB": 0.85,
-      "snr_20dB": 0.9,
-      "snr_10dB": 0.5,
-      "snr_5dB": 0.5,
-      "snr_0dB": 0.25,
-      "gain_-12dB": 0.75,
-      "gain_+6dB": 0.75,
-      "shift_+200ms": 0.75
+      "clean": 0.5,
+      "snr_30dB": 0.65,
+      "snr_20dB": 0.4,
+      "snr_10dB": 0.2875,
+      "snr_5dB": 0.25,
+      "snr_0dB": 0.3125,
+      "gain_-12dB": 0.5,
+      "gain_+6dB": 0.5,
+      "shift_+200ms": 0.5
     },
     "cnn_dscnn (eksplorasi)": {
-      "clean": 0.75,
-      "snr_30dB": 0.75,
-      "snr_20dB": 0.75,
-      "snr_10dB": 0.7,
-      "snr_5dB": 0.45,
-      "snr_0dB": 0.25,
-      "gain_-12dB": 0.75,
-      "gain_+6dB": 0.75,
-      "shift_+200ms": 0.75
+      "clean": 0.875,
+      "snr_30dB": 0.925,
+      "snr_20dB": 0.8625,
+      "snr_10dB": 0.525,
+      "snr_5dB": 0.325,
+      "snr_0dB": 0.2375,
+      "gain_-12dB": 0.875,
+      "gain_+6dB": 0.875,
+      "shift_+200ms": 0.875
     },
     "cnn_tinykws_freqpool (eksplorasi)": {
-      "clean": 1.0,
-      "snr_30dB": 1.0,
-      "snr_20dB": 1.0,
-      "snr_10dB": 0.85,
-      "snr_5dB": 0.6,
+      "clean": 0.875,
+      "snr_30dB": 0.9375,
+      "snr_20dB": 0.65,
+      "snr_10dB": 0.3875,
+      "snr_5dB": 0.35,
       "snr_0dB": 0.25,
-      "gain_-12dB": 1.0,
-      "gain_+6dB": 1.0,
-      "shift_+200ms": 1.0
+      "gain_-12dB": 0.875,
+      "gain_+6dB": 0.875,
+      "shift_+200ms": 0.875
     }
   },
   "hash_verification_exploratory": {
@@ -369,7 +489,7 @@
     "mp12_dscnn": true,
     "mp12_tinykws_freqpool": true
   },
-  "n_test": 4,
+  "n_test": 16,
   "post_test_tuning_performed": false,
   "used_for_model_selection": false,
   "note": "Model eksplorasi dibekukan + di-hash sebelum MP13. Hasil eksplorasi bersifat informatif (rekomendasi untuk siklus pengembangan berikutnya dengan data baru), bukan pengganti kandidat resmi."

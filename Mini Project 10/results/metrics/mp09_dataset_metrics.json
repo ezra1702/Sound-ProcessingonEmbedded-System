@@ -1,45 +1,68 @@
 {
-  "n_samples": 24,
+  "n_samples": 96,
   "feature_dim": 39,
   "finite_features": true,
   "class_counts_all": {
-    "nyala": 6,
-    "mati": 6,
-    "naik": 6,
-    "turun": 6
+    "nyala": 24,
+    "mati": 24,
+    "naik": 24,
+    "turun": 24
   },
   "class_counts_train": {
+    "nyala": 16,
+    "mati": 16,
+    "naik": 16,
+    "turun": 16
+  },
+  "class_counts_validation": {
     "nyala": 4,
     "mati": 4,
     "naik": 4,
     "turun": 4
   },
-  "class_counts_validation": {
-    "nyala": 1,
-    "mati": 1,
-    "naik": 1,
-    "turun": 1
-  },
   "class_counts_test": {
-    "nyala": 1,
-    "mati": 1,
-    "naik": 1,
-    "turun": 1
+    "nyala": 4,
+    "mati": 4,
+    "naik": 4,
+    "turun": 4
   },
-  "n_train": 16,
-  "n_validation": 4,
-  "n_test": 4,
+  "n_train": 64,
+  "n_validation": 16,
+  "n_test": 16,
   "group_overlap_train_val": [],
   "group_overlap_train_test": [],
-  "record_duration_s": 1.2,
+  "record_duration_s": 1.1999999999999997,
   "active_duration_after_vad_s": {
-    "min": 0.275,
-    "mean": 0.48000000000000004,
-    "max": 0.725
+    "min": 0.185,
+    "mean": 0.4708333333333334,
+    "max": 0.795
   },
   "logmel_frames": {
-    "min": 26,
-    "max": 71
+    "min": 17,
+    "max": 78
   },
-  "acquisition_mode": "tts"
+  "n_speakers": 4,
+  "subject_counts": {
+    "abdillah": {
+      "train": 16,
+      "validation": 4,
+      "test": 4
+    },
+    "ezra": {
+      "train": 16,
+      "validation": 4,
+      "test": 4
+    },
+    "ivang": {
+      "train": 16,
+      "validation": 4,
+      "test": 4
+    },
+    "jahzeel": {
+      "train": 16,
+      "validation": 4,
+      "test": 4
+    }
+  },
+  "acquisition_mode": "group"
 }

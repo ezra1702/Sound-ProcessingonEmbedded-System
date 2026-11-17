@@ -7,7 +7,7 @@
 #    berbasis hitungan MAC (asumsi dinyatakan eksplisit).
 # 2. **CPU-load stress sweep**: compute diperlambat 1x–256x → kapan ring buffer 4 blok overflow? utilisasi, latensi p99, jitter.
 # 3. **Inference-stride sweep** 50–500 ms: beban CPU vs latensi deteksi terburuk.
-# 4. **Streaming KWS kontinu**: 20 ucapan train+val disambung dengan jeda derau; jendela 975 ms tiap 100 ms memakai
+# 4. **Streaming KWS kontinu**: seluruh ucapan train+val (80, 4 penutur) disambung dengan jeda derau; jendela 975 ms tiap 100 ms memakai
 #    front-end beku (`kws_frontend.py`) + model klasik; dibandingkan *raw* vs *energy gate* (duty-cycling) vs
 #    *gate + posterior smoothing + debounce/refractory* (materi Bab 14: deteksi event pada stream).
 # 5. **Ring buffer C** (drop-oldest, kapasitas 4, critical-section macro) dikompilasi `gcc` & diuji terhadap model Python.
@@ -91,7 +91,7 @@ mac = {
     'iir_filter_per_block': BLK*(len(b)+len(a)-1),
     'frame_features_full_per_hop': fe_cost['mac_per_frame_full39'],
     'frame_features_selected_per_hop': fe_cost['mac_per_frame_selected'],
-    'classical_tree_per_inference': mp13['resource_proxy']['classical']['estimated_ops_per_sample'] + 2*len(SEL),
+    'classical_per_inference': mp13['resource_proxy']['classical']['estimated_ops_per_sample'] + 2*len(SEL),
     'tiny_cnn_per_inference': mp13['resource_proxy']['tiny_cnn']['estimated_macs_per_inference'],
 }
 mcu_ms = {k: 1e3*v*MCU['cycles_per_mac_float']/MCU['f_hz'] for k, v in mac.items()}
@@ -104,8 +104,8 @@ def utilization(per_block_ms, per_infer_ms, stride_frames):
 
 pipelines = {
     'A: full39 front-end + tiny CNN float': (mcu_ms['iir_filter_per_block']+mcu_ms['frame_features_full_per_hop'], mcu_ms['tiny_cnn_per_inference']),
-    'B: full39 front-end + tree': (mcu_ms['iir_filter_per_block']+mcu_ms['frame_features_full_per_hop'], mcu_ms['classical_tree_per_inference']),
-    'C: selected front-end + tree (MP10 hemat)': (mcu_ms['iir_filter_per_block']+mcu_ms['frame_features_selected_per_hop'], mcu_ms['classical_tree_per_inference']),
+    'B: full39 front-end + classical': (mcu_ms['iir_filter_per_block']+mcu_ms['frame_features_full_per_hop'], mcu_ms['classical_per_inference']),
+    'C: selected front-end + classical (MP10 hemat)': (mcu_ms['iir_filter_per_block']+mcu_ms['frame_features_selected_per_hop'], mcu_ms['classical_per_inference']),
     'D: log-mel only + tiny CNN INT8': (mcu_ms['iir_filter_per_block']+mcu_ms['frame_features_selected_per_hop'], mcu_ms['tiny_cnn_int8_per_inference']),
 }
 proj = {}
@@ -153,7 +153,7 @@ print('Faktor perlambatan pertama yang menyebabkan overflow:', break_factor)
 stride_sweep = {}
 for sf in (5, 10, 20, 50):
     row = {'stride_ms': sf*rt['feature_hop_samples']*1000/fs, 'inferences_per_s': 1000/(sf*10)}
-    for k in ('A: full39 front-end + tiny CNN float', 'C: selected front-end + tree (MP10 hemat)'):
+    for k in ('A: full39 front-end + tiny CNN float', 'C: selected front-end + classical (MP10 hemat)'):
         pb, pi = pipelines[k]
         row[k[:1]+'_util'] = utilization(pb, pi, sf)
     row['worst_detection_latency_ms'] = row['stride_ms'] + pipelines['A: full39 front-end + tiny CNN float'][1]
@@ -172,15 +172,18 @@ noise_rms = []
 for sid in ids:
     y = fe.read_wav(ROOT/'data/raw/mp09_dataset'/f'{sid}.wav'); noise_rms.append(np.sqrt(np.mean(y[:800]**2)))
 gap_rms = float(np.median(noise_rms))
+# Derau jeda sebelum tiap ucapan = derau latar rekaman itu sendiri (mic & ruangan penutur yang sama).
+# Dengan 4 penutur, level derau berbeda hingga ~12 dB; derau jeda global (median) akan membuat lompatan level
+# di batas klip yang tidak terjadi pada perangkat nyata.
 for i in order:
     sid = ids[i]
     y = fe.read_wav(ROOT/'data/raw/mp09_dataset'/f'{sid}.wav')
-    gap = rng.normal(scale=gap_rms, size=int(fs*rng.uniform(0.6, 1.2)))
+    gap = rng.normal(scale=noise_rms[i], size=int(fs*rng.uniform(0.6, 1.2)))
     pieces += [gap, y]; cursor += len(gap)
     _, (s0, s1) = fe.preprocess(y, return_bounds=True)
-    words.append({'id': sid, 'label': sid.split('_b')[0], 'start_s': (cursor+s0)/fs, 'end_s': (cursor+s1)/fs})
+    words.append({'id': sid, 'label': sid.split('_b')[0].split('_')[-1], 'start_s': (cursor+s0)/fs, 'end_s': (cursor+s1)/fs})
     cursor += len(y)
-pieces.append(rng.normal(scale=gap_rms, size=fs))
+pieces.append(rng.normal(scale=noise_rms[order[-1]], size=fs))
 stream = np.concatenate(pieces)
 WIN = int(round(rt['feature_context_ms']*fs/1000)); HOPW = STRIDE*rt['feature_hop_samples']
 classes = list(clf.classes_)
@@ -257,6 +260,38 @@ stream_res[k_end]['inferences_run'] = n_inf_end; stream_res[k_end]['inference_sa
 s = stream_res[k_end]
 print(f"  {k_end:58s} hit={s['hits']:2d}/{len(words)} sub={s['substitutions']:2d} FA={s['false_alarms']:3d} ({s['false_alarms_per_min']:.1f}/min)  inferensi={n_inf_end}/{len(win_rows)}")
 print(f'Duty-cycle: gate terbuka pada {100*gate_open:.1f}% jendela -> inferensi dihemat {100*(1-gate_open):.1f}%')
+
+# Penyetelan ulang ambang VAD-endpoint pada stream TRAIN+VAL (data desain; test tidak dipakai).
+# Ambang 12/6 dB di atas berasal dari desain awal (data TTS bersih); rekaman 4 penutur asli punya
+# level & SNR berbeda (beberapa penutur jauh lebih pelan), jadi ambang disapu dan dipilih skor hit − false alarm terbaik.
+sweep_end = {}
+for g_db in (6.0, 8.0, 10.0, 12.0):
+    for e_db in (3.0, 6.0):
+        ev_s, n_s = detect_endpoint(win_rows, g_db, e_db)
+        sc = score(ev_s); sc.update({'gate_db': g_db, 'end_db': e_db, 'inferences_run': n_s})
+        sweep_end[f'gate{g_db:.0f}_end{e_db:.0f}'] = sc
+best_key = max(sweep_end, key=lambda k: (sweep_end[k]['hits']-sweep_end[k]['false_alarms'], -sweep_end[k]['false_alarms']))
+b = sweep_end[best_key]
+k_tuned = 'VAD-endpoint trigger, ambang disetel ulang pada train+val'
+ev_t, n_t = detect_endpoint(win_rows, b['gate_db'], b['end_db'])
+stream_res[k_tuned] = score(ev_t); stream_res[k_tuned]['config'] = {'gate_db': b['gate_db'], 'end_db': b['end_db'], 'refractory_s': 1.0}
+stream_res[k_tuned]['inferences_run'] = n_t; stream_res[k_tuned]['inference_saving_vs_raw'] = 1-n_t/len(win_rows)
+for k, sc in sweep_end.items():
+    print(f"  sweep {k:14s} hit={sc['hits']:2d}/{len(words)} sub={sc['substitutions']:2d} miss={sc['misses']:2d} FA={sc['false_alarms']:3d}")
+s = stream_res[k_tuned]
+print(f"  {k_tuned:58s} hit={s['hits']:2d}/{len(words)} sub={s['substitutions']:2d} FA={s['false_alarms']:3d} ({s['false_alarms_per_min']:.1f}/min) [gate {b['gate_db']:.0f} dB, end {b['end_db']:.0f} dB]")
+# Rincian hit per penutur (ucapan yang terdeteksi benar oleh konfigurasi terpilih)
+used_t = set(); per_spk = {}
+for t_, lab_ in ev_t:
+    m_ = [k for k, w in enumerate(words) if w['start_s']+0.15 <= t_ <= w['end_s']+1.0 and k not in used_t]
+    if m_:
+        used_t.add(m_[0]); spk_ = words[m_[0]]['id'].split('_')[0] if words[m_[0]]['id'].count('_') >= 2 else 'single'
+        per_spk.setdefault(spk_, [0, 0])[0 if words[m_[0]]['label'] == lab_ else 1] += 1
+n_per_spk = {}
+for w in words:
+    sp_ = w['id'].split('_')[0] if w['id'].count('_') >= 2 else 'single'; n_per_spk[sp_] = n_per_spk.get(sp_, 0)+1
+stream_res[k_tuned]['per_speaker_hit_sub_total'] = {sp_: [per_spk.get(sp_, [0, 0])[0], per_spk.get(sp_, [0, 0])[1], n_] for sp_, n_ in n_per_spk.items()}
+print('  per penutur [hit, substitusi, total]:', stream_res[k_tuned]['per_speaker_hit_sub_total'])
 
 # %% [markdown]
 # ### 5. Ring buffer C (drop-oldest) — compile & uji terhadap model Python
@@ -360,6 +395,7 @@ ext = {'host_stage_ms_median_p99': stage_host, 'mcu_assumptions': MCU, 'mac_coun
        'stride_sweep': {str(k): v for k, v in stride_sweep.items()},
        'continuous_stream': {'source_ids': ids, 'duration_s': len(stream)/fs, 'n_words': len(words), 'gate_db': GATE_DB,
                              'gate_open_fraction': float(gate_open), 'results': stream_res,
+                             'endpoint_threshold_sweep_train_val': sweep_end, 'endpoint_selected': best_key,
                              'note': 'Integration test pada blok train+val (bukan estimasi generalisasi).'},
        'ring_buffer_c_test': ring_test, 'contract_changed': False, 'test_split_used': False}
 (OUT_MET/'mp14_extension_realtime_metrics.json').write_text(json.dumps(ext, indent=2, default=float), encoding='utf-8')
@@ -386,7 +422,7 @@ ax.set_ylim(-1, 1); ax.set_xlabel('waktu (s)'); ax.legend(loc='lower right', fon
 ax.set_title('Streaming KWS kontinu (biru = ucapan ground truth, merah = event VAD-endpoint trigger)')
 ax = fig.add_subplot(gs[1, 2])
 host = {'ISR (signal)': 0.01, 'IIR filter': mcu_ms['iir_filter_per_block'], 'feature/frame (full39)': mcu_ms['frame_features_full_per_hop'],
-        'classical tree': mcu_ms['classical_tree_per_inference'], 'tiny CNN float': mcu_ms['tiny_cnn_per_inference']}
+        'classical': mcu_ms['classical_per_inference'], 'tiny CNN float': mcu_ms['tiny_cnn_per_inference']}
 lanes = list(host); cpu_free = 0.0
 for k in range(15):
     t0 = k*PERIOD
@@ -395,7 +431,7 @@ for k in range(15):
     ax.broken_barh([(st, host['IIR filter'])], (3, .8), color='C1'); st += host['IIR filter']
     ax.broken_barh([(st, host['feature/frame (full39)'])], (2, .8), color='C2'); st += host['feature/frame (full39)']
     if k % STRIDE == STRIDE-1:
-        ax.broken_barh([(st, max(host['classical tree'], .4))], (1, .8), color='C3')
+        ax.broken_barh([(st, max(host['classical'], .4))], (1, .8), color='C3')
         ax.broken_barh([(st, host['tiny CNN float'])], (0, .8), color='C4'); st += host['tiny CNN float']
         ax.annotate('CNN float melewati\nbatas blok -> antre', (st, .4), (st+3, 1.8), fontsize=7, arrowprops=dict(arrowstyle='->'))
     cpu_free = st

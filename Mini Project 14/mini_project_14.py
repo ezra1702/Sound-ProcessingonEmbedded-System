@@ -190,10 +190,14 @@ print('Classical family:', clf_cfg['chosen_family'], '| CNN classes:', dl_classe
 
 # %% [markdown]
 # ## 4. Simulasi streaming DMA block-by-block (virtual CPU + ring buffer 4 blok)
-# Input: blok training `nyala_b01.wav` (tidak memakai test untuk desain arsitektur), diulang 4x.
+# Input: ucapan "nyala" block 01 (TRAIN) dari split MP9 — tidak memakai test untuk desain arsitektur — diulang 4x.
+# Dataset kelompok memberi id `<penutur>_nyala_b01`; dipilih id TRAIN pertama yang berakhiran `nyala_b01`.
 
 # %%
-source = ROOT/'data/raw/mp09_dataset/nyala_b01.wav'  # training block; no reuse of test for architecture design
+_split = json.loads((ROOT/'splits/mp09_split.json').read_text(encoding='utf-8'))
+_src_id = next(s for s in _split['train_ids'] if s.endswith('nyala_b01'))
+source = ROOT/'data/raw/mp09_dataset'/f'{_src_id}.wav'  # training block; no reuse of test for architecture design
+print('Sumber simulasi streaming (TRAIN):', source.name)
 sr, audio = wavfile.read(source)
 if sr != fs: raise RuntimeError(f'sampling rate {sr} != {fs}')
 if audio.ndim > 1: audio = audio[:, 0]

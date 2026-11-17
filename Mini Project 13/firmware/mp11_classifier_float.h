@@ -3,18 +3,12 @@
 #define MP11_INPUT_DIM 8
 #define MP11_N_CLASSES 4
 /* class order: 0=mati, 1=naik, 2=nyala, 3=turun */
+static const float MP11_W[32] = { -1.51663721f, -0.243253872f, 0.0732319206f, 1.12375402f, -0.0261342991f, 0.562127829f, -0.186896563f, -0.59502089f, 0.630501211f, -0.0393874012f, 1.08781981f, 0.286984742f, 0.960310221f, -1.00270844f, -0.540312767f, 0.594709694f, 0.643571913f, -0.636660337f, -1.17935324f, 0.34882763f, -0.578138471f, -0.135837525f, 0.758767843f, 0.270771325f, 0.242564127f, 0.919301569f, 0.0183014683f, -1.75956643f, -0.356037468f, 0.576418102f, -0.0315585099f, -0.270460099f };
+static const float MP11_B[4] = { -0.510203421f, 0.450780332f, 0.317074716f, -0.257651627f };
 static inline int mp11_predict(const float *x) {
-    if (x[2] <= 0.0449725054f) {
-        if (x[7] <= -0.391019559f) {
-            return 2; /* nyala */
-        } else {
-            return 3; /* turun */
-        }
-    } else {
-        if (x[7] <= 0.0704455897f) {
-            return 1; /* naik */
-        } else {
-            return 0; /* mati */
-        }
-    }
+    int best = 0; float bs = -1e30f;
+    for (int k = 0; k < MP11_N_CLASSES; ++k) { float s = MP11_B[k];
+        for (int j = 0; j < MP11_INPUT_DIM; ++j) s += MP11_W[k*MP11_INPUT_DIM+j]*x[j];
+        if (s > bs) { bs = s; best = k; } }
+    return best;
 }

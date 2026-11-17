@@ -1,6 +1,6 @@
 {
-  "selected_model": "classical_tree_int8",
-  "classical_family": "tree",
+  "selected_model": "classical_logreg_int8",
+  "classical_family": "logreg",
   "classes": [
     "mati",
     "naik",
@@ -13,14 +13,14 @@
   "feature_hop_samples": 160,
   "inference_stride_frames": 10,
   "selected_feature_names": [
-    "mfcc02_mean",
-    "mfcc02_std",
+    "mfcc01_mean",
+    "mfcc03_mean",
+    "mfcc04_mean",
     "mfcc04_std",
-    "mfcc05_mean",
-    "zcr_mean",
-    "zcr_std",
-    "centroid_hz_mean",
-    "centroid_hz_std"
+    "mfcc06_std",
+    "mfcc07_mean",
+    "mfcc11_std",
+    "rms_mean"
   ],
   "files_required": [
     "config/project_config.json",

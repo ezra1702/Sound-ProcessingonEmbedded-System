@@ -8,9 +8,9 @@
   "test_predictions_generated": false,
   "seed": 2026,
   "validation_f1_tolerance": 0.03,
-  "chosen_family": "tree",
+  "chosen_family": "logreg",
   "chosen_params": {
-    "max_depth": 2
+    "C": 1.0
   },
   "classes": [
     "mati",

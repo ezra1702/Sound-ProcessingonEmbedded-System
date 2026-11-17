@@ -250,7 +250,8 @@ report = {
     'post_test_tuning_performed': False,
     'deployment_selection_from_test_performed': False,
     'deployment_candidates_forwarded': ['mp11_classical_baseline', 'mp12_tiny_cnn'],
-    'interpretation_warning': 'With four test samples, point estimates have very wide uncertainty. Do not claim perfect generalization from a 100% score.',
+    'interpretation_warning': f'With only {len(test_ids)} test samples (known speakers, new session), point estimates have wide uncertainty; '
+                              'see the Wilson intervals. Do not claim generalization to unseen speakers.',
 }
 if REPRODUCTION_RUN:
     prev = json.loads((ROOT/'results/metrics/mp13_final_test_metrics.json').read_text(encoding='utf-8'))
